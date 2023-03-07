@@ -4,7 +4,7 @@ from decimal import *
 
 getcontext().prec = 50
 
-total_drop_nr = 1000
+total_drop_nr = 100
 
 t_start = 0
 t_end = 300
@@ -55,7 +55,7 @@ loading = "det"
 #growth = "midpoint_tau_binary"
 #growth = "adaptive_tau_binary"
 growth = 'gillespie_binary'
-degradation = 'MM_exponential'
+degradation = 'MM_linear'
 deg_type = 'rate'
 
 ### r timesteps for dt test

@@ -70,20 +70,9 @@ class strain(object):
     @staticmethod
     def degrade_ab_1_step(AB_concentration_array, N_bact_pop, delta_t, nr_drops_total_mass, volume):
         if degradation == 'MM_linear':
-            print('ab', AB_concentration_array[-1])
-            print('Vmax', Vmax)
-            print('Km', Km)
-            print('volume', volume)
             new_ab = AB_concentration_array[-1] - Vmax * AB_concentration_array[-1] / \
                      (Km + AB_concentration_array[-1]) * N_bact_pop[-1]/volume * delta_t * 1e-5
-            print('change', Vmax * AB_concentration_array[-1] / \
-                     (Km + AB_concentration_array[-1]) * N_bact_pop[-1]/volume * delta_t * 1e-5)
-            print('change MM', Vmax * AB_concentration_array[-1] / \
-                  (Km + AB_concentration_array[-1]) * N_bact_pop[-1] / volume * delta_t)
-            #new_ab = max(0, new_ab)
-            print('new ab', new_ab)
-            #new_ab = AB_concentration_array[-1] - Vmax * N_bact_pop[-1] * delta_t * AB_concentration_array[-1] /(Km * volume) - Vmax * N_bact_pop[-1] * delta_t / volume
-            #new_ab = max(0, new_ab)
+            new_ab = max(0, new_ab)
         if degradation == 'MM_exponential':
             print('ab before deg', AB_concentration_array[-1])
             y = 1 / Km * AB_concentration_array[-1]

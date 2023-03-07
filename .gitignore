@@ -155,3 +155,4 @@ cython_debug/
 ./output/
 *.csv
 *.png
+output/*
