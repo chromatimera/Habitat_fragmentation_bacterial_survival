@@ -1,3 +1,4 @@
+import variables
 from strain import strain
 from Experiment_R import Experiment_R
 import numpy as np
@@ -16,12 +17,12 @@ getcontext().prec = 50
 
 class droplets_R():
 
-    def __init__(self, total_drop_number, strain_r, AB_conc, dt, t_end):
-        self.total_drop_number = total_drop_number
+    def __init__(self, strain_r, AB_conc):
+        self.total_drop_number = variables.total_drop_nr
         self.strain_r = strain_r
         self.AB_conc = AB_conc
-        self.dt = dt
-        self.t_end = t_end
+        self.dt = variables.dt
+        self.t_end = variables.t_end
         self.timesteps = round(t_end/dt)
 
         ## if doing deterministic growth
@@ -75,7 +76,7 @@ class droplets_R():
 
         folder_name = 'output/' \
                       'Nsat_{}_dropnr_{}_loading_{}_growth_{}_initialN_{}_abconc_{}_growthrate_{}_dt_' \
-                      '{}'.format(Nsat,total_drop_nr,loading,growth, initialN, self.AB_conc, growthrate, self.dt)
+                      '{}'.format(variables.Nsat,variables.total_drop_nr,loading,growth, variables.initialN, self.AB_conc, growthrate, self.dt)
         path = os.path.join(curr_path, folder_name)
         isExist = os.path.exists(path)
 
@@ -87,7 +88,7 @@ class droplets_R():
         os.chdir(path)
 
         # create x axis of time in minutes:
-        if (grow_meth != "binary") or (grow_meth != "tau_binary")  or (grow_meth != "balanced"):
+        if (grow_meth != "binary") or (grow_meth != "tau_binary") or (grow_meth != "balanced"):
 
             plt.rcParams.update({'font.size': 14})
 
@@ -152,36 +153,6 @@ class droplets_R():
             plt.ylim(bottom=0)
             plt.title ('{}_growth'.format(growth))
             plt.savefig('plot_ABconc_{}_loading_{}_growth_{}'.format(self.AB_conc, loading, growth))
-            #plt.show()
-        #
-        # # plt.figure(3)
-        # # # plt.grid(True)
-        # # plt.plot(XX.T, self.probability_extinction.T)
-        # # plt.grid(True)
-        # # # plt.title('Concentration of antibiotic over time in each droplet.')
-        # # plt.ylabel('Probability of extinction')
-        # # plt.xlabel('Time (mins)')
-        # # plt.xlim(0, self.t_end)
-        # # plt.ylim(bottom=0)
-        # # plt.title('{}_growth'.format(growth))
-        # # plt.savefig('plot_prob_extinction_{}_loading_{}_growth_{}_abconc'.format(loading, growth, AB_conc))
-        # # plt.show()
-        # #
-        # # plt.figure(4)
-        # # # plt.grid(True)
-        # # plt.plot(XX.T, self.time_extinction.T)
-        # # plt.grid(True)
-        # # # plt.title('Concentration of antibiotic over time in each droplet.')
-        # # plt.ylabel('time until extinction')
-        # # plt.xlabel('Time (mins)')
-        # # plt.xlim(0, self.t_end)
-        # # plt.ylim(bottom=0)
-        # # plt.title('{}_growth'.format(growth))
-        # # plt.savefig('plot_time_extinction_{}_loading_{}_growth_{}_abconc'.format(loading, growth, AB_conc))
-        # # plt.show()
-        #
-        # os.chdir(curr_path)
-
         os.chdir(curr_path)
 
     def countSurvival(self, grow_meth):
@@ -207,29 +178,6 @@ class droplets_R():
             else:
                 self.Res_survival_fraction = Res_living / np.count_nonzero(self.N_r_array[:, 0])
             print("Fraction of droplets where bacteria survived=  " + str(self.Res_survival_fraction))
-
-    # def countTotalMass_time(self, grow_meth, time):
-    #
-    #     if (grow_meth != "binary") or (grow_meth != "tau_binary")  or (grow_meth != "balanced"):
-    #         self.mass_droplet = []
-    #         for i in range(0, len(self.N_list_gillespie)):
-    #             time_list = sorted(j for j in self.time_list_gillespie[i] if j <= time)
-    #             print('nr of items in time list', len(time_list)) ### but as an index it has to be -1
-    #             self.mass_droplet.append(self.N_list_gillespie[i][len(time_list)-1])
-    #             print(self.N_list_gillespie[i][len(time_list) -1])
-    #         print('mass_droplet', self.mass_droplet) ### last N at a specific time
-    #         self.total_mass = np.sum(self.mass_droplet)
-    #         if np.count_nonzero(self.mass_droplet) == 0:
-    #             self.total_mass = 0
-    #         else:
-    #             print('total_mass', self.total_mass)
-    #     else:
-    #         if np.count_nonzero(self.N_r_array[:, 0]) == 0:
-    #             self.total_mass = 0
-    #         else:
-    #             self.total_mass = np.sum(self.N_r_array[:, round(time/self.dt)])
-    #         print('total_mass', self.total_mass)
-    #         print("Total mass in droplets where bacteria survived=  " + str(self.total_mass))
 
     def countTotalMass(self, grow_meth):
         self.total_mass = np.empty(self.timesteps + 1)
@@ -277,7 +225,7 @@ class droplets_R():
 
 
 
-    def save(self,NRfilename, ABfilename,Timefilename, Nsat, total_drop_nr, loading, growth, initialN, AB_conc, growthrate, dt):
+    def save(self,NRfilename, ABfilename,Timefilename, AB_conc):
 
         #Get path of current folder
         curr_path = os.getcwd()
@@ -285,7 +233,7 @@ class droplets_R():
 
         # Check whether the specified path exists or not
 
-        folder_name = 'output/Nsat_{}_dropnr_{}_loading_{}_growth_{}_initialN_{}_abconc_{}_growthrate_{}_dt_{}'.format(Nsat,total_drop_nr, loading, growth, initialN, AB_conc, growthrate, self.dt)
+        folder_name = 'output/Nsat_{}_dropnr_{}_loading_{}_growth_{}_initialN_{}_abconc_{}_growthrate_{}_dt_{}'.format(variables.Nsat,variables.total_drop_nr, variables.loading, variables.growth, variables.initialN, AB_conc, variables.growthrate, self.dt)
         path = os.path.join(curr_path, folder_name)
         isExist = os.path.exists(path)
 

@@ -4,7 +4,7 @@ from decimal import *
 
 getcontext().prec = 50
 
-total_drop_nr = 100
+total_drop_nr = 10
 
 ## not sure about the ime units
 
@@ -13,17 +13,17 @@ t_end = 300
 dt = 1
 
 n_crit = 2
-## nr of drops to simulate for total mass
-nr_drops_total_mass = 1
-volume = 1e-4 * nr_drops_total_mass   # volume of droplets ~100pL; 1pL is 1e-6 ul; UNITS: ul
+volume = 1e-4   # volume of droplets ~100pL; 1pL is 1e-6 ul; UNITS: ul
 
-#check_total_mass = False
+##simulating multiple fake droplets (this a factor ie. 2 means 2 * initial N, but total_droplet_nr/2)
+nr_drop_min = 1
+nr_drop_max = 10
+step_drop = 5
 
 
-Nsat = 100 * nr_drops_total_mass
-
-initialN = 10 * nr_drops_total_mass
-growthrate = 0.01 # per minute
+Nsat = 100
+initialN = 10
+growthrate = 0.0066 # per minute from experimental data Nia thesis
 deathrate =  0.045  # per minute
 
 AB_molar_mass = 349.406 #g/mol (ug/umol)
@@ -35,7 +35,8 @@ AB_conc = 6 /AB_molar_mass * 1e-3 #ug/ml (per droplet)#\frac{ug}/{ml}/\frac{ug}{
 #Km given as 6.7e-3 μg/uL -> transformed to umoles/uL
 Km = 6.7e-3 /AB_molar_mass  #UNITS: umoles/uL
 #Vmax given as 6e-4 μg/cell/min
-Vmax = 6e-4 /AB_molar_mass  #UNITS: ug/cell/min
+Vmax = 6e-4 /AB_molar_mass #6e-4 ug/cell/min /AB_molar_mass  #UNITS: umoles/cell/min
+
 
 ##ab conc values range for testing ab
 abmin = 0
@@ -55,7 +56,7 @@ loading = "det"
 #growth = "midpoint_tau_binary"
 #growth = "adaptive_tau_binary"
 growth = 'gillespie_binary'
-degradation = 'MM_exponential'
+degradation = 'exponential_decay'
 deg_type = 'rate'
 
 ### r timesteps for dt test

@@ -3,7 +3,8 @@ import numpy as np
 from scipy.stats import poisson
 import math
 import strain
-from variables import Nsat, degradation, deg_type, epsilon, nr_drops_total_mass, Km, Vmax, volume
+import variables
+from variables import degradation, epsilon, Km, Vmax
 from decimal import *
 from scipy.special import lambertw
 import os.path
@@ -22,8 +23,8 @@ class Experiment_R(object):
 
     def __init__(self, strain_r, AB_conc, dt, t_end):
         self.strain_r = strain_r
-        self.dt = dt
-        self.t_end = t_end
+        self.dt = variables.dt
+        self.t_end = variables.t_end
         self.timesteps = round(t_end/dt)
         self.AB_conc = AB_conc
 
@@ -42,6 +43,7 @@ class Experiment_R(object):
 
         if init_type == "det":
             self.N_array[0] = self.strain_r.initialN
+            print('variables initialN', variables.initialN, 'strain_r.Nsat', self.strain_r.initialN)
         elif init_type == "rand":
             #randomize initial starting numbers:
             self.strain_r.N = poisson.rvs(mu=self.strain_r.initialN, size=1)
@@ -52,11 +54,13 @@ class Experiment_R(object):
     def degrade_ab_1_step(self, AB_concentration, N_bact, delta_t):
 
         if degradation == 'MM_linear':
-            ...
+            AB_concentration = AB_concentration - Vmax * AB_concentration / (
+                        Km * AB_concentration) * N_bact / variables.volume * delta_t
+
         elif degradation == 'exponential':
             y = 1 / Km * AB_concentration
             exp_factor_1 = math.exp(AB_concentration / Km)
-            exp_factor_2 = math.exp(-Vmax * N_bact * delta_t / (volume * Km))
+            exp_factor_2 = math.exp(-Vmax * N_bact * delta_t / (variables.volume * Km))
             AB_concentration = Km * lambertw(y * exp_factor_1 * exp_factor_2).real
         return AB_concentration
 
@@ -78,7 +82,7 @@ class Experiment_R(object):
                 self.strain_r.balanced_grow(self.AB_conc_array[i])
 
             # Check if growth has saturated:
-            if (self.strain_r.N > Nsat):
+            if (self.strain_r.N > strain.Nsat):
                 # Set rest of list to Nsat:
                 self.N_array[i:self.timesteps] = self.strain_r.N
                 self.AB_conc_array[i:self.timesteps] = self.AB_conc_array[i]
