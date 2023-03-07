@@ -62,10 +62,7 @@ class strain(object):
 
    Parameters
    ----------
-   a, a0 - propensities functions (probabilities of growing/dying)
-   time array , ab array, N array
-   stoichiometry - [-1, 1], can add or remove one bacteria based on the chosen reaction (the index in the stoichiometry array that is chosen based on previous probabilities)
-
+   
    Returns
    -------
    force: time array, ab array, N array
@@ -73,22 +70,26 @@ class strain(object):
     @staticmethod
     def degrade_ab_1_step(AB_concentration_array, N_bact_pop, delta_t, nr_drops_total_mass, volume):
         if degradation == 'MM_linear':
-            print(Vmax * AB_concentration_array[-1] / (Km * AB_concentration_array[-1]) * N_bact_pop[
-                -1] / volume * delta_t)
+            print('ab', AB_concentration_array[-1])
             print('Vmax', Vmax)
             print('Km', Km)
             print('volume', volume)
-            new_ab = AB_concentration_array[-1] - Vmax * AB_concentration_array[-1] / (
-                        Km * AB_concentration_array[-1]) * N_bact_pop[-1] / volume * delta_t
+            new_ab = AB_concentration_array[-1] - Vmax * AB_concentration_array[-1] / \
+                     (Km + AB_concentration_array[-1]) * N_bact_pop[-1]/volume * delta_t * 1e-5
+            print('change', Vmax * AB_concentration_array[-1] / \
+                     (Km + AB_concentration_array[-1]) * N_bact_pop[-1]/volume * delta_t * 1e-5)
+            print('change MM', Vmax * AB_concentration_array[-1] / \
+                  (Km + AB_concentration_array[-1]) * N_bact_pop[-1] / volume * delta_t)
+            #new_ab = max(0, new_ab)
+            print('new ab', new_ab)
             #new_ab = AB_concentration_array[-1] - Vmax * N_bact_pop[-1] * delta_t * AB_concentration_array[-1] /(Km * volume) - Vmax * N_bact_pop[-1] * delta_t / volume
             #new_ab = max(0, new_ab)
         if degradation == 'MM_exponential':
             print('ab before deg', AB_concentration_array[-1])
             y = 1 / Km * AB_concentration_array[-1]
             exp_factor_1 = math.exp(AB_concentration_array[-1] / Km)
-            exp_factor_2 = math.exp(-Vmax * N_bact_pop[-1] * delta_t / (volume * Km))
-            print(exp_factor_2)
-            print(Vmax, N_bact_pop[-1],delta_t, volume,Km )
+            exp_factor_2 = math.exp(-Vmax * delta_t * N_bact_pop[-1] / (volume * Km) * 1e-5)
+            print(Vmax, N_bact_pop[-1], delta_t, volume, Km)
             print('lambert', y * exp_factor_1 * exp_factor_2)
             new_ab = Km * lambertw(y * exp_factor_1 * exp_factor_2).real
             print('new_Ab', lambertw(y * exp_factor_1 * exp_factor_2).real)
@@ -432,7 +433,7 @@ class strain(object):
                         # update time array
                         self.t_array = np.append(self.t_array, self.t_array[-1] + tau)
                         # update Ab_conc for next step
-                        self.AB_conc_array = self.degrade_ab_1_step(self.AB_conc_array, self.N, tau)
+                        self.AB_conc_array = self.degrade_ab_1_step(self.AB_conc_array, self.N, tau, self.nr_drops_total_mass, variables.volume)
                         s += 1
 
 

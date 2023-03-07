@@ -26,8 +26,7 @@ class DropTest(object):
         Droplet_exp.save('initialN{}'
                          '_growthrate{}_MIC{}_totaldropnr{}_ABconc{}_'
                          'dt{}_loading{}_growth{}.csv'.format(initialN, growthrate, MIC, total_drop_nr, AB_conc, dt,
-                                                              loading, growth), 'ABconc{}_loading{}_growth{}.csv'.format(AB_conc, loading, growth),'Time_list.csv', Nsat,
-                                                              total_drop_nr, loading, growth, initialN, AB_conc, growthrate, dt)
+                                                              loading, growth), 'ABconc{}_loading{}_growth{}.csv'.format(AB_conc, loading, growth),'Time_list.csv', AB_conc)
 
 
 
