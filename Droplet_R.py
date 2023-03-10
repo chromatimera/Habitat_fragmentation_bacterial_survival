@@ -23,12 +23,12 @@ class droplets_R():
         self.AB_conc = AB_conc
         self.dt = variables.dt
         self.t_end = variables.t_end
-        self.timesteps = round(t_end/dt)
+        self.timesteps = round(self.t_end / variables.dt)
 
         ## if doing deterministic growth
-        self.N_r_array = np.empty((self.total_drop_number, self.timesteps + 1))#.astype(int) # initialize empty array
-        self.AB_conc_array = np.empty((self.total_drop_number, self.timesteps + 1))  # initialize empty array
-        self.time_list_array = np.linspace(t_start, t_end, self.timesteps + 1)
+        self.N_r_array = np.empty((self.total_drop_number, self.timesteps))#.astype(int) # initialize empty array
+        self.AB_conc_array = np.empty((self.total_drop_number, self.timesteps))  # initialize empty array
+        self.time_list_array = np.empty((self.total_drop_number, self.timesteps))
 
         #if doing stochastic growth
         self.N_list_gillespie = [] # N_r_array for gillespie since the nr of rows are different between droplets, and cannot concatenate
@@ -44,25 +44,19 @@ class droplets_R():
         Exp = Experiment_R(self.strain_r, self.AB_conc, self.dt, self.t_end)
 
         for k in range(0, self.total_drop_number):
-            print('drop. nr:', k)
-            if (grow_meth != "binary") or (grow_meth != "tau_binary") or (grow_meth != "balanced"):
+            #print('drop. nr:', k)
+            if (grow_meth != "binary"):
                 Exp.run(init_type, grow_meth)
                 ## not necessarily gillespie, but the point is that the N, AB_conc and Time list have variable lengths
                 self.N_list_gillespie.append(Exp.N_array)
                 self.time_list_gillespie.append(Exp.ts)
                 self.AB_conc_array_gillespie.append(Exp.AB_conc_array)
-                #print(self.N_list_gillespie)
             else:
                 Exp.run(init_type, grow_meth)
-                # collect data for each droplet, k:
-                #print(Exp.N_array)
                 self.N_r_array[k] = Exp.N_array
-                # self.N_array = self.N_r_array
+                self.time_list_array[k] = Exp.ts
                 self.AB_conc_array[k] = Exp.AB_conc_array
-        #self.deg_list = Exp.deg_list
-
-                # self.probability_extinction[k] = Exp.prob_extinction
-                # self.time_extinction[k] = Exp.time_extinction
+        self.deg_list = Exp.deg_list
 
 
     def plots(self, grow_meth):
@@ -88,7 +82,7 @@ class droplets_R():
         os.chdir(path)
 
         # create x axis of time in minutes:
-        if (grow_meth != "binary") or (grow_meth != "tau_binary") or (grow_meth != "balanced"):
+        if (grow_meth != "binary"):
 
             plt.rcParams.update({'font.size': 14})
 
@@ -122,7 +116,7 @@ class droplets_R():
             plt.show()
 
         else:
-            X = np.arange(0, self.t_end + self.dt, self.dt).tolist()
+            X = np.arange(0, self.t_end, self.dt).tolist()
             XX= np.tile(X, (self.total_drop_number, 1))
 
             plt.rcParams.update({'font.size': 14})
@@ -141,6 +135,7 @@ class droplets_R():
             #ax.yaxis.set_major_locator(ticker.MultipleLocator(tick_spacing))
             plt.ylim(bottom=0)
             plt.savefig('plot_Nbact_loading_{}_growth_{}ab_conc_{}'.format(loading, growth, AB_conc))
+            plt.show()
 
             plt.figure(2)
             #plt.grid(True)
@@ -153,13 +148,14 @@ class droplets_R():
             plt.ylim(bottom=0)
             plt.title ('{}_growth'.format(growth))
             plt.savefig('plot_ABconc_{}_loading_{}_growth_{}'.format(self.AB_conc, loading, growth))
+            plt.show()
         os.chdir(curr_path)
 
     def countSurvival(self, grow_meth):
         self.last_N_list = []
         self.first_N_list = []
 
-        if (grow_meth != "binary") or (grow_meth != "tau_binary")  or (grow_meth != "balanced"):
+        if (grow_meth != "binary"):
             for i in range(0, len(self.N_list_gillespie)):
                 self.last_N_list.append(self.N_list_gillespie[i][-1])
                 self.first_N_list.append(self.N_list_gillespie[i][0])
@@ -244,13 +240,13 @@ class droplets_R():
 
         os.chdir(path)
 
-        if (growth != "binary") or (growth != "tau_binary")  or (growth != "balanced"):
+        if (growth != "binary"):
             pd.DataFrame(self.N_list_gillespie).to_csv(NRfilename)
             pd.DataFrame(self.AB_conc_array_gillespie).to_csv(ABfilename)
             pd.DataFrame(self.time_list_gillespie).to_csv(Timefilename)
         else:
-            pd.DataFrame(self.N_r_array).to_csv(NRfilename, header = self.time_list_array)
-            pd.DataFrame(self.AB_conc_array).to_csv(ABfilename, header = self.time_list_array)
+            pd.DataFrame(self.N_r_array).to_csv(NRfilename)
+            pd.DataFrame(self.AB_conc_array).to_csv(ABfilename)
 
 
         # make dir

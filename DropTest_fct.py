@@ -4,6 +4,7 @@ from Droplet_R import droplets_R
 from variables import *
 from decimal import *
 import pandas as pd
+getcontext().prec = 10
 
 
 getcontext().prec = 50
@@ -16,39 +17,33 @@ start_time = time.time()
 class DropTest(object):
     def run(self): ## simulation for one AB concentration; used in troubleshooting
 
-        strain_R = strain(nr_drops_total_mass=1) #prob_ext=None, time_ext=None)
-        #2 Just resistant strain exp: def __init__(self, total_drop_number, strain_r, AB_conc, dt, t_end):
-        Droplet_exp = droplets_R(strain_R, AB_conc)  #0.5, 300
-        #3
+        strain_R = strain(nr_drops_total_mass=1)
+        Droplet_exp = droplets_R(strain_R, AB_conc)
         Droplet_exp.run(loading, growth)
-        #4
-
         Droplet_exp.save('initialN{}'
                          '_growthrate{}_MIC{}_totaldropnr{}_ABconc{}_'
                          'dt{}_loading{}_growth{}.csv'.format(initialN, growthrate, MIC, total_drop_nr, AB_conc, dt,
                                                               loading, growth), 'ABconc{}_loading{}_growth{}.csv'.format(AB_conc, loading, growth),'Time_list.csv', AB_conc)
 
-
-
         print("--- %s seconds ---" % (time.time() - start_time))
         Droplet_exp.plots(growth)
-
         Droplet_exp.countSurvival(growth)
-        #Droplet_exp.normed_histograms(50)
+
     def test_dt(self, dtmin, dtmax, stepdt): ## will be removed; fct to test difference in AB degradation between different dts - can estimate error in linear approximation
         new = pd.DataFrame()
 
         # loop for variables
         for i in range(dtmin, dtmax, stepdt):
-            new_dt = 1 / (10 ** i)
-            new_t_end = new_dt * nr_timesteps
-            # new_t_end = 300
-            print('dt = ', new_dt, 't_end = ', new_t_end)
-            #print(new_t_end)
-            strain_R = strain(initialN, growthrate, deathrate, MIC, new_dt, new_t_end, Nsat)
-            Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc, new_dt, new_t_end)  # 0.5, 300
+            variables.dt = 1 / (10 ** i)
+            print(nr_timesteps)
+            print(variables.dt)
+            variables.t_end = round(variables.dt * nr_timesteps, i)
+            print(t_end)
+            print('dt = ', variables.dt, 't_end = ', variables.t_end)
+            strain_R = strain(nr_drops_total_mass=1)
+            Droplet_exp = droplets_R(strain_R, AB_conc)
             Droplet_exp.run(loading, growth)
-            additional = pd.DataFrame({"" + str(new_dt) + "": Droplet_exp.deg_list})
+            additional = pd.DataFrame({"" + str(variables.dt) + "": Droplet_exp.deg_list})
             new = pd.concat([new, additional], axis=1)
             Droplet_exp.save(
                 'initialN{}_growthrate{}_MIC{}_totaldropnr{}_ABconc{}_dt{}_loading{}_growth{}.csv'.format(initialN,
@@ -56,16 +51,10 @@ class DropTest(object):
                                                                                                           MIC,
                                                                                                           total_drop_nr,
                                                                                                           AB_conc,
-                                                                                                          new_dt,
+                                                                                                          variables.dt,
                                                                                                           loading,
                                                                                                           growth),
-                'ABconc{}_loading{}_growth{}.csv'.format(AB_conc, loading, growth), Nsat, total_drop_nr, loading,
-                growth, initialN, AB_conc, growthrate, new_dt)
-
-
-
-            # print("--- %s seconds ---" % (time.time() - start_time))
-            Droplet_exp.plots(growth)
+                'ABconc{}_loading{}_growth{}.csv'.format(AB_conc, loading, growth),'Time{}.csv'.format(variables.dt), AB_conc)
 
         # Get path of current folder
         curr_path = os.getcwd()
@@ -180,8 +169,8 @@ class DropTest(object):
         print("--- %s seconds ---" % (time.time() - start_time))
 
 simulate = DropTest()
-simulate.run()
-#simulate.test_dt(1, 2, 1)
+#simulate.run()
+simulate.test_dt(0, 10, 1)
 #simulate.test_surv_frac_diff_ab_conc(abmin, abmax, step)
 #simulate.test_survival_big_droplet_diff_ab_conc(abmin,abmax,step,nr_drop_min,nr_drop_max,step_drop)
 #simulate.count_total_mass(abmin, abmax, step)

@@ -1,6 +1,4 @@
-from scipy.stats import poisson
 import math
-
 import variables
 from variables import *
 import os.path
@@ -77,8 +75,8 @@ class strain(object):
             print('ab before deg', AB_concentration_array[-1])
             y = 1 / Km * AB_concentration_array[-1]
             exp_factor_1 = math.exp(AB_concentration_array[-1] / Km)
-            exp_factor_2 = math.exp(-Vmax * delta_t * N_bact_pop[-1] / (volume * Km) * 1e-5)
             print(Vmax, N_bact_pop[-1], delta_t, volume, Km)
+            exp_factor_2 = math.exp(-Vmax * delta_t * N_bact_pop[-1] / (volume * Km) * 1e-5)
             print('lambert', y * exp_factor_1 * exp_factor_2)
             new_ab = Km * lambertw(y * exp_factor_1 * exp_factor_2).real
             print('new_Ab', lambertw(y * exp_factor_1 * exp_factor_2).real)
@@ -208,14 +206,10 @@ class strain(object):
 
 
     def binary_grow(self, AB_conc):
-        #print(scientific_notation(self.MIC), scientific_notation(AB_conc))
-        # print(self.MIC, self.AB_conc)
-        #print(type(self.N))
         if self.MIC > AB_conc:
             self.N = self.N + self.N * self.growthrate * self.dt  ## N grows uninhibited, normalized by dt
         else:
             self.N = self.N - self.N * self.deathrate * self.dt   ## N dies with growthrate normalized by dt
-
         if self.N < 0.0:  #### #can't have less than 0 bacteria (THIS WAS 1) 01/04/2022
            self.N = 0
 
@@ -432,7 +426,7 @@ class strain(object):
                                     rates, a, a0 = self.set_rates_and_prop_binary(self.AB_conc_array, self.MIC, self.N, self.growthrate, self.deathrate)
 
                                     self.t_array, self.AB_conc_array, self.N = self.evolve_gillespie_one_step(a, a0, self.t_array,
-                                                                                                          self.AB_conc_array, self.N, AB_Deg_rate, stoichiometry)
+                                                                                                          self.AB_conc_array, self.N, stoichiometry, self.nr_drops_total_mass)
                                     s += 1
                                 break
         return self.t_array, self.N, self.AB_conc_array

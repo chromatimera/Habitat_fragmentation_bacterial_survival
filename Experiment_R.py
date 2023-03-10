@@ -11,7 +11,7 @@ import os.path
 getcontext().prec = 50
 
 global AB_Deg_rate
-AB_Deg_rate = 1e-2  # rate of AB degradation per cell per min
+AB_Deg_rate = 1e-2 # rate of AB degradation per cell per min
 
 def scientific_notation(n):
     sc_not ="{:e}".format(n)
@@ -25,25 +25,23 @@ class Experiment_R(object):
         self.strain_r = strain_r
         self.dt = variables.dt
         self.t_end = variables.t_end
-        self.timesteps = round(t_end/dt)
+        self.timesteps = round(t_end/variables.dt)
         self.AB_conc = AB_conc
 
     def initialise(self, init_type):
 
         # Zero arrays:
-        self.AB_conc_array = np.empty(self.timesteps + 1)
-        self.N_array = np.empty(self.timesteps + 1)#.astype(float)
+        self.AB_conc_array = np.empty(self.timesteps)
+        self.N_array = np.empty(self.timesteps)#.astype(float)
         self.strain_r.N = self.strain_r.initialN
-        self.prob_extinction = np.empty(self.timesteps + 1)
-        self.time_extinction = np.empty(self.timesteps + 1)
+        self.deg_list = np.empty(self.timesteps)
 
         self.AB_conc_array[0] = self.AB_conc
-        self.prob_extinction[0] = None
-        self.time_extinction[0] = None
+        self.deg_list[0] = 0
+
 
         if init_type == "det":
             self.N_array[0] = self.strain_r.initialN
-            print('variables initialN', variables.initialN, 'strain_r.Nsat', self.strain_r.initialN)
         elif init_type == "rand":
             #randomize initial starting numbers:
             self.strain_r.N = poisson.rvs(mu=self.strain_r.initialN, size=1)
@@ -51,61 +49,58 @@ class Experiment_R(object):
         else:
             print("Error in initialisation; type 'det' or 'rand' in run()")
 
-    def degrade_ab_1_step(self, AB_concentration, N_bact, delta_t):
-
+    def degrade_ab_1_step_det(self, AB_conc, N_t, delta_t, volume, nr_drops_total_mass):
         if degradation == 'MM_linear':
-            AB_concentration = AB_concentration - Vmax * AB_concentration / (
-                        Km * AB_concentration) * N_bact / variables.volume * delta_t
+            new_ab = AB_conc - Vmax * AB_conc / (Km + AB_conc) * N_t / volume * delta_t * 1e-5
+            new_ab = max(0, new_ab)
+            deg_linear = Vmax * AB_conc / (Km + AB_conc) * N_t / volume * delta_t * 1e-5
+            deg_rate = 1 - deg_linear / AB_conc
 
-        elif degradation == 'exponential':
-            y = 1 / Km * AB_concentration
-            exp_factor_1 = math.exp(AB_concentration / Km)
-            exp_factor_2 = math.exp(-Vmax * N_bact * delta_t / (variables.volume * Km))
-            AB_concentration = Km * lambertw(y * exp_factor_1 * exp_factor_2).real
-        return AB_concentration
+        if degradation == 'MM_exponential':
+            y = 1 / Km * AB_conc
+            exp_factor_1 = math.exp(AB_conc / Km)
+            exp_factor_2 = math.exp(-Vmax * delta_t * N_t / (volume * Km) * 1e-5)
+            new_ab = Km * lambertw(y * exp_factor_1 * exp_factor_2).real
+            deg_rate = new_ab/AB_conc
+        if degradation == 'exponential_decay':
+            new_ab = AB_conc * math.exp(-AB_Deg_rate * N_t / nr_drops_total_mass * delta_t)
+            deg_rate = math.exp(-AB_Deg_rate * N_t / nr_drops_total_mass * delta_t)
+        if degradation == 'linear_decay':
+            deg_linear = AB_Deg_rate * N_t * delta_t
+            deg_rate = 1 - deg_linear
+            new_ab = AB_conc - deg_linear * AB_conc
+            new_ab = max(0, new_ab)
+        return deg_rate, new_ab
+
+        # AB is degraded at rate Vmax proportional to number of resistant cells:
 
     def run(self, init_type, grow_meth):  #CHOOSE INITIALIZATION AND GROWTH METHODS
 
         self.initialise(init_type) #det or random?
-        for i in range(1, self.timesteps + 1):
 
-            self.AB_conc_array[i] = self.degrade_ab_1_step(self.AB_conc_array[-1], self.strain_r.N, self.dt)
+        for i in range(0, self.timesteps-1):
+
             # Grow strain for dt: ###tau_grow VS grow
             if grow_meth == 'binary':
-                #print('strain_r.N', self.strain_r.N)
-                self.strain_r.binary_grow(self.AB_conc_array[i])
-            elif grow_meth == 'tau_binary':
-                #print('strain_r.N', self.strain_r.N)
-                self.strain_r.tau_binary_grow(self.AB_conc_array[i])
-            elif grow_meth == 'balanced':
-                #print('strain_r.N', self.strain_r.N)
-                self.strain_r.balanced_grow(self.AB_conc_array[i])
+                self.deg_list[i+1], self.AB_conc_array[i+1] = self.degrade_ab_1_step_det(self.AB_conc_array[i], self.strain_r.N, self.dt,
+                                                                variables.volume, nr_drops_total_mass=1)
+                self.strain_r.binary_grow(self.AB_conc_array[i+1])
+                self.N_array[i+1] = self.strain_r.N
 
             # Check if growth has saturated:
             if (self.strain_r.N > strain.Nsat):
                 # Set rest of list to Nsat:
-                self.N_array[i:self.timesteps] = self.strain_r.N
-                self.AB_conc_array[i:self.timesteps] = self.AB_conc_array[i]
-                self.prob_extinction[i:self.timesteps] = 0
+                self.N_array[i+1:self.timesteps] = self.strain_r.N
+                self.AB_conc_array[i+1:self.timesteps] = self.AB_conc_array[i+1]
                 break
-            # Update array:
-            self.N_array[i] = self.strain_r.N
+        self.ts = np.arange(variables.t_start, self.t_end, self.dt)
 
-        if grow_meth == "gillespie_balanced":
-            self.ts, self.N_array, self.AB_conc_array = self.strain_r.gillespie_balanced_grow(self.AB_conc)
         if grow_meth == "gillespie_binary":
             self.ts, self.N_array, self.AB_conc_array = self.strain_r.gillespie_binary_grow(self.AB_conc)
-        if grow_meth == "precheck_tau_binary":
-            self.ts, self.N_array, self.AB_conc_array = self.strain_r.precheck_tau_binary_grow(epsilon, self.AB_conc)
         if grow_meth == "midpoint_tau_binary":
-            self.ts, self.N_array, self.AB_conc_array = self.strain_r.midpoint_tau_binary_grow(epsilon, self.AB_conc)
-        if grow_meth == "midpoint_tau_balanced":
             self.ts, self.N_array, self.AB_conc_array = self.strain_r.midpoint_tau_binary_grow(epsilon, self.AB_conc)
         if grow_meth == "adaptive_tau_binary":
             self.ts, self.N_array, self.AB_conc_array = self.strain_r.adaptive_tau_binary_grow(epsilon, self.AB_conc)
-        if grow_meth == "adaptive_tau_balanced":
-            self.ts, self.N_array, self.AB_conc_array = self.strain_r.adaptive_tau_balanced_grow(epsilon, self.AB_conc)
-
 
 
 experiment_script_path = __file__
