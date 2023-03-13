@@ -18,7 +18,7 @@ class DropTest(object):
     def run(self): ## simulation for one AB concentration; used in troubleshooting
 
         strain_R = strain(nr_drops_total_mass=1)
-        Droplet_exp = droplets_R(strain_R, AB_conc)
+        Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc)
         Droplet_exp.run(loading, growth)
         Droplet_exp.save('initialN{}'
                          '_growthrate{}_MIC{}_totaldropnr{}_ABconc{}_'
@@ -76,7 +76,7 @@ class DropTest(object):
     def test_surv_frac_diff_ab_conc(self, abmin, abmax, step):
         new = pd.DataFrame()
 
-        # loop for variables
+        # loop for var
         for i in range(abmin, abmax, step):
             new_ab_conc = i
             print('antib_conc', new_ab_conc)
@@ -107,6 +107,40 @@ class DropTest(object):
             #print(new)
             pd.DataFrame(new).to_csv('output/df_growth_{}_count_survival_nr_drop_{}_ab_range_{}_{}.csv'.format(growth,total_drop_nr,abmin,abmax), index= None)
         return new
+
+    def test_surv_frac_diff_partitioning(self, partmin, partmax, step):
+        new = pd.DataFrame()
+
+        # loop for partitioning factors
+        for i in range(partmin, partmax, step):
+             for j in range(0,2,1):
+                new_i = 10**i * 5**j
+                new_nr_drops_total_mass = new_i
+                print('partitioning factor', new_nr_drops_total_mass)
+                total_drop_nr = round(variables.total_drop_nr /new_i)
+                strain_R = strain(new_nr_drops_total_mass)
+                Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc)  # 0.5, 300
+                Droplet_exp.run(loading, growth)
+                Droplet_exp.countSurvival(growth)
+                #surv_frac = Droplet_exp.Res_survival_fraction
+                #print(surv_frac)
+                additional = pd.DataFrame({"" + str(new_nr_drops_total_mass) + "": [Droplet_exp.Res_survival_fraction]})
+                # print(additional)
+                new = pd.concat([new, additional], axis=1)
+                # #Droplet_exp.save(
+                #     'initialN{}_growthrate{}_MIC{}_totaldropnr{}_ABconc{}_dt{}_loading{}_growth{}.csv'.format(initialN,
+                #                                                                                               growthrate,
+                #                                                                                               MIC,
+                #                                                                                               total_drop_nr,
+                #                                                                                               new_ab_conc,
+                #                                                                                               dt,
+                #                                                                                               loading,
+                #                                                                                               growth),
+                #     'ABconc{}_loading{}_growth{}.csv'.format(new_ab_conc, loading, growth),'Time_list.csv', Nsat, total_drop_nr, loading,
+                #     growth, initialN, new_ab_conc, growthrate, dt)
+        print("--- %s seconds ---" % (time.time() - start_time))
+        pd.DataFrame(new).to_csv('output/df_growth_{}_count_survival_nr_drop_{}_partition_factor.csv'.format(growth, total_drop_nr), index= None)
+        #print('total_drop_nr', total_drop_nr)
 
     ## Test the survival fraction of droplets for different factors, ab conc and calculate the total mass
     def test_survival_big_droplet_diff_ab_conc(self, abmin, abmax, step, n_drops_min, n_drops_max, step_drops):
@@ -170,7 +204,8 @@ class DropTest(object):
 
 simulate = DropTest()
 #simulate.run()
-simulate.test_dt(0, 10, 1)
+#simulate.test_dt(0, 10, 1)
+simulate.test_surv_frac_diff_partitioning(0, 4, 1)
 #simulate.test_surv_frac_diff_ab_conc(abmin, abmax, step)
 #simulate.test_survival_big_droplet_diff_ab_conc(abmin,abmax,step,nr_drop_min,nr_drop_max,step_drop)
 #simulate.count_total_mass(abmin, abmax, step)

@@ -17,8 +17,8 @@ def scientific_notation(n):
 class strain(object):
 
     def __init__(self, nr_drops_total_mass):
-        self.initialN = variables.initialN
-        self.N = variables.initialN
+        self.initialN = variables.initialN * nr_drops_total_mass
+        self.N = self.initialN
         self.growthrate = variables.growthrate
         self.deathrate = variables.deathrate
         self.MIC = variables.MIC
@@ -26,7 +26,7 @@ class strain(object):
         self.t_end = variables.t_end
         self.dt = variables.dt
         self.timesteps = round(self.t_end/self.dt)
-        self.Nsat = variables.Nsat
+        self.Nsat = variables.Nsat * nr_drops_total_mass
         self.nr_drops_total_mass = nr_drops_total_mass
 
     @staticmethod
@@ -66,24 +66,28 @@ class strain(object):
    force: time array, ab array, N array
    """
     @staticmethod
-    def degrade_ab_1_step(AB_concentration_array, N_bact_pop, delta_t, nr_drops_total_mass, volume):
+    def degrade_ab_1_step(AB_array, N_bact_pop, delta_t, nr_drops_total_mass, volume):
         if degradation == 'MM_linear':
-            new_ab = AB_concentration_array[-1] - Vmax * AB_concentration_array[-1] / \
-                     (Km + AB_concentration_array[-1]) * N_bact_pop[-1]/volume * delta_t * 1e-5
+            new_ab = AB_array[-1] - Vmax * AB_array[-1] / (Km + AB_array[-1]) * N_bact_pop[-1] / volume * delta_t * 1e-5
             new_ab = max(0, new_ab)
+            deg_linear = Vmax * AB_array[-1] / (Km + AB_array[-1]) * N_bact_pop[-1] / volume * delta_t * 1e-5
+            deg_rate = 1 - deg_linear / AB_array[-1]
+
         if degradation == 'MM_exponential':
-            print('ab before deg', AB_concentration_array[-1])
-            y = 1 / Km * AB_concentration_array[-1]
-            exp_factor_1 = math.exp(AB_concentration_array[-1] / Km)
-            print(Vmax, N_bact_pop[-1], delta_t, volume, Km)
+            exp_factor_1 = math.exp(AB_array[-1] / Km)
             exp_factor_2 = math.exp(-Vmax * delta_t * N_bact_pop[-1] / (volume * Km) * 1e-5)
-            print('lambert', y * exp_factor_1 * exp_factor_2)
-            new_ab = Km * lambertw(y * exp_factor_1 * exp_factor_2).real
-            print('new_Ab', lambertw(y * exp_factor_1 * exp_factor_2).real)
+            new_ab = Km * lambertw(AB_array[-1] / Km * exp_factor_1 * exp_factor_2).real
+            deg_rate = new_ab / AB_array[-1]
         if degradation == 'exponential_decay':
-            new_ab = AB_concentration_array[-1] * math.exp(-AB_Deg_rate * N_bact_pop[-1]/nr_drops_total_mass * delta_t)
-        AB_concentration_array = np.append(AB_concentration_array, new_ab)
-        return AB_concentration_array
+            new_ab = AB_array[-1] * math.exp(-AB_Deg_rate * N_bact_pop[-1] / nr_drops_total_mass * delta_t)
+            deg_rate = math.exp(-AB_Deg_rate * N_bact_pop[-1] / nr_drops_total_mass * delta_t)
+        if degradation == 'linear_decay':
+            deg_linear = AB_Deg_rate * N_bact_pop[-1] * delta_t
+            deg_rate = 1 - deg_linear
+            new_ab = AB_array[-1] - deg_linear * AB_array[-1]
+            new_ab = max(0, new_ab)
+        AB_array = np.append(AB_array, new_ab)
+        return AB_array
 
     """
    Evolve nr of bacteria array, antibiotic concentration array and time array for one tau. 
@@ -99,7 +103,7 @@ class strain(object):
 
    Returns
    -------
-   force: time array, ab array, N array
+   time array, ab array, N array
    """
     @staticmethod
     def evolve_gillespie_one_step(a, a0, time_array, AB_conc_array, N_population_array, stoichiometry, nr_drops_total_mass):
@@ -206,6 +210,8 @@ class strain(object):
 
 
     def binary_grow(self, AB_conc):
+        print('initialN', self.initialN)
+        print('Nsat', self.Nsat)
         if self.MIC > AB_conc:
             self.N = self.N + self.N * self.growthrate * self.dt  ## N grows uninhibited, normalized by dt
         else:
@@ -432,6 +438,8 @@ class strain(object):
         return self.t_array, self.N, self.AB_conc_array
 
     def gillespie_binary_grow(self, AB_conc):
+        #print('initialN', self.initialN)
+        #print('Nsat', self.Nsat)
         if self.initialN != 0:
 
             # stoichiometry vector

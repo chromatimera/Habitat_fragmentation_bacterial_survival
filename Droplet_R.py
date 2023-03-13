@@ -17,8 +17,8 @@ getcontext().prec = 50
 
 class droplets_R():
 
-    def __init__(self, strain_r, AB_conc):
-        self.total_drop_number = variables.total_drop_nr
+    def __init__(self, total_drop_nr, strain_r, AB_conc):
+        self.total_drop_number = total_drop_nr
         self.strain_r = strain_r
         self.AB_conc = AB_conc
         self.dt = variables.dt
@@ -44,7 +44,7 @@ class droplets_R():
         Exp = Experiment_R(self.strain_r, self.AB_conc, self.dt, self.t_end)
 
         for k in range(0, self.total_drop_number):
-            #print('drop. nr:', k)
+            print('drop. nr:', k)
             if (grow_meth != "binary"):
                 Exp.run(init_type, grow_meth)
                 ## not necessarily gillespie, but the point is that the N, AB_conc and Time list have variable lengths

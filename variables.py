@@ -4,11 +4,11 @@ from decimal import *
 
 getcontext().prec = 50
 
-total_drop_nr = 1
+total_drop_nr = 5000
 
 t_start = 0
 t_end = 300
-dt = 0.001
+dt = 0.1
 
 ### nr timesteps for dt test; ignore dt for this test
 nr_timesteps = int(3e6)
@@ -30,7 +30,7 @@ deathrate  = 0.045  # per minute
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
-AB_conc = 4 #ug/mL
+AB_conc = 10 #ug/mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL
@@ -53,8 +53,8 @@ epsilon = 0.03
 ##type of loading and growth
 loading = "det"
 #growth = "midpoint_tau_binary"
-growth = "binary"
-#growth = 'gillespie_binary'
+#growth = "binary"
+growth = 'gillespie_binary'
 degradation = 'linear_decay'
 
 
