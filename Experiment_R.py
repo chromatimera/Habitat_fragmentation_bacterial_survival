@@ -32,12 +32,12 @@ class Experiment_R(object):
 
         # Zero arrays:
         self.AB_conc_array = np.empty(self.timesteps)
-        self.N_array = np.empty(self.timesteps)#.astype(float)
+        self.N_array = np.empty(self.timesteps).astype(int)#.astype(float)
         self.strain_r.N = self.strain_r.initialN
-        self.deg_list = np.empty(self.timesteps)
+        self.deg_list = []
 
         self.AB_conc_array[0] = self.AB_conc
-        self.deg_list[0] = 0
+        self.deg_list.append(0) #when initialising there's no degradation
 
 
         if init_type == "det":
@@ -70,7 +70,8 @@ class Experiment_R(object):
             deg_rate = 1 - deg_linear
             new_ab = AB_conc - deg_linear * AB_conc
             new_ab = max(0, new_ab)
-        return deg_rate, new_ab
+        self.deg_list.append(deg_rate)
+        return new_ab #deg_rate, new_ab
 
         # AB is degraded at rate Vmax proportional to number of resistant cells:
 
@@ -82,8 +83,8 @@ class Experiment_R(object):
 
             # Grow strain for dt: ###tau_grow VS grow
             if grow_meth == 'binary':
-                self.deg_list[i+1], self.AB_conc_array[i+1] = self.degrade_ab_1_step_det(self.AB_conc_array[i], self.strain_r.N, self.dt,
-                                                                variables.volume, nr_drops_total_mass=1)
+                self.AB_conc_array[i+1] = self.degrade_ab_1_step_det(self.AB_conc_array[i], self.strain_r.N, self.dt,
+                                                                variables.volume, nr_drops_total_mass=1) #self.deg_list[i+1],
                 self.strain_r.binary_grow(self.AB_conc_array[i+1])
                 self.N_array[i+1] = self.strain_r.N
 

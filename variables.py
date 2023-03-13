@@ -55,7 +55,7 @@ loading = "det"
 #growth = "midpoint_tau_binary"
 growth = "binary"
 #growth = 'gillespie_binary'
-degradation = 'MM_linear'
+degradation = 'linear_decay'
 
 
 
