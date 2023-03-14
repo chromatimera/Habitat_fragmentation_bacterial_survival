@@ -58,8 +58,8 @@ nr_points = 25
 epsilon = 0.03
 
 ##type of loading and growth
-loading = "det"
-#growth = "midpoint_tau_binary"
+loading = "det"  # rand
+#growth = "midpoint_tau_binary" # for troubleshooting -- needs updating
 #growth = "binary"
 growth = 'gillespie_binary'
 degradation = 'linear_decay'
