@@ -34,7 +34,7 @@ AB_conc = 10 #ug/mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL
-Vmax = 6.0e-4 #ug/cell/min
+Vmax = 3.5e-8 #ug/cell/min
 
 
 ##ab conc values range for testing ab

@@ -69,14 +69,14 @@ class strain(object):
     @staticmethod
     def degrade_ab_1_step(AB_array, N_bact_pop, delta_t, nr_drops_total_mass, volume):
         if degradation == 'MM_linear':
-            new_ab = AB_array[-1] - Vmax * AB_array[-1] / (Km + AB_array[-1]) * N_bact_pop[-1] / volume * delta_t * 1e-5
+            new_ab = AB_array[-1] - Vmax * AB_array[-1] / (Km + AB_array[-1]) * N_bact_pop[-1] / volume * delta_t
             new_ab = max(0, new_ab)
-            deg_linear = Vmax * AB_array[-1] / (Km + AB_array[-1]) * N_bact_pop[-1] / volume * delta_t * 1e-5
+            deg_linear = Vmax * AB_array[-1] / (Km + AB_array[-1]) * N_bact_pop[-1] / volume * delta_t
             deg_rate = 1 - deg_linear / AB_array[-1]
 
         if degradation == 'MM_exponential':
             exp_factor_1 = math.exp(AB_array[-1] / Km)
-            exp_factor_2 = math.exp(-Vmax * delta_t * N_bact_pop[-1] / (volume * Km) * 1e-5)
+            exp_factor_2 = math.exp(-Vmax * delta_t * N_bact_pop[-1] / (volume * Km))
             new_ab = Km * lambertw(AB_array[-1] / Km * exp_factor_1 * exp_factor_2).real
             deg_rate = new_ab / AB_array[-1]
         if degradation == 'exponential_decay':

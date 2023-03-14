@@ -52,15 +52,15 @@ class Experiment_R(object):
 
     def degrade_ab_1_step_det(self, AB_conc, N_t, delta_t, volume, nr_drops_total_mass):
         if degradation == 'MM_linear':
-            new_ab = AB_conc - Vmax * AB_conc / (Km + AB_conc) * N_t / volume * delta_t * 1e-5
+            new_ab = AB_conc - Vmax * AB_conc / (Km + AB_conc) * N_t / volume * delta_t
             new_ab = max(0, new_ab)
-            deg_linear = Vmax * AB_conc / (Km + AB_conc) * N_t / volume * delta_t * 1e-5
+            deg_linear = Vmax * AB_conc / (Km + AB_conc) * N_t / volume * delta_t
             deg_rate = 1 - deg_linear / AB_conc
 
         if degradation == 'MM_exponential':
             y = 1 / Km * AB_conc
             exp_factor_1 = math.exp(AB_conc / Km)
-            exp_factor_2 = math.exp(-Vmax * delta_t * N_t / (volume * Km) * 1e-5)
+            exp_factor_2 = math.exp(-Vmax * delta_t * N_t / (volume * Km))
             new_ab = Km * lambertw(y * exp_factor_1 * exp_factor_2).real
             deg_rate = new_ab/AB_conc
         if degradation == 'exponential_decay':

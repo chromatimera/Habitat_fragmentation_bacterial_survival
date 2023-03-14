@@ -18,7 +18,7 @@ class DropTest(object):
     def run(self): ## simulation for one AB concentration; used in troubleshooting
 
         strain_R = strain(nr_drops_total_mass=1)
-        Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc)
+        Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc, volume)
         Droplet_exp.run(loading, growth)
         Droplet_exp.save('initialN{}'
                          '_growthrate{}_MIC{}_totaldropnr{}_ABconc{}_'
@@ -203,9 +203,9 @@ class DropTest(object):
         print("--- %s seconds ---" % (time.time() - start_time))
 
 simulate = DropTest()
-#simulate.run()
+simulate.run()
 #simulate.test_dt(0, 10, 1)
-simulate.test_surv_frac_diff_partitioning(0, 3, 1)
+#simulate.test_surv_frac_diff_partitioning(0, 3, 1)
 #simulate.test_surv_frac_diff_ab_conc(abmin, abmax, step)
 #simulate.test_survival_big_droplet_diff_ab_conc(abmin,abmax,step,nr_drop_min,nr_drop_max,step_drop)
 #simulate.count_total_mass(abmin, abmax, step)
