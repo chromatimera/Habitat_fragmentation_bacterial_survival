@@ -100,7 +100,7 @@ class droplets_R():
             # ax.yaxis.set_major_locator(ticker.MultipleLocator(tick_spacing))
             plt.ylim(bottom=0)
             plt.savefig('plot_Nbact_loading_{}_growth_{}ab_conc_{}.png'.format(loading, growth, str(AB_conc)))
-            plt.show()
+
 
             plt.figure(2)
             for i in range(0, self.total_drop_number):
@@ -135,7 +135,7 @@ class droplets_R():
             #ax.yaxis.set_major_locator(ticker.MultipleLocator(tick_spacing))
             plt.ylim(bottom=0)
             plt.savefig('plot_Nbact_loading_{}_growth_{}ab_conc_{}'.format(loading, growth, AB_conc))
-            plt.show()
+
 
             plt.figure(2)
             #plt.grid(True)

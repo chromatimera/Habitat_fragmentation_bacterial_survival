@@ -1,7 +1,9 @@
 ### To do list:
 ### When running for loop different partitions, the bacteria seem to grow - I believe there is something wrong in either degradation or volume or something else
-
-
+##  deg is faster for bigger droplets-- why -- partially because nsat too low (make a concentration rather than fixed value?)
+#check TOTAL initial bact (this should be the same for all loops in det loading)-- plot Ni vs partition ( i think this is ok?)
+#change units for AB in plots ;; ug /ml???
+#  changed from 0 to 1  ;; if self.N < 1.0: for det growth  #### #can't have less than 1 bacteria ; is this the same in Gillespie?
 
 
 
@@ -11,7 +13,7 @@ from decimal import *
 
 getcontext().prec = 50
 
-total_drop_nr = 10
+total_drop_nr = 500  ###
 
 t_start = 0
 t_end = 300
@@ -30,10 +32,10 @@ nr_drop_min = 1
 nr_drop_max = 10
 step_drop = 5
 
-Nsat = 100
-initialN = 10
+Nsat = 1e8
+initialN = 5
 growthrate = 0.01 # per minute from experimental data Nia thesis
-deathrate  = 0.045  # per minute
+deathrate  = 0.045  # per minute from Gore 2013
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
@@ -62,7 +64,8 @@ loading = "det"  # rand
 #growth = "midpoint_tau_binary" # for troubleshooting -- needs updating
 #growth = "binary"
 growth = 'gillespie_binary'
-degradation = 'linear_decay'
+degradation = 'MM_exponential'
+#MM_exponential
 
 
 

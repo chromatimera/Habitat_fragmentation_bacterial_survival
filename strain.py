@@ -217,7 +217,7 @@ class strain(object):
             self.N = self.N + self.N * self.growthrate * self.dt  ## N grows uninhibited, normalized by dt
         else:
             self.N = self.N - self.N * self.deathrate * self.dt   ## N dies with growthrate normalized by dt
-        if self.N < 0.0:  #### #can't have less than 0 bacteria (THIS WAS 1) 01/04/2022
+        if self.N < 1.0:  #### #can't have less than 1 bacteria ??
            self.N = 0
 
     def midpoint_tau_binary_grow(self, epsilon, AB_conc):

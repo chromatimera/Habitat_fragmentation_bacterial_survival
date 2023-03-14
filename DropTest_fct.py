@@ -81,7 +81,7 @@ class DropTest(object):
             new_ab_conc = i
             print('antib_conc', new_ab_conc)
             strain_R = strain(initialN, growthrate, deathrate, MIC, dt, t_end, Nsat)
-            Droplet_exp = droplets_R(total_drop_nr, strain_R, new_ab_conc, dt, t_end)  # 0.5, 300
+            Droplet_exp = droplets_R(total_drop_nr, strain_R, new_ab_conc, dt, t_end)
             Droplet_exp.run(loading, growth)
             Droplet_exp.countSurvival(growth)
             #surv_frac = Droplet_exp.Res_survival_fraction
@@ -89,7 +89,7 @@ class DropTest(object):
             additional = pd.DataFrame({"" + str(new_ab_conc) + "": [Droplet_exp.Res_survival_fraction]})
             # print(additional)
             new = pd.concat([new, additional], axis=1)
-            # #Droplet_exp.save(
+             #Droplet_exp.save(
             #     'initialN{}_growthrate{}_MIC{}_totaldropnr{}_ABconc{}_dt{}_loading{}_growth{}.csv'.format(initialN,
             #                                                                                               growthrate,
             #                                                                                               MIC,
@@ -102,7 +102,6 @@ class DropTest(object):
             #     growth, initialN, new_ab_conc, growthrate, dt)
 
             print("--- %s seconds ---" % (time.time() - start_time))
-            #Droplet_exp.plots(growth)
             # Droplet_exp.normed_histograms(50)
             #print(new)
             pd.DataFrame(new).to_csv('output/df_growth_{}_count_survival_nr_drop_{}_ab_range_{}_{}.csv'.format(growth,total_drop_nr,abmin,abmax), index= None)
@@ -127,18 +126,17 @@ class DropTest(object):
                 additional = pd.DataFrame({"" + str(new_nr_drops_total_mass) + "": [Droplet_exp.Res_survival_fraction]})
                 # print(additional)
                 new = pd.concat([new, additional], axis=1)
-                # #Droplet_exp.save(
-                #     'initialN{}_growthrate{}_MIC{}_totaldropnr{}_ABconc{}_dt{}_loading{}_growth{}.csv'.format(initialN,
-                #                                                                                               growthrate,
-                #                                                                                               MIC,
-                #                                                                                               total_drop_nr,
-                #                                                                                               new_ab_conc,
-                #                                                                                               dt,
-                #                                                                                               loading,
-                #                                                                                               growth),
-                #     'ABconc{}_loading{}_growth{}.csv'.format(new_ab_conc, loading, growth),'Time_list.csv', Nsat, total_drop_nr, loading,
-                #     growth, initialN, new_ab_conc, growthrate, dt)
-        print("--- %s seconds ---" % (time.time() - start_time))
+                #Droplet_exp.plots(growth)
+       #         Droplet_exp.save('initialN{}_growthrate{}_MIC{}_totaldropnr{}_vol{}_loading{}_growth{}.csv'.format(initialN,
+       #                                                                                                        growthrate,
+       #                                                                                                        MIC,
+       #                                                                                                        total_drop_nr,
+        #                                                                                                       new_volume,
+        #                                                                                                       loading,
+        #                                                                                                       growth)
+      #         , 'ABconc{}_loading{}_growth{}_vol{}.csv'.format(AB_conc, loading, growth, new_volume),'Time_list.csv', AB_conc) #, Nsat, total_drop_nr, loading,
+                    # growth, initialN, new_volume, growthrate, dt)
+       # print("--- %s seconds ---" % (time.time() - start_time))
         pd.DataFrame(new).to_csv('output/df_growth_{}_count_survival_nr_drop_{}_partition_factor.csv'.format(growth, total_drop_nr), index= None)
         #print('total_drop_nr', total_drop_nr)
 
@@ -203,9 +201,9 @@ class DropTest(object):
         print("--- %s seconds ---" % (time.time() - start_time))
 
 simulate = DropTest()
-simulate.run()
+#simulate.run()
 #simulate.test_dt(0, 10, 1)
-#simulate.test_surv_frac_diff_partitioning(0, 3, 1)
+simulate.test_surv_frac_diff_partitioning(0, 3, 1)
 #simulate.test_surv_frac_diff_ab_conc(abmin, abmax, step)
 #simulate.test_survival_big_droplet_diff_ab_conc(abmin,abmax,step,nr_drop_min,nr_drop_max,step_drop)
 #simulate.count_total_mass(abmin, abmax, step)
