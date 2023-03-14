@@ -21,12 +21,13 @@ def scientific_notation(n):
 
 class Experiment_R(object):
 
-    def __init__(self, strain_r, AB_conc, dt, t_end):
+    def __init__(self, strain_r, AB_conc, t_end, volume):
         self.strain_r = strain_r
         self.dt = variables.dt
         self.t_end = variables.t_end
         self.timesteps = round(t_end/variables.dt)
         self.AB_conc = AB_conc
+        self.volume = volume
 
     def initialise(self, init_type):
 
@@ -84,7 +85,7 @@ class Experiment_R(object):
             # Grow strain for dt: ###tau_grow VS grow
             if grow_meth == 'binary':
                 self.AB_conc_array[i+1] = self.degrade_ab_1_step_det(self.AB_conc_array[i], self.strain_r.N, self.dt,
-                                                                variables.volume, nr_drops_total_mass=1) #self.deg_list[i+1],
+                                                                self.volume, nr_drops_total_mass=1) #self.deg_list[i+1],
                 self.strain_r.binary_grow(self.AB_conc_array[i+1])
                 self.N_array[i+1] = self.strain_r.N
 

@@ -28,6 +28,7 @@ class strain(object):
         self.timesteps = round(self.t_end/self.dt)
         self.Nsat = variables.Nsat * nr_drops_total_mass
         self.nr_drops_total_mass = nr_drops_total_mass
+        self.volume = variables.volume * nr_drops_total_mass
 
     @staticmethod
     def set_rates_and_prop_binary(AB_conc_array, MIC, N_population_array, growthrate, deathrate):
@@ -106,7 +107,7 @@ class strain(object):
    time array, ab array, N array
    """
     @staticmethod
-    def evolve_gillespie_one_step(a, a0, time_array, AB_conc_array, N_population_array, stoichiometry, nr_drops_total_mass):
+    def evolve_gillespie_one_step(a, a0, time_array, AB_conc_array, N_population_array, stoichiometry, nr_drops_total_mass, volume):
         # determine time of next reaction for gillespie
         r1 = random.uniform(0, 1)
         tau = (-math.log(r1) / a0)
@@ -117,7 +118,7 @@ class strain(object):
         chosen_reaction = np.argwhere(np.array(acumsum) >= r2)[0]
 
         time_array = np.append(time_array, time_array[-1] + tau)
-        AB_conc_array = strain.degrade_ab_1_step(AB_conc_array, N_population_array, tau, nr_drops_total_mass, variables.volume)
+        AB_conc_array = strain.degrade_ab_1_step(AB_conc_array, N_population_array, tau, nr_drops_total_mass, volume)
         N_population_array = np.append(N_population_array, N_population_array[-1] + stoichiometry[chosen_reaction])
 
         return time_array, AB_conc_array, N_population_array
@@ -272,7 +273,7 @@ class strain(object):
                         self.t_array = np.append(self.t_array, self.t_array[-1] + tau)
 
                         #update Ab_conc for next step
-                        self.AB_conc_array = self.degrade_ab_1_step(self.AB_conc_array, self.N, tau, variables.volume)
+                        self.AB_conc_array = self.degrade_ab_1_step(self.AB_conc_array, self.N, tau, self.volume)
                         #update N
                         self.N = np.append(self.N, self.N[-1] + change_in_N)
                         #print('actual N', self.N[-1])
@@ -311,7 +312,7 @@ class strain(object):
                         self.t_array = np.append(self.t_array, self.t_array[-1] + tau)
 
                         #update Ab_conc for next step
-                        self.AB_conc_array = self.degrade_ab_1_step(self.AB_conc_array, self.N, tau, variables.volume)
+                        self.AB_conc_array = self.degrade_ab_1_step(self.AB_conc_array, self.N, tau, self.volume)
                         #update N
                         self.N = np.append(self.N, self.N[-1] - change_in_N)
                         #print('actual N', self.N[-1])
@@ -321,7 +322,7 @@ class strain(object):
                         gill_trial = True
 
                 if gill_trial == True:
-                    self.t_array, self.AB_conc_array, self.N = self.evolve_gillespie_one_step(a, a0, self.t_array, self.AB_conc_array[-1], self.N, AB_Deg_rate, stoichiometry)
+                    self.t_array, self.AB_conc_array, self.N = self.evolve_gillespie_one_step(a, a0, self.t_array, self.AB_conc_array[-1], self.N, AB_Deg_rate, stoichiometry, self.volume)
 
     def adaptive_tau_binary_grow(self, epsilon, AB_conc):
         def compute_L_and_crit_arrays(stoichiometry, a, n_crit):
@@ -422,7 +423,7 @@ class strain(object):
                         # update time array
                         self.t_array = np.append(self.t_array, self.t_array[-1] + tau)
                         # update Ab_conc for next step
-                        self.AB_conc_array = self.degrade_ab_1_step(self.AB_conc_array, self.N, tau, self.nr_drops_total_mass, variables.volume)
+                        self.AB_conc_array = self.degrade_ab_1_step(self.AB_conc_array, self.N, tau, self.nr_drops_total_mass, self.volume)
                         s += 1
 
 
@@ -432,7 +433,7 @@ class strain(object):
                                     rates, a, a0 = self.set_rates_and_prop_binary(self.AB_conc_array, self.MIC, self.N, self.growthrate, self.deathrate)
 
                                     self.t_array, self.AB_conc_array, self.N = self.evolve_gillespie_one_step(a, a0, self.t_array,
-                                                                                                          self.AB_conc_array, self.N, stoichiometry, self.nr_drops_total_mass)
+                                                                                                          self.AB_conc_array, self.N, stoichiometry, self.nr_drops_total_mass, self.volume)
                                     s += 1
                                 break
         return self.t_array, self.N, self.AB_conc_array
@@ -455,7 +456,7 @@ class strain(object):
 
             while (self.t_array[s] < self.t_end) and (self.N[-1] != 0) and (self.N[-1] < self.Nsat):
                 rates, a, a0 = self.set_rates_and_prop_binary(self.AB_conc_array, self.MIC, self.N, self.growthrate, self.deathrate)
-                self.t_array, self.AB_conc_array, self.N = self.evolve_gillespie_one_step(a, a0, self.t_array, self.AB_conc_array, self.N, stoichiometry, self.nr_drops_total_mass)
+                self.t_array, self.AB_conc_array, self.N = self.evolve_gillespie_one_step(a, a0, self.t_array, self.AB_conc_array, self.N, stoichiometry, self.nr_drops_total_mass, self.volume)
                 # keep counters for timesteps and AB_conc
                 s += 1
 

@@ -4,7 +4,7 @@ from decimal import *
 
 getcontext().prec = 50
 
-total_drop_nr = 5000
+total_drop_nr = 500
 
 t_start = 0
 t_end = 300

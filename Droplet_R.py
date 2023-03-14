@@ -17,13 +17,14 @@ getcontext().prec = 50
 
 class droplets_R():
 
-    def __init__(self, total_drop_nr, strain_r, AB_conc):
+    def __init__(self, total_drop_nr, strain_r, AB_conc, volume):
         self.total_drop_number = total_drop_nr
         self.strain_r = strain_r
         self.AB_conc = AB_conc
         self.dt = variables.dt
         self.t_end = variables.t_end
         self.timesteps = round(self.t_end / variables.dt)
+        self.volume = volume
 
         ## if doing deterministic growth
         self.N_r_array = np.empty((self.total_drop_number, self.timesteps))#.astype(int) # initialize empty array
@@ -41,7 +42,7 @@ class droplets_R():
 
     def run(self, init_type, grow_meth):
         #run identical experiments in each droplet
-        Exp = Experiment_R(self.strain_r, self.AB_conc, self.dt, self.t_end)
+        Exp = Experiment_R(self.strain_r, self.AB_conc, self.t_end, self.volume)
 
         for k in range(0, self.total_drop_number):
             print('drop. nr:', k)

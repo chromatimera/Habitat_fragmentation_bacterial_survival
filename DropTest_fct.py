@@ -116,10 +116,10 @@ class DropTest(object):
              for j in range(0,2,1):
                 new_i = 10**i * 5**j
                 new_nr_drops_total_mass = new_i
-                print('partitioning factor', new_nr_drops_total_mass)
-                total_drop_nr = round(variables.total_drop_nr /new_i)
+                new_volume = variables.volume * new_nr_drops_total_mass
+                total_drop_nr = round(variables.total_drop_nr /new_nr_drops_total_mass)
                 strain_R = strain(new_nr_drops_total_mass)
-                Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc)  # 0.5, 300
+                Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc, new_volume)  # 0.5, 300
                 Droplet_exp.run(loading, growth)
                 Droplet_exp.countSurvival(growth)
                 #surv_frac = Droplet_exp.Res_survival_fraction
@@ -205,7 +205,7 @@ class DropTest(object):
 simulate = DropTest()
 #simulate.run()
 #simulate.test_dt(0, 10, 1)
-simulate.test_surv_frac_diff_partitioning(0, 4, 1)
+simulate.test_surv_frac_diff_partitioning(0, 3, 1)
 #simulate.test_surv_frac_diff_ab_conc(abmin, abmax, step)
 #simulate.test_survival_big_droplet_diff_ab_conc(abmin,abmax,step,nr_drop_min,nr_drop_max,step_drop)
 #simulate.count_total_mass(abmin, abmax, step)
