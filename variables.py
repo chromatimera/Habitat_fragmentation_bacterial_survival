@@ -1,3 +1,10 @@
+### To do list:
+### When running for loop different partitions, the bacteria seem to grow - I believe there is something wrong in either degradation or volume or something else
+
+
+
+
+
 ## set all variables here and settings
 import os.path
 from decimal import *
