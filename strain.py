@@ -211,8 +211,8 @@ class strain(object):
 
 
     def binary_grow(self, AB_conc):
-        print('initialN', self.initialN)
-        print('Nsat', self.Nsat)
+        #print('initialN', self.initialN)
+        #print('Nsat', self.Nsat)
         if self.MIC > AB_conc:
             self.N = self.N + self.N * self.growthrate * self.dt  ## N grows uninhibited, normalized by dt
         else:

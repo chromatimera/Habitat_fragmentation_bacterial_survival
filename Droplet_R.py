@@ -45,7 +45,7 @@ class droplets_R():
         Exp = Experiment_R(self.strain_r, self.AB_conc, self.t_end, self.volume)
 
         for k in range(0, self.total_drop_number):
-            print('drop. nr:', k)
+            #print('drop. nr:', k)
             if (grow_meth != "binary"):
                 Exp.run(init_type, grow_meth)
                 ## not necessarily gillespie, but the point is that the N, AB_conc and Time list have variable lengths
@@ -70,8 +70,7 @@ class droplets_R():
 
 
         folder_name = 'output/' \
-                      'Nsat_{}_dropnr_{}_loading_{}_growth_{}_initialN_{}_abconc_{}_growthrate_{}_dt_' \
-                      '{}'.format(variables.Nsat,variables.total_drop_nr,loading,growth, variables.initialN, self.AB_conc, growthrate, self.dt)
+                      'dropnr_{}_loading_{}_growth_{}_initialN_{}_abconc_{}_gr_{}_dt_{}_Nsat_{}'.format(variables.total_drop_nr,loading,growth, variables.initialN, self.AB_conc, growthrate, self.dt,variables.Nsat)
         path = os.path.join(curr_path, folder_name)
         isExist = os.path.exists(path)
 
@@ -160,7 +159,7 @@ class droplets_R():
             for i in range(0, len(self.N_list_gillespie)):
                 self.last_N_list.append(self.N_list_gillespie[i][-1])
                 self.first_N_list.append(self.N_list_gillespie[i][0])
-            print('N_list', self.last_N_list)
+            #print('N_list', self.last_N_list)
             Res_living = np.count_nonzero(self.last_N_list)
             if np.count_nonzero(self.first_N_list) == 0:
                 self.Res_survival_fraction = 0
@@ -230,7 +229,7 @@ class droplets_R():
 
         # Check whether the specified path exists or not
 
-        folder_name = 'output/Nsat_{}_dropnr_{}_loading_{}_growth_{}_initialN_{}_abconc_{}_growthrate_{}_dt_{}'.format(variables.Nsat,variables.total_drop_nr, variables.loading, variables.growth, variables.initialN, AB_conc, variables.growthrate, self.dt)
+        folder_name = 'output/dropnr_{}_loading_{}_growth_{}_initialN_{}_abconc_{}_gr_{}_dt_{}_Nsat_{}'.format(variables.total_drop_nr, variables.loading, variables.growth, variables.initialN, AB_conc, variables.growthrate, self.dt,variables.Nsat)
         path = os.path.join(curr_path, folder_name)
         isExist = os.path.exists(path)
 
@@ -242,9 +241,11 @@ class droplets_R():
         os.chdir(path)
 
         if (growth != "binary"):
-            pd.DataFrame(self.N_list_gillespie).to_csv(NRfilename)
+            new_fn=os.path.join(path+NRfilename)   ##os.path.join(path+"N_R.csv")
+
             pd.DataFrame(self.AB_conc_array_gillespie).to_csv(ABfilename)
             pd.DataFrame(self.time_list_gillespie).to_csv(Timefilename)
+            pd.DataFrame(self.N_list_gillespie).to_csv(NRfilename)
         else:
             pd.DataFrame(self.N_r_array).to_csv(NRfilename)
             pd.DataFrame(self.AB_conc_array).to_csv(ABfilename)

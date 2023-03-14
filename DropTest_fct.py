@@ -20,12 +20,12 @@ class DropTest(object):
         strain_R = strain(nr_drops_total_mass=1)
         Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc, volume)
         Droplet_exp.run(loading, growth)
-        Droplet_exp.save('initialN{}'
-                         '_growthrate{}_MIC{}_totaldropnr{}_ABconc{}_'
-                         'dt{}_loading{}_growth{}.csv'.format(initialN, growthrate, MIC, total_drop_nr, AB_conc, dt,
+        Droplet_exp.save('Ni{}'
+                         '_MIC{}_totaldropnr{}_ABconc{}_'
+                         '_loading{}_growth{}.csv'.format(initialN, growthrate, MIC, total_drop_nr, AB_conc, dt,
                                                               loading, growth), 'ABconc{}_loading{}_growth{}.csv'.format(AB_conc, loading, growth),'Time_list.csv', AB_conc)
 
-        print("--- %s seconds ---" % (time.time() - start_time))
+        #print("--- %s seconds ---" % (time.time() - start_time))
         Droplet_exp.plots(growth)
         Droplet_exp.countSurvival(growth)
 
