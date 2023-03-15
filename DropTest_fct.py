@@ -113,7 +113,7 @@ class DropTest(object):
         # loop for partitioning factors
         for i in range(partmin, partmax, step):
              for j in range(0,2,1):
-                new_i = 10**i * 5**j
+                new_i = 5**i * 2**j
                 new_nr_drops_total_mass = new_i
                 new_volume = variables.volume * new_nr_drops_total_mass
                 total_drop_nr = round(variables.total_drop_nr /new_nr_drops_total_mass)
@@ -137,7 +137,7 @@ class DropTest(object):
       #         , 'ABconc{}_loading{}_growth{}_vol{}.csv'.format(AB_conc, loading, growth, new_volume),'Time_list.csv', AB_conc) #, Nsat, total_drop_nr, loading,
                     # growth, initialN, new_volume, growthrate, dt)
        # print("--- %s seconds ---" % (time.time() - start_time))
-        pd.DataFrame(new).to_csv('output/df_growth_{}_count_survival_nr_drop_{}_partition_factor.csv'.format(growth, total_drop_nr), index= None)
+        pd.DataFrame(new).to_csv('output/df_growth_{}_loading_{}_ABconc{}.csv'.format(growth, loading,AB_conc), index= None)
         #print('total_drop_nr', total_drop_nr)
 
     ## Test the survival fraction of droplets for different factors, ab conc and calculate the total mass
@@ -203,7 +203,7 @@ class DropTest(object):
 simulate = DropTest()
 #simulate.run()
 #simulate.test_dt(0, 10, 1)
-simulate.test_surv_frac_diff_partitioning(0, 3, 1)
+simulate.test_surv_frac_diff_partitioning(0, 5, 1)
 #simulate.test_surv_frac_diff_ab_conc(abmin, abmax, step)
 #simulate.test_survival_big_droplet_diff_ab_conc(abmin,abmax,step,nr_drop_min,nr_drop_max,step_drop)
 #simulate.count_total_mass(abmin, abmax, step)

@@ -57,7 +57,7 @@ class droplets_R():
                 self.N_r_array[k] = Exp.N_array
                 self.time_list_array[k] = Exp.ts
                 self.AB_conc_array[k] = Exp.AB_conc_array
-        self.deg_list = Exp.deg_list
+                self.deg_list = Exp.deg_list
 
 
     def plots(self, grow_meth):
