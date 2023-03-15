@@ -4,6 +4,11 @@
 #check TOTAL initial bact (this should be the same for all loops in det loading)-- plot Ni vs partition ( i think this is ok?)
 #change units for AB in plots ;; ug /ml???
 #  changed from 0 to 1  ;; if self.N < 1.0: for det growth  #### #can't have less than 1 bacteria ; is this the same in Gillespie?
+#QUESTIONS
+#can you explain i and j in the partition loop?
+#How does poission loading work for the big droplet?
+#==> ie what kind of repeats does your loop do
+#Final N plots (with error bars from repeats)
 
 
 
@@ -39,7 +44,7 @@ deathrate  = 0.045  # per minute from Gore 2013
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
-AB_conc = 10 #ug/mL
+AB_conc = 25 #ug/mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL
@@ -60,12 +65,12 @@ nr_points = 25
 epsilon = 0.03
 
 ##type of loading and growth
-loading = "det"  # rand
+loading = "det"  # rand #det
 #growth = "midpoint_tau_binary" # for troubleshooting -- needs updating
-#growth = "binary"
-growth = 'gillespie_binary'
+growth = "binary"
+#growth = 'gillespie_binary'
+#degradation = 'MM_linear'
 degradation = 'MM_exponential'
-#MM_exponential
 
 
 
