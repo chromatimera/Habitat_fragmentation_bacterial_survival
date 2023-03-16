@@ -1,16 +1,10 @@
 ### To do list:
-### When running for loop different partitions, the bacteria seem to grow - I believe there is something wrong in either degradation or volume or something else
-##  deg is faster for bigger droplets-- why -- partially because nsat too low (make a concentration rather than fixed value?)
-#check TOTAL initial bact (this should be the same for all loops in det loading)-- plot Ni vs partition ( i think this is ok?)
-#change units for AB in plots ;; ug /ml???
-#  changed from 0 to 1  ;; if self.N < 1.0: for det growth  #### #can't have less than 1 bacteria ; is this the same in Gillespie?
-#QUESTIONS
-#can you explain i and j in the partition loop?
-#How does poission loading work for the big droplet?
-#==> ie what kind of repeats does your loop do
+
+## why changing Nsat changes results??? - ### When running for loop different partitions, the bacteria seem to grow - I believe there is something wrong in either degradation or volume or something else
+
+#How does poission loading work for the big droplet? - the nr of repeats
 #Final N plots (with error bars from repeats)
-
-
+## plot Nf, Ni versus parition for same ab conc
 
 ## set all variables here and settings
 import os.path
@@ -55,11 +49,6 @@ Vmax = 3.5e-8 #ug/cell/min
 abmin = 0
 abmax = 50
 step = 1
-
-### drop number for testing convergence or surv frac
-dropmin = 1
-dropmax = 5000
-nr_points = 25
 
 ## epsilon parameter for tau precheck
 epsilon = 0.03

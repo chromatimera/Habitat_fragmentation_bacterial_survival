@@ -57,7 +57,8 @@ class droplets_R():
                 self.N_r_array[k] = Exp.N_array
                 self.time_list_array[k] = Exp.ts
                 self.AB_conc_array[k] = Exp.AB_conc_array
-                self.deg_list = Exp.deg_list
+        ## uncomment this line if doing comparison between types of ab degradation; otherwise not necessary; should be only once per droplet
+        #self.deg_list = Exp.deg_list
 
 
     def plots(self, grow_meth):
@@ -107,7 +108,7 @@ class droplets_R():
                 plt.plot(self.time_list_gillespie[i], self.AB_conc_array_gillespie[i])
             plt.grid(True)
             # plt.title('Concentration of antibiotic over time in each droplet.')
-            plt.ylabel('Antibiotic (molecules)')
+            plt.ylabel('Antibiotic (ug/nL)')
             plt.xlabel('Time (mins)')
             plt.xlim(0, self.t_end)
             plt.ylim(bottom=0)
@@ -142,7 +143,7 @@ class droplets_R():
             plt.plot(XX.T, self.AB_conc_array.T)
             plt.grid(True)
             #plt.title('Concentration of antibiotic over time in each droplet.')
-            plt.ylabel('Antibiotic (molecules)')
+            plt.ylabel('Antibiotic (ug/mL)')
             plt.xlabel('Time (mins)')
             plt.xlim(0, self.t_end)
             plt.ylim(bottom=0)

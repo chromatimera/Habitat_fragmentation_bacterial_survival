@@ -29,7 +29,8 @@ class DropTest(object):
         Droplet_exp.plots(growth)
         Droplet_exp.countSurvival(growth)
 
-    def test_dt(self, dtmin, dtmax, stepdt): ## will be removed; fct to test difference in AB degradation between different dts - can estimate error in linear approximation
+    def test_dt(self, dtmin, dtmax, stepdt): ## will be removed; fct to test difference in AB degradation between different dts -
+        # can estimate error in linear approximation; uncomment Deg_list in the Exp_R file
         new = pd.DataFrame()
 
         # loop for variables
@@ -80,8 +81,8 @@ class DropTest(object):
         for i in range(abmin, abmax, step):
             new_ab_conc = i
             print('antib_conc', new_ab_conc)
-            strain_R = strain(initialN, growthrate, deathrate, MIC, dt, t_end, Nsat)
-            Droplet_exp = droplets_R(total_drop_nr, strain_R, new_ab_conc, dt, t_end)
+            strain_R = strain(nr_drops_total_mass= 1 )
+            Droplet_exp = droplets_R(total_drop_nr, strain_R, new_ab_conc, variables.volume)
             Droplet_exp.run(loading, growth)
             Droplet_exp.countSurvival(growth)
             #surv_frac = Droplet_exp.Res_survival_fraction
@@ -178,7 +179,7 @@ class DropTest(object):
             # pd.DataFrame(new).to_csv('output/df_growth_{}_count_survival.csv'.format(growth), index=None)
             pd.DataFrame(df_total_mass).to_csv('output/df_growth_{}_nr_drops_{}_big_droplet_nr_{}.csv'.format(growth, total_drop_nr,nr_drops_total_mass), index=None)
 
-
+    ## needs changing
     def count_total_mass(self, abmin, abmax, step):
         df_total_mass = pd.DataFrame()
         # loop for variables
