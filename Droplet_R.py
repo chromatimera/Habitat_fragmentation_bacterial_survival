@@ -177,7 +177,7 @@ class droplets_R():
             print("Fraction of droplets where bacteria survived=  " + str(self.Res_survival_fraction))
 
     def countTotalMass(self, grow_meth):
-        self.total_mass = np.empty(self.timesteps + 1)
+        self.total_mass = np.empty(self.timesteps)
 
         if (grow_meth != "binary") or (grow_meth != "tau_binary")  or (grow_meth != "balanced"):
 
@@ -190,7 +190,7 @@ class droplets_R():
             # print('mass_droplet',self.mass_droplet)
 
             ## for all times with increment dt from 0 until t_end
-            for t in range(0, self.timesteps + 1):
+            for t in range(0, self.timesteps):
                 #print('time', t * self.dt)
                 ## define a list that takes the mass values at a specific time_point
                 self.mass_droplet = []
@@ -209,7 +209,7 @@ class droplets_R():
                 #print('mass_droplet', self.mass_droplet) ### last N at a specific time
                 self.total_mass[t] = np.sum(self.mass_droplet)
         else:
-            for i in range(0, self.timesteps + 1):
+            for i in range(0, self.timesteps):
                 if np.count_nonzero(self.N_r_array[:, 0]) == 0:
                     self.total_mass[i] = 0
                 else:

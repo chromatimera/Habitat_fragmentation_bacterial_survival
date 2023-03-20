@@ -16,7 +16,7 @@ total_drop_nr = 500  ###
 
 t_start = 0
 t_end = 300
-dt = 0.1
+dt = 5
 
 ### nr timesteps for dt test; ignore dt for this test
 nr_timesteps = int(3e6)
@@ -32,13 +32,13 @@ nr_drop_max = 10
 step_drop = 5
 
 Nsat = 1e8
-initialN = 5
+initialN = 50
 growthrate = 0.01 # per minute from experimental data Nia thesis
 deathrate  = 0.045  # per minute from Gore 2013
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
-AB_conc = 25 #ug/mL
+AB_conc = 10 #ug/mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL
@@ -54,10 +54,10 @@ step = 1
 epsilon = 0.03
 
 ##type of loading and growth
-loading = "det"  # rand #det
+loading = "rand"  # rand #det
 #growth = "midpoint_tau_binary" # for troubleshooting -- needs updating
-growth = "binary"
-#growth = 'gillespie_binary'
+#growth = "binary"
+growth = 'gillespie_binary'
 #degradation = 'MM_linear'
 degradation = 'MM_exponential'
 

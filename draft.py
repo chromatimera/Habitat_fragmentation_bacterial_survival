@@ -1,17 +1,12 @@
-new_i = 5**i * 2**j
-                new_nr_drops_total_mass = new_i
-                new_volume = variables.volume * new_nr_drops_total_mass
-                total_drop_nr = round(variables.total_drop_nr /new_nr_drops_total_mass)
-                strain_R = strain(new_nr_drops_total_mass)
-                Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc, new_volume)  # 0.5, 300
-                Droplet_exp.run(loading, growth)
-                Droplet_exp.countSurvival(growth)
-                additional = pd.DataFrame({"" + str(new_nr_drops_total_mass) + "": [Droplet_exp.Res_survival_fraction]})
-                # print(additional)
-                new = pd.concat([new, additional], axis=1)
-                #Droplet_exp.plots(growth)
-                #Droplet_exp.save('initialN{}_totaldropnr{}_vol{}_loading{}_growth{}.csv'.format(initialN,new_nr_drops_total_mass,new_volume,loading,growth),
-                #                 'ABconc{}_loading{}_growth{}_vol{}.csv'.format(AB_conc, loading, growth, new_volume),'Time_list.csv', AB_conc) #, Nsat, total_drop_nr, loading,growth, initialN, new_volume, growthrate, dt)
-        #print("--- %s seconds ---" % (time.time() - start_time))
-        pd.DataFrame(new).to_csv('output/df_growth_{}_loading_{}_ABconc{}.csv'.format(growth, loading, AB_conc), index = None)
-        #print('total_drop_nr', total_drop_nr)
+import numpy as np
+from variables import *
+import pandas as pd
+
+x = pd.read_csv('./output/df_growth_gillespie_binary_starting_nr_drops_500.csv')
+part_fact = [0, 0.0008, 0.0016, 0.004, 0.008, 0.02, 0.04, 0.1, 0.2, 0.5, 1.0]
+pf = pd.DataFrame(part_fact)
+print(pf)
+x.loc[-1] = [0, 0.0008, 0.0016, 0.004, 0.008, 0.02, 0.04, 0.1, 0.2, 0.5, 1.0]  # adding a row
+x.index = x.index + 1  # shifting index
+x.sort_index(inplace=True)
+print(x)
