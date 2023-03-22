@@ -1,10 +1,15 @@
+##Beware:
+## the way in which the loop is set out rn is not ideal; we need to make sure that we when calculating the 'multiplying' factor, we don't divide the total
+# nr of droplets to a factor so big that we end up with 0 droplets; as this will result in error
+## added an error message to make the user aware of this
+
 ### To do list:
 
 ## why changing Nsat changes results??? - ### When running for loop different partitions, the bacteria seem to grow - I believe there is something wrong in either degradation or volume or something else
-## Not sure why the last droplet in the for loop countTotalMass is 0? How to go around that?
 #How does poission loading work for the big droplet? - the nr of repeats
-#Final N plots (with error bars from repeats)
-## plot Nf, Ni versus parition for same ab conc
+#Final N plots (with error bars from repeats) - add error bars
+## I think we should normalize the Nf, Ni - as there's a big gap between them
+
 
 ## set all variables here and settings
 import os.path
@@ -13,7 +18,7 @@ import math
 getcontext().prec = 50
 
 ### nr of droplets and the power of i and j in the partitioning loop are related i.e. for 100 droplets, the loop goes from 0 to 3.
-total_drop_nr = 10
+total_drop_nr = 1000
 part_min = 0
 part_max = math.floor(math.log(total_drop_nr, 10)) + 1
 

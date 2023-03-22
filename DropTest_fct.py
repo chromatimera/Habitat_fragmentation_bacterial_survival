@@ -185,19 +185,22 @@ class DropTest(object):
                 new_volume = variables.volume * new_nr_drops_total_mass
                 total_drop_nr = round(variables.total_drop_nr / new_nr_drops_total_mass)
                 print('total_droplets', total_drop_nr)
+                if total_drop_nr == 0:
+                    print("Error in partitioning; the partitioning factor is so small that you're trying to simulate 0 droplets")
+                else:
 
-                strain_R = strain(new_nr_drops_total_mass)
-                Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc, new_volume)  # 0.5, 300
-                Droplet_exp.run(loading, growth)
-                Droplet_exp.countTotalMass(growth)
+                    strain_R = strain(new_nr_drops_total_mass)
+                    Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc, new_volume)  # 0.5, 300
+                    Droplet_exp.run(loading, growth)
+                    Droplet_exp.countTotalMass(growth)
 
-                ##this is the total number of bacteria at each timestep
-                nr_bact_each_ts = Droplet_exp.total_mass
-                part_fct = 1/total_drop_nr
-                print('part fct', part_fct)
-                df_total_mass['{}'.format(part_fct)] = nr_bact_each_ts
-                ## append all parition factors, next step will transform this into partition factors
-                part_fact.append(new_nr_drops_total_mass)
+                    ##this is the total number of bacteria at each timestep
+                    nr_bact_each_ts = Droplet_exp.total_mass
+                    part_fct = 1/total_drop_nr
+                    print('part fct', part_fct)
+                    df_total_mass['{}'.format(part_fct)] = nr_bact_each_ts
+                    ## append all parition factors, next step will transform this into partition factors
+                    part_fact.append(new_nr_drops_total_mass)
 
 
         #

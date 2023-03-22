@@ -5,9 +5,24 @@ import matplotlib.pyplot as plt
 import variables
 from variables import *
 
+
+def read_csv():
+    df = pd.read_csv('./output/df_growth_{}_starting_nr_drops_{}.csv'.format(growth, variables.total_drop_nr))
+    return df
+
+### PLS IGNORE THIS BIT - FOR ADDING ERROR BARS
+def add_error95_bar(df):
+    ...
+    return
 print(os.getcwd())
-df = pd.read_csv('./output/df_growth_{}_starting_nr_drops_{}.csv'.format(growth, variables.total_drop_nr))
+df = read_csv()
 print(df)
+
+
+
+### PLS IGNORE THIS BIT - FOR ADDING ERROR BARS
+#adaptive_tau_binary_transposed['Error95'] = adaptive_tau_binary_transposed.apply(lambda x: 2 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(nr_drops), axis=1)
+#adaptive_tau_binary_transposed['Error99'] = adaptive_tau_binary_transposed.apply(lambda x: 2.6 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(nr_drops), axis=1)
 
 # ### This plot plots Nr of bacteria as a function of time; each line is a different multiplication factor ### this is only for troubleshooting purposes
 # df.iloc[1:, 1:].plot()
@@ -26,5 +41,5 @@ plt.title('Total mass versus partitioning factor, growth {}'.format(growth))
 plt.ylabel('Total mass (nr of bacteria) Nf, Ni')
 plt.xlabel('Partition factor')
 plt.legend(['Ni', 'Nf'], loc='upper left')
-#plt.savefig('./output/Total mass growth {}, nr of droplets {}, difference.png'.format(g, 10000))
+plt.savefig('./output/Nf_Ni_vs_part_fact_startin_nr_of_drops_{}.png'.format(variables.total_drop_nr))
 plt.show()
