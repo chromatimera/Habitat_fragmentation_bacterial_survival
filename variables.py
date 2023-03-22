@@ -41,13 +41,13 @@ nr_drop_max = 10
 step_drop = 5
 
 Nsat = 1e8
-initialN = 50
+initialN = 10
 growthrate = 0.01 # per minute from experimental data Nia thesis
 deathrate  = 0.045  # per minute from Gore 2013
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
-AB_conc = 25 #ug/mL
+AB_conc = 75 #ug/mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL

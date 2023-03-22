@@ -11,11 +11,12 @@ def read_csv():
     return df
 
 ### PLS IGNORE THIS BIT - FOR ADDING ERROR BARS
-def add_error95_bar(df):
-    ...
-    return
+#def add_error95_bar(df):
+#    df['Error95'] = df.apply(lambda x: 2 * math.sqrt(df.iloc[:, x] * (1 - df.iloc[:, x])) / math.sqrt(variables.total_drop_nr * ), axis=1)
+#    return df
 print(os.getcwd())
 df = read_csv()
+#df = add_error95_bar()
 print(df)
 
 
@@ -37,7 +38,7 @@ print(df)
 df.iloc[0, 1:].plot()  ### plot initial nr of bacteria
 df.iloc[-1, 1:].plot() ### plot final nr of bacteria
 plt.grid(True)
-plt.title('Total mass versus partitioning factor, growth {}'.format(growth))
+plt.title('Total mass versus partitioning factor, ab conc {}'.format(AB_conc))
 plt.ylabel('Total mass (nr of bacteria) Nf, Ni')
 plt.xlabel('Partition factor')
 plt.legend(['Ni', 'Nf'], loc='upper left')
