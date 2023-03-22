@@ -196,29 +196,21 @@ class DropTest(object):
                 part_fct = 1/total_drop_nr
                 print('part fct', part_fct)
                 df_total_mass['{}'.format(part_fct)] = nr_bact_each_ts
-                ## append all multiplying factors, next step will transform this into partition factors
+                ## append all parition factors, next step will transform this into partition factors
                 part_fact.append(new_nr_drops_total_mass)
-        ## transform multiplication factors into partition factors
-        #part_fact.insert(0, None)
 
 
         #
         ### insert the time array into the dataframe
         df_total_mass.insert(loc=0, column='Time', value = np.linspace(t_start, t_end, num=round(t_end/dt)))
-        ### despite having the multiplication/partition factor in the name of the column, we want the first row to be the multiplication factors for plotting purposes
         ## See below how the dataframe should look like:
-        ## Header Time      M.x1 M.x5 M.x10
-        ##                    1     5    10  ### this is the multiplication factor
+        ## Header Time      x0.1 x0.5 x1
         ##          0        100   100   100 ### Nr of bacteria for t_start
         ##          .         .     .     .
         ##          .         .     .     .
         ##          .         .     .     .
         ##         300        0     2     0
 
-        ## adding the partitioning factor as the first row
-        #df_total_mass.loc[-1] = part_fact
-        #df_total_mass.index = df_total_mass.index + 1  # shifting index
-        #df_total_mass.sort_index(inplace=True)
 
         pd.DataFrame(df_total_mass).to_csv('output/df_growth_{}_starting_nr_drops_{}.csv'.format(growth, variables.total_drop_nr), index = None)
         print("--- %s seconds ---" % (time.time() - start_time))

@@ -18,9 +18,6 @@ part_min = 0
 part_max = math.floor(math.log(total_drop_nr, 10)) + 1
 
 
-
-
-
 t_start = 0
 t_end = 300
 dt = 5
