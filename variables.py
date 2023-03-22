@@ -1,7 +1,7 @@
 ### To do list:
 
 ## why changing Nsat changes results??? - ### When running for loop different partitions, the bacteria seem to grow - I believe there is something wrong in either degradation or volume or something else
-
+## Not sure why the last droplet in the for loop countTotalMass is 0? How to go around that?
 #How does poission loading work for the big droplet? - the nr of repeats
 #Final N plots (with error bars from repeats)
 ## plot Nf, Ni versus parition for same ab conc
@@ -9,10 +9,17 @@
 ## set all variables here and settings
 import os.path
 from decimal import *
-
+import math
 getcontext().prec = 50
 
-total_drop_nr = 500  ###
+### nr of droplets and the power of i and j in the partitioning loop are related i.e. for 100 droplets, the loop goes from 0 to 3.
+total_drop_nr = 10
+part_min = 0
+part_max = math.floor(math.log(total_drop_nr, 10)) + 1
+
+
+
+
 
 t_start = 0
 t_end = 300
@@ -38,7 +45,7 @@ deathrate  = 0.045  # per minute from Gore 2013
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
-AB_conc = 10 #ug/mL
+AB_conc = 25 #ug/mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL

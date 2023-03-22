@@ -171,14 +171,14 @@ class DropTest(object):
             # pd.DataFrame(new).to_csv('output/df_growth_{}_count_survival.csv'.format(growth), index=None)
             pd.DataFrame(df_total_mass).to_csv('output/df_growth_{}_nr_drops_{}_big_droplet_nr_{}.csv'.format(growth, total_drop_nr,nr_drops_total_mass), index=None)
 
-    ## needs changing
+    ## function to sumulate growth and make df used for plotting Nf and Ni versus partitioning factor
     def count_total_mass(self, partmin, partmax, step):
         df_total_mass = pd.DataFrame()
         # loop for different partitioning factors:
         # loop for partitioning factors
-        multipl_fact = []
+        part_fact = []
         for i in range(partmin, partmax, step):
-            for j in range(0, 2, 1):
+            for j in range(partmin, partmax, step):
                 new_i = 5 ** i * 2 ** j
                 new_nr_drops_total_mass = new_i
                 print('new multiplication factor', new_nr_drops_total_mass)
@@ -193,15 +193,13 @@ class DropTest(object):
 
                 ##this is the total number of bacteria at each timestep
                 nr_bact_each_ts = Droplet_exp.total_mass
-
-                df_total_mass['Multiplication x{}'.format(new_nr_drops_total_mass)] = nr_bact_each_ts
+                part_fct = 1/total_drop_nr
+                print('part fct', part_fct)
+                df_total_mass['{}'.format(part_fct)] = nr_bact_each_ts
                 ## append all multiplying factors, next step will transform this into partition factors
-                multipl_fact.append(new_nr_drops_total_mass)
-        print(multipl_fact)
+                part_fact.append(new_nr_drops_total_mass)
         ## transform multiplication factors into partition factors
-        multipl_fact.reverse()
-        part_fact = [1/x for x in multipl_fact]
-        print(part_fact)
+        #part_fact.insert(0, None)
 
 
         #
@@ -218,9 +216,9 @@ class DropTest(object):
         ##         300        0     2     0
 
         ## adding the partitioning factor as the first row
-        df_total_mass.loc[-1] = part_fact
-        df_total_mass.index = df_total_mass.index + 1  # shifting index
-        df_total_mass.sort_index(inplace=True)
+        #df_total_mass.loc[-1] = part_fact
+        #df_total_mass.index = df_total_mass.index + 1  # shifting index
+        #df_total_mass.sort_index(inplace=True)
 
         pd.DataFrame(df_total_mass).to_csv('output/df_growth_{}_starting_nr_drops_{}.csv'.format(growth, variables.total_drop_nr), index = None)
         print("--- %s seconds ---" % (time.time() - start_time))
@@ -229,7 +227,7 @@ simulate = DropTest()
 #simulate.run()
 #simulate.test_dt(0, 10, 1)
 #simulate.test_surv_frac_diff_partitioning(0, 5, 1)
-simulate.count_total_mass(0, 5, 1)
+simulate.count_total_mass(part_min, part_max, step)
 #simulate.test_surv_frac_diff_ab_conc(abmin, abmax, step)
 #simulate.test_survival_big_droplet_diff_ab_conc(abmin,abmax,step,nr_drop_min,nr_drop_max,step_drop)
 #simulate.count_total_mass(abmin, abmax, step)
