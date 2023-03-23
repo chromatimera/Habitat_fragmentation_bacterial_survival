@@ -218,7 +218,7 @@ class DropTest(object):
         pd.DataFrame(df_total_mass).to_csv('output/df_growth_{}_starting_nr_drops_{}.csv'.format(growth, variables.total_drop_nr), index = None)
         print("--- %s seconds ---" % (time.time() - start_time))
 
-        ## function to sumulate growth and make df used for plotting Nf and Ni versus partitioning factor
+        ## function to sumulate growth and make df used for plotting Nf and Ni versus partitioning factor FOR DIFFERENT AB CONC
     def count_total_mass_diff_ab(self, partmin, partmax, abmin, abmax, step):
         df_total_mass = pd.DataFrame()
         for ab in range(abmin, abmax, step):
@@ -255,15 +255,14 @@ class DropTest(object):
         ### insert the time array into the dataframe
         df_total_mass.insert(loc=0, column='Time', value=np.linspace(t_start, t_end, num=round(t_end / dt)))
         ## See below how the dataframe should look like:
-        ## Header Time      x0.1 x0.5 x1
+        ## Header Time      x0.1_ab _0 x0.5_ab_0 x1_ab_0 x1_ab_1 ...
         ##          0        100   100   100 ### Nr of bacteria for t_start
         ##          .         .     .     .
         ##          .         .     .     .
         ##          .         .     .     .
         ##         300        0     2     0
 
-        pd.DataFrame(df_total_mass).to_csv(
-            'output/df_growth_{}_starting_nr_drops_{}.csv'.format(growth, variables.total_drop_nr), index=None)
+        pd.DataFrame(df_total_mass).to_csv('output/df_growth_{}_starting_nr_drops_{}.csv'.format(growth, variables.total_drop_nr), index=None)
         print("--- %s seconds ---" % (time.time() - start_time))
 
 

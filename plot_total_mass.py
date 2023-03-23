@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import matplotlib.pyplot as plt
+from mpl_toolkits import mplot3d
 
 import variables
 from variables import *
@@ -19,6 +20,22 @@ df = read_csv()
 #df = add_error95_bar()
 print(df)
 
+new_df = pd.DataFrame()
+fig = plt.figure()
+ax = plt.axes(projection='3d')
+
+# for m in range(abmin, abmax, step):
+#     for i in range(part_min, part_max, step):
+#         for j in range(part_min, part_max, step):
+#             new_i = 5 ** i * 2 ** j
+#             new_nr_drops_total_mass = new_i
+#             total_drop_nr = round(variables.total_drop_nr / new_nr_drops_total_mass)
+#             part = 1/total_drop_nr
+#             new_df.append(df['p_{}'.format(part)])
+ax.plot_surface(x, y, df.iloc[-1, 1:], cmap='viridis', edgecolor='none')
+ax.set_title('Surface plot')
+plt.show()
+
 
 
 ### PLS IGNORE THIS BIT - FOR ADDING ERROR BARS
@@ -35,3 +52,4 @@ plt.xlabel('Partition factor')
 plt.legend(['Ni', 'Nf'], loc='upper left')
 plt.savefig('./output/Nf_Ni_vs_part_fact_startin_nr_of_drops_{}.png'.format(variables.total_drop_nr))
 plt.show()
+
