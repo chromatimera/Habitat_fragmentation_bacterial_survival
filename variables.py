@@ -4,11 +4,13 @@
 ## added an error message to make the user aware of this
 
 ### To do list:
+## 1. add error bars on the plot
+## 2. do countTotalMass for all AB conc
+##3. check survival fraction vs partition ratio; not sure how to see that plot or if it's in the final form
 
 ## why changing Nsat changes results??? - ### When running for loop different partitions, the bacteria seem to grow - I believe there is something wrong in either degradation or volume or something else
-#How does poission loading work for the big droplet? - the nr of repeats
+#How does poission loading work for the big droplet? - the nr of repeats  ##I think we discussed that with Rosalind and she said it shouldn't matter - check with Nia just to be sure
 #Final N plots (with error bars from repeats) - add error bars
-## I think we should normalize the Nf, Ni - as there's a big gap between them
 
 
 ## set all variables here and settings
@@ -18,7 +20,7 @@ import math
 getcontext().prec = 50
 
 ### nr of droplets and the power of i and j in the partitioning loop are related i.e. for 100 droplets, the loop goes from 0 to 3.
-total_drop_nr = 1000
+total_drop_nr = 10
 part_min = 0
 part_max = math.floor(math.log(total_drop_nr, 10)) + 1
 
@@ -56,7 +58,7 @@ Vmax = 3.5e-8 #ug/cell/min
 
 ##ab conc values range for testing ab
 abmin = 0
-abmax = 50
+abmax = 5
 step = 1
 
 ## epsilon parameter for tau precheck

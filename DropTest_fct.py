@@ -109,7 +109,7 @@ class DropTest(object):
             #print(new)
             pd.DataFrame(new).to_csv('output/df_growth_{}_count_survival_nr_drop_{}_ab_range_{}_{}.csv'.format(growth,total_drop_nr,abmin,abmax), index= None)
         return new
-
+    ### i think for now survival is not binary; it;s a ratio of all droplets - check with Nia
     def test_surv_frac_diff_partitioning(self, partmin, partmax, step): ## one AB conc
         new = pd.DataFrame()
 
@@ -201,18 +201,6 @@ class DropTest(object):
                     df_total_mass['{}'.format(part_fct)] = nr_bact_each_ts
                     ## append all parition factors, next step will transform this into partition factors
                     part_fact.append(new_nr_drops_total_mass)
-                    strain_R = strain(new_nr_drops_total_mass)
-                    Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc, new_volume)  # 0.5, 300
-                    Droplet_exp.run(loading, growth)
-                    Droplet_exp.countTotalMass(growth)
-
-                    ##this is the total number of bacteria at each timestep
-                    nr_bact_each_ts = Droplet_exp.total_mass
-                    part_fct = 1/total_drop_nr
-                    print('part fct', part_fct)
-                    df_total_mass['{}'.format(part_fct)] = nr_bact_each_ts
-                    ## append all parition factors, next step will transform this into partition factors
-                    part_fact.append(new_nr_drops_total_mass)
 
 
         #
@@ -230,11 +218,61 @@ class DropTest(object):
         pd.DataFrame(df_total_mass).to_csv('output/df_growth_{}_starting_nr_drops_{}.csv'.format(growth, variables.total_drop_nr), index = None)
         print("--- %s seconds ---" % (time.time() - start_time))
 
+        ## function to sumulate growth and make df used for plotting Nf and Ni versus partitioning factor
+    def count_total_mass_diff_ab(self, partmin, partmax, abmin, abmax, step):
+        df_total_mass = pd.DataFrame()
+        for ab in range(abmin, abmax, step):
+            # loop for different partitioning factors:
+            # loop for partitioning factors
+            part_fact = []
+            AB_conc = ab
+            for i in range(partmin, partmax, step):
+                for j in range(partmin, partmax, step):
+                    new_i = 5 ** i * 2 ** j
+                    new_nr_drops_total_mass = new_i
+                    new_volume = variables.volume * new_nr_drops_total_mass
+                    total_drop_nr = round(variables.total_drop_nr / new_nr_drops_total_mass)
+                    print('total_droplets', total_drop_nr)
+                    if total_drop_nr == 0:
+                        print(
+                            "Error in partitioning; the partitioning factor is so small that you're trying to simulate 0 droplets")
+                    else:
+
+                        strain_R = strain(new_nr_drops_total_mass)
+                        Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc, new_volume)  # 0.5, 300
+                        Droplet_exp.run(loading, growth)
+                        Droplet_exp.countTotalMass(growth)
+
+                        ##this is the total number of bacteria at each timestep
+                        nr_bact_each_ts = Droplet_exp.total_mass
+                        part_fct = 1 / total_drop_nr
+                        print('part fct', part_fct)
+                        df_total_mass['p_{}_ab_{}'.format(part_fct, ab)] = nr_bact_each_ts
+                        ## append all parition factors, next step will transform this into partition factors
+                        part_fact.append(new_nr_drops_total_mass)
+
+        print(df_total_mass)
+        ### insert the time array into the dataframe
+        df_total_mass.insert(loc=0, column='Time', value=np.linspace(t_start, t_end, num=round(t_end / dt)))
+        ## See below how the dataframe should look like:
+        ## Header Time      x0.1 x0.5 x1
+        ##          0        100   100   100 ### Nr of bacteria for t_start
+        ##          .         .     .     .
+        ##          .         .     .     .
+        ##          .         .     .     .
+        ##         300        0     2     0
+
+        pd.DataFrame(df_total_mass).to_csv(
+            'output/df_growth_{}_starting_nr_drops_{}.csv'.format(growth, variables.total_drop_nr), index=None)
+        print("--- %s seconds ---" % (time.time() - start_time))
+
+
 simulate = DropTest()
 #simulate.run()
 #simulate.test_dt(0, 10, 1)
 #simulate.test_surv_frac_diff_partitioning(0, 5, 1)
-simulate.count_total_mass(part_min, part_max, step)
+#simulate.count_total_mass(part_min, part_max, step)
 #simulate.test_surv_frac_diff_ab_conc(abmin, abmax, step)
-#simulate.test_survival_big_droplet_diff_ab_conc(abmin,abmax,step,nr_drop_min,nr_drop_max,step_drop)
+
+simulate.count_total_mass_diff_ab(part_min, part_max, abmin, abmax, step)
 #simulate.count_total_mass(abmin, abmax, step)

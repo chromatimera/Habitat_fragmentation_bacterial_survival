@@ -12,7 +12,7 @@ def read_csv():
 
 ### PLS IGNORE THIS BIT - FOR ADDING ERROR BARS
 #def add_error95_bar(df):
-#    df['Error95'] = df.apply(lambda x: 2 * math.sqrt(df.iloc[:, x] * (1 - df.iloc[:, x])) / math.sqrt(variables.total_drop_nr * ), axis=1)
+#    df['Error95_{}'.format(x)] = df.apply(lambda x: 2 * math.sqrt(df.iloc[:, x] * (1 - df.iloc[:, x])) / math.sqrt(variables.total_drop_nr * ), axis=1)
 #    return df
 print(os.getcwd())
 df = read_csv()
@@ -24,15 +24,6 @@ print(df)
 ### PLS IGNORE THIS BIT - FOR ADDING ERROR BARS
 #adaptive_tau_binary_transposed['Error95'] = adaptive_tau_binary_transposed.apply(lambda x: 2 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(nr_drops), axis=1)
 #adaptive_tau_binary_transposed['Error99'] = adaptive_tau_binary_transposed.apply(lambda x: 2.6 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(nr_drops), axis=1)
-
-# ### This plot plots Nr of bacteria as a function of time; each line is a different multiplication factor ### this is only for troubleshooting purposes
-# df.iloc[1:, 1:].plot()
-# plt.grid(True)
-# plt.title('Total mass versus partitioning factor, growth {}'.format(growth))
-# plt.ylabel('Total mass (nr of bacteria)')
-# plt.xlabel('Partition factor')
-# plt.legend(loc = 'upper left')
-# #plt.savefig('./output/Total mass growth {}, nr of droplets {}, difference.png'.format(g, 10000))
 
 ## to plot Nf, Ni  as a function of partition factors
 df.iloc[0, 1:].plot()  ### plot initial nr of bacteria
