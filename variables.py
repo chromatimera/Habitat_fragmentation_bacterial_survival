@@ -1,12 +1,9 @@
-##Beware:
-## the way in which the loop is set out rn is not ideal; we need to make sure that we when calculating the 'multiplying' factor, we don't divide the total
-# nr of droplets to a factor so big that we end up with 0 droplets; as this will result in error
-## added an error message to make the user aware of this
-
 ### To do list:
 ## 1. add error bars on the plot
 ## 2. do countTotalMass for all AB conc
 ##3. check survival fraction vs partition ratio; not sure how to see that plot or if it's in the final form
+## the countsurvival fraction should be 0 and 1 and run the simulation x times and from there calculate survival
+
 
 ## why changing Nsat changes results??? - ### When running for loop different partitions, the bacteria seem to grow - I believe there is something wrong in either degradation or volume or something else
 #How does poission loading work for the big droplet? - the nr of repeats  ##I think we discussed that with Rosalind and she said it shouldn't matter - check with Nia just to be sure
@@ -21,6 +18,7 @@ getcontext().prec = 50
 
 ### nr of droplets and the power of i and j in the partitioning loop are related i.e. for 100 droplets, the loop goes from 0 to 3.
 total_drop_nr = 10
+## don't change the 2 lines below
 part_min = 0
 part_max = math.floor(math.log(total_drop_nr, 10)) + 1
 
