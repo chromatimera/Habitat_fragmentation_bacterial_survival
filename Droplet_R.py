@@ -203,10 +203,16 @@ class droplets_R():
                     time_list = sorted(j for j in self.time_list_gillespie[i] if j <= t * self.dt)
                     #print('time_list', time_list)
 
+                    ## put int as without it error comes up
+                    # 'ValueError: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (1000,) + inhomogeneous part.'
+
                     #print('nr of items in time list', len(time_list)) ### but as an index it has to be -1
-                    self.mass_droplet.append(self.N_list_gillespie[i][len(time_list)-1])
-                    #print(self.N_list_gillespie[i][len(time_list) -1])
+                    self.mass_droplet.append(int(self.N_list_gillespie[i][len(time_list)-1]))
+                      #print(self.N_list_gillespie[i][len(time_list) -1])
                 #print('mass_droplet', self.mass_droplet) ### last N at a specific time
+                #print('mass_droplet', self.mass_droplet)
+                #print('sum mass droplet', np.sum(self.mass_droplet))
+                #print('total_mass', self.total_mass)
                 self.total_mass[t] = np.sum(self.mass_droplet)
         else:
             for i in range(0, self.timesteps):

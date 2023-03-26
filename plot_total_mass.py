@@ -1,7 +1,7 @@
 import pandas as pd
 import os
+import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits import mplot3d
 
 import variables
 from variables import *
@@ -20,31 +20,25 @@ df = read_csv()
 #df = add_error95_bar()
 print(df)
 
-new_df = pd.DataFrame()
-fig = plt.figure()
-ax = plt.axes(projection='3d')
 
-# for m in range(abmin, abmax, step):
-#     for i in range(part_min, part_max, step):
-#         for j in range(part_min, part_max, step):
-#             new_i = 5 ** i * 2 ** j
-#             new_nr_drops_total_mass = new_i
-#             total_drop_nr = round(variables.total_drop_nr / new_nr_drops_total_mass)
-#             part = 1/total_drop_nr
-#             new_df.append(df['p_{}'.format(part)])
-ax.plot_surface(x, y, df.iloc[-1, 1:], cmap='viridis', edgecolor='none')
-ax.set_title('Surface plot')
-plt.show()
+part_fact = np.loadtxt("output/part_fact.txt", delimiter=",", unpack=False)
+print(part_fact)
+print(len(part_fact))
+for i in range(0, len(part_fact)):
+    print(part_fact[i])
+    df['Error95_{}'.format(part_fact[i])] = df.apply(lambda x: 200 / math.sqrt(variables.total_drop_nr/(variables.total_drop_nr * part_fact[i])), axis=1)
 
+    #df['Error95_{}'.format(part_fact[i])] = df.apply(lambda x: 2 * math.sqrt(x['{}'.format(part_fact[i])] * (1 - x['{}'.format(part_fact[i])])) / math.sqrt(total_drop_nr * part_fact[i]), axis=1)
+    #df['Error99_{}'.format(part_fact[i])] = df.apply(lambda x: 2.6 * math.sqrt(x['{}'.format(part_fact[i])] * (1 - x['{}'.format(part_fact[i])])) / math.sqrt(total_drop_nr * part_fact[i]), axis=1)
 
-
-### PLS IGNORE THIS BIT - FOR ADDING ERROR BARS
-#adaptive_tau_binary_transposed['Error95'] = adaptive_tau_binary_transposed.apply(lambda x: 2 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(nr_drops), axis=1)
-#adaptive_tau_binary_transposed['Error99'] = adaptive_tau_binary_transposed.apply(lambda x: 2.6 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(nr_drops), axis=1)
-
+print(df)
+### PLOT FOR 2D DATAFRAME; if dataframe is associated with one antibiotic concentration
 ## to plot Nf, Ni  as a function of partition factors
-df.iloc[0, 1:].plot()  ### plot initial nr of bacteria
-df.iloc[-1, 1:].plot() ### plot final nr of bacteria
+errors = list(df.iloc[0, (len(part_fact)+1):])
+print(errors)
+
+df.iloc[0, 1:(len(part_fact)+1)].plot(yerr = errors)  ### plot initial nr of bacteria
+df.iloc[-1, 1:(len(part_fact)+1)].plot(yerr = errors) ### plot final nr of bacteria
 plt.grid(True)
 plt.title('Total mass versus partitioning factor, ab conc {}'.format(AB_conc))
 plt.ylabel('Total mass (nr of bacteria) Nf, Ni')

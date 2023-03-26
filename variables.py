@@ -1,5 +1,5 @@
 ### To do list:
-## 1. add error bars on the plot
+## 1. add error bars on the plot - don't know how to calculate the error
 ## 2. do countTotalMass for all AB conc
 ##3. check survival fraction vs partition ratio; not sure how to see that plot or if it's in the final form
 ## the countsurvival fraction should be 0 and 1 and run the simulation x times and from there calculate survival
@@ -17,7 +17,7 @@ import math
 getcontext().prec = 50
 
 ### nr of droplets and the power of i and j in the partitioning loop are related i.e. for 100 droplets, the loop goes from 0 to 3.
-total_drop_nr = 10
+total_drop_nr = 100
 ## don't change the 2 lines below
 part_min = 0
 part_max = math.floor(math.log(total_drop_nr, 10)) + 1
@@ -47,7 +47,7 @@ deathrate  = 0.045  # per minute from Gore 2013
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
-AB_conc = 75 #ug/mL
+AB_conc = 25 #ug/mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL
@@ -56,7 +56,7 @@ Vmax = 3.5e-8 #ug/cell/min
 
 ##ab conc values range for testing ab
 abmin = 0
-abmax = 5
+abmax = 50
 step = 1
 
 ## epsilon parameter for tau precheck

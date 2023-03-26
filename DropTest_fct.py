@@ -197,10 +197,10 @@ class DropTest(object):
                     ##this is the total number of bacteria at each timestep
                     nr_bact_each_ts = Droplet_exp.total_mass
                     part_fct = 1/total_drop_nr
-                    #print('part fct', part_fct)
+                    print('part fct', part_fct)
                     df_total_mass['{}'.format(part_fct)] = nr_bact_each_ts
                     ## append all parition factors, next step will transform this into partition factors
-                    part_fact.append(new_nr_drops_total_mass)
+                    part_fact.append(part_fct)
 
 
         #
@@ -216,16 +216,21 @@ class DropTest(object):
 
 
         pd.DataFrame(df_total_mass).to_csv('output/df_growth_{}_starting_nr_drops_{}.csv'.format(growth, variables.total_drop_nr), index = None)
+        np.savetxt('output/part_fact.txt', part_fact, delimiter=',')  # X is an array
+
         print("--- %s seconds ---" % (time.time() - start_time))
 
         ## function to sumulate growth and make df used for plotting Nf and Ni versus partitioning factor FOR DIFFERENT AB CONC
     def count_total_mass_diff_ab(self, partmin, partmax, abmin, abmax, step):
         df_total_mass = pd.DataFrame()
+        ab_list = []
         for ab in range(abmin, abmax, step):
             # loop for different partitioning factors:
             # loop for partitioning factors
             part_fact = []
             AB_conc = ab
+            ab_list.append(AB_conc)
+            print(ab)
             for i in range(partmin, partmax, step):
                 for j in range(partmin, partmax, step):
                     new_i = 5 ** i * 2 ** j
@@ -249,7 +254,7 @@ class DropTest(object):
                         print('part fct', part_fct)
                         df_total_mass['p_{}_ab_{}'.format(part_fct, ab)] = nr_bact_each_ts
                         ## append all parition factors, next step will transform this into partition factors
-                        part_fact.append(new_nr_drops_total_mass)
+                        part_fact.append(part_fct)
 
         print(df_total_mass)
         ### insert the time array into the dataframe
@@ -263,6 +268,9 @@ class DropTest(object):
         ##         300        0     2     0
 
         pd.DataFrame(df_total_mass).to_csv('output/df_growth_{}_starting_nr_drops_{}.csv'.format(growth, variables.total_drop_nr), index=None)
+        np.savetxt('output/part_fact.txt', part_fact, delimiter=',')  # X is an array
+        np.savetxt('output/ab_conc.txt', ab_list, delimiter=',')  # X is an array
+
         print("--- %s seconds ---" % (time.time() - start_time))
 
 
@@ -270,8 +278,8 @@ simulate = DropTest()
 #simulate.run()
 #simulate.test_dt(0, 10, 1)
 #simulate.test_surv_frac_diff_partitioning(0, 5, 1)
-#simulate.count_total_mass(part_min, part_max, step)
+simulate.count_total_mass(part_min, part_max, step)
 #simulate.test_surv_frac_diff_ab_conc(abmin, abmax, step)
 
-simulate.count_total_mass_diff_ab(part_min, part_max, abmin, abmax, step)
+#simulate.count_total_mass_diff_ab(part_min, part_max, abmin, abmax, step)
 #simulate.count_total_mass(abmin, abmax, step)
