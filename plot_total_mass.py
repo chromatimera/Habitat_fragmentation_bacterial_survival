@@ -26,7 +26,7 @@ print(part_fact)
 print(len(part_fact))
 for i in range(0, len(part_fact)):
     print(part_fact[i])
-    df['Error95_{}'.format(part_fact[i])] = df.apply(lambda x: 200 / math.sqrt(variables.total_drop_nr/(variables.total_drop_nr * part_fact[i])), axis=1)
+    df['Error95_{}'.format(part_fact[i])] = df.apply(lambda x: 2 / math.sqrt(variables.total_drop_nr/(variables.total_drop_nr * part_fact[i])), axis=1)
 
     #df['Error95_{}'.format(part_fact[i])] = df.apply(lambda x: 2 * math.sqrt(x['{}'.format(part_fact[i])] * (1 - x['{}'.format(part_fact[i])])) / math.sqrt(total_drop_nr * part_fact[i]), axis=1)
     #df['Error99_{}'.format(part_fact[i])] = df.apply(lambda x: 2.6 * math.sqrt(x['{}'.format(part_fact[i])] * (1 - x['{}'.format(part_fact[i])])) / math.sqrt(total_drop_nr * part_fact[i]), axis=1)

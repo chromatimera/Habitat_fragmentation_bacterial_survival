@@ -133,53 +133,6 @@ class DropTest(object):
         #print("--- %s seconds ---" % (time.time() - start_time))
         pd.DataFrame(new).to_csv('output/df_growth_{}_loading_{}_ABconc{}.csv'.format(growth, loading, AB_conc), index = None)
         #print('total_drop_nr', total_drop_nr)
-    def calc_survival_prob_diff_part(self, partmin, partmax, step, spec_time, total_sim):
-
-        ## create list with part fact as column names
-        total_prob = pd.DataFrame()
-        survival_fraction = []
-        for nr_sim in range(0, total_sim, step):
-            prob_diff_part = []
-            part_fact = []
-            ## simulate droplets for different partitioning factors
-            for i in range(partmin, partmax, step):
-                 for j in range(0, 2, 1):
-                    ## set new values for diff part factor
-                    new_i = 5**i * 2**j
-                    new_nr_drops_total_mass = new_i
-                    new_volume = variables.volume * new_nr_drops_total_mass
-                    total_drop_nr = round(variables.total_drop_nr /new_nr_drops_total_mass)
-                    part_fct = 1 / total_drop_nr
-                    part_fact.append(part_fct)
-                    ## simulate growth with new params
-                    strain_R = strain(new_nr_drops_total_mass)
-                    Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc, new_volume)  # 0.5, 300
-                    Droplet_exp.run(loading, growth)
-
-
-                    ## calculate the total nr of bacteria in all droplets, if any survived, prob survival = 1
-                    Droplet_exp.countTotalMass(growth)
-                    nr_bact_each_ts = Droplet_exp.total_mass
-                    index = int(spec_time/variables.dt)
-                    if nr_bact_each_ts[index] == 0:
-                        prob_survival = 0
-                    else:
-                        prob_survival = 1
-                    ## append probs to a list with diff probs for diff part factors
-                    prob_diff_part.append(prob_survival)
-            print(part_fact)
-            ## append row at the end of each simulation for each partition factor
-            additional = pd.DataFrame(data=[prob_diff_part])
-            total_prob = pd.concat([total_prob, additional])
-        total_prob.columns = part_fact
-        print(total_prob)
-        ## calculate the survival fraction and make new dataframe
-        total_prob.loc['surv_Frac'] = total_prob.sum()/ (len(total_prob.axes[0]))
-        print(total_prob)
-
-        surv_df = total_prob.tail(1)
-        pd.DataFrame(surv_df).to_csv('output/survival_fraction_growth_{}_loading_{}_ABconc{}.csv'.format(growth, loading, AB_conc), index = None)
-        # print("--- %s seconds ---" % (time.time() - start_time))
 
     ## Test the survival fraction of droplets for different factors, ab conc and calculate the total mass
     ## function to sumulate growth and make df used for plotting Nf and Ni versus partitioning factor
@@ -288,8 +241,8 @@ simulate = DropTest()
 #simulate.run()
 #simulate.test_dt(0, 10, 1)
 #simulate.test_surv_frac_diff_partitioning(0, 5, 1)
-#simulate.count_total_mass(part_min, part_max, step)
+simulate.count_total_mass(part_min, part_max, step)
 #simulate.test_surv_frac_diff_ab_conc(abmin, abmax, step)
-simulate.calc_survival_prob_diff_part(part_min, part_max, step, spec_time, total_sim)
+
 #simulate.count_total_mass_diff_ab(part_min, part_max, abmin, abmax, step)
 #simulate.count_total_mass(abmin, abmax, step)

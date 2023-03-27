@@ -1,8 +1,8 @@
 ### To do list:
 ## 1. add error bars on the plot - don't know how to calculate the error
-## 2. do countTotalMass for all AB conc
-##3. check survival fraction vs partition ratio; not sure how to see that plot or if it's in the final form
-## the countsurvival fraction should be 0 and 1 and run the simulation x times and from there calculate survival
+## 2. the countsurvival fraction should be 0 and 1 and run the simulation x times and from there calculate survival
+## 4. do countTotalMass for all AB conc and add it to survival fracion - get survival fraction and total mass at the same time,
+# otherwise we simulate 2 different things
 
 
 ## why changing Nsat changes results??? - ### When running for loop different partitions, the bacteria seem to grow - I believe there is something wrong in either degradation or volume or something else
@@ -26,6 +26,8 @@ part_max = math.floor(math.log(total_drop_nr, 10)) + 1
 t_start = 0
 t_end = 300
 dt = 5
+spec_time = 240
+total_sim = 3
 
 ### nr timesteps for dt test; ignore dt for this test
 nr_timesteps = int(3e6)
@@ -47,7 +49,7 @@ deathrate  = 0.045  # per minute from Gore 2013
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
-AB_conc = 25 #ug/mL
+AB_conc = 65 #ug/mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL
