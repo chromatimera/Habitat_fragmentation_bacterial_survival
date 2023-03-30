@@ -1,14 +1,9 @@
 ### To do list:
-## 1. add error bars on the plot - don't know how to calculate the error
-## 2. the countsurvival fraction should be 0 and 1 and run the simulation x times and from there calculate survival
-## 4. do countTotalMass for all AB conc and add it to survival fracion - get survival fraction and total mass at the same time,
-# otherwise we simulate 2 different things
 
-
+## 1. do countTotalMass for all AB conc and add it to survival fracion - get survival fraction and total mass at the same time,
+## 2. do partition fact for deterministic case;
+## 3. check to see that surv frac fct and count total mass work for det case too
 ## why changing Nsat changes results??? - ### When running for loop different partitions, the bacteria seem to grow - I believe there is something wrong in either degradation or volume or something else
-#How does poission loading work for the big droplet? - the nr of repeats  ##I think we discussed that with Rosalind and she said it shouldn't matter - check with Nia just to be sure
-#Final N plots (with error bars from repeats) - add error bars
-
 
 ## set all variables here and settings
 import os.path
@@ -17,7 +12,7 @@ import math
 getcontext().prec = 50
 
 ### nr of droplets and the power of i and j in the partitioning loop are related i.e. for 100 droplets, the loop goes from 0 to 3.
-total_drop_nr = 100
+total_drop_nr = 1000
 ## don't change the 2 lines below
 part_min = 0
 part_max = math.floor(math.log(total_drop_nr, 10)) + 1
@@ -27,14 +22,13 @@ t_start = 0
 t_end = 300
 dt = 5
 spec_time = 240
-total_sim = 3
+total_sim = 10
 
 ### nr timesteps for dt test; ignore dt for this test
 nr_timesteps = int(3e6)
 
 # n_crit used in one of the tau_leaping algorithms
 n_crit = 2
-
 volume = 1e-7   # volume of droplets ~100pL; 1pL is 1e-6 ul; 100pL - 1e-4 ul UNITS: mL
 
 ##simulating multiple fake droplets (this a factor ie. 2 means 2 * initial N, but total_droplet_nr/2)
@@ -67,8 +61,8 @@ epsilon = 0.03
 ##type of loading and growth
 loading = "rand"  # rand #det
 #growth = "midpoint_tau_binary" # for troubleshooting -- needs updating
-#growth = "binary"
-growth = 'gillespie_binary'
+growth = "binary"
+#growth = 'gillespie_binary'
 #degradation = 'MM_linear'
 degradation = 'MM_exponential'
 

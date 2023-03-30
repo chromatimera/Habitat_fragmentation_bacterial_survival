@@ -11,39 +11,57 @@ def read_csv():
     df = pd.read_csv('./output/df_growth_{}_starting_nr_drops_{}.csv'.format(growth, variables.total_drop_nr))
     return df
 
-### PLS IGNORE THIS BIT - FOR ADDING ERROR BARS
-#def add_error95_bar(df):
-#    df['Error95_{}'.format(x)] = df.apply(lambda x: 2 * math.sqrt(df.iloc[:, x] * (1 - df.iloc[:, x])) / math.sqrt(variables.total_drop_nr * ), axis=1)
-#    return df
-print(os.getcwd())
-df = read_csv()
-#df = add_error95_bar()
-print(df)
+df_total_mass = read_csv()
 
 
 part_fact = np.loadtxt("output/part_fact.txt", delimiter=",", unpack=False)
-print(part_fact)
-print(len(part_fact))
-for i in range(0, len(part_fact)):
-    print(part_fact[i])
-    df['Error95_{}'.format(part_fact[i])] = df.apply(lambda x: 2 / math.sqrt(variables.total_drop_nr/(variables.total_drop_nr * part_fact[i])), axis=1)
 
-    #df['Error95_{}'.format(part_fact[i])] = df.apply(lambda x: 2 * math.sqrt(x['{}'.format(part_fact[i])] * (1 - x['{}'.format(part_fact[i])])) / math.sqrt(total_drop_nr * part_fact[i]), axis=1)
-    #df['Error99_{}'.format(part_fact[i])] = df.apply(lambda x: 2.6 * math.sqrt(x['{}'.format(part_fact[i])] * (1 - x['{}'.format(part_fact[i])])) / math.sqrt(total_drop_nr * part_fact[i]), axis=1)
+##start building the average N(t) and SD(t) over simulations
+total_nr_bact = np.zeros((df_total_mass.shape[0], len(part_fact)))
+error_nr_bact = np.zeros((df_total_mass.shape[0], len(part_fact)))
+var_nr_bact = np.zeros((df_total_mass.shape[0], len(part_fact)))
 
-print(df)
+## for each partition factor, calculate the sum over the simulation of N(t)
+for i in range(0, len(part_fact), 1):
+    for j in range(0, total_sim, 1):
+        k = i + j * len(part_fact)
+        total_nr_bact[:, i] += df_total_mass.iloc[:, k]
+
+## at this stage we have a np array with a sum of N(t) across all iterations -> we need to divide it by the nr of sim
+nr_simu = np.array(total_sim)
+avg_nr_bact = np.divide(total_nr_bact, nr_simu)
+
+for i in range(0, len(part_fact), 1):
+    for j in range(0, total_sim, 1):
+        k = i + j * len(part_fact)
+        var_nr_bact[:, i] += (df_total_mass.iloc[:, k] - avg_nr_bact[:, i]) ** 2
+
+var_nr_bact = np.sqrt(np.divide(var_nr_bact, nr_simu -1))
+
+### standard deviation of the mean which is
+error_nr_bact = np.divide(var_nr_bact, np.sqrt(nr_simu))
+error_nr_bact = pd.DataFrame(error_nr_bact, columns=part_fact)
+print(error_nr_bact)
+
+avg_nr_bact = pd.DataFrame(avg_nr_bact, columns=part_fact)
+var_nr_bact = pd.DataFrame(var_nr_bact)
+
+pd.DataFrame(error_nr_bact).to_csv('output/sd_error_mean_growth_{}_loading_{}_ABconc{}.csv'.format(growth, loading, AB_conc), index=None)
+#pd.DataFrame(avg_nr_bact).to_csv('output/average_df_growth_{}_loading_{}_ABconc{}.csv'.format(growth, loading, AB_conc), index=None)
+
 ### PLOT FOR 2D DATAFRAME; if dataframe is associated with one antibiotic concentration
 ## to plot Nf, Ni  as a function of partition factors
-errors = list(df.iloc[0, (len(part_fact)+1):])
-print(errors)
 
-df.iloc[0, 1:(len(part_fact)+1)].plot(yerr = errors)  ### plot initial nr of bacteria
-df.iloc[-1, 1:(len(part_fact)+1)].plot(yerr = errors) ### plot final nr of bacteria
+
+print(error_nr_bact.iloc[-1, 1:len(part_fact)+1].tolist())
+
+avg_nr_bact.iloc[0, 1:(len(part_fact) + 1)].plot(yerr = error_nr_bact.iloc[0, 1:len(part_fact)+1].tolist())  ### plot initial nr of bacteria
+avg_nr_bact.iloc[-1, 1:(len(part_fact) + 1)].plot(yerr = error_nr_bact.iloc[-1, 1:len(part_fact)+1].tolist()) ### plot final nr of bacteria
 plt.grid(True)
 plt.title('Total mass versus partitioning factor, ab conc {}'.format(AB_conc))
 plt.ylabel('Total mass (nr of bacteria) Nf, Ni')
 plt.xlabel('Partition factor')
 plt.legend(['Ni', 'Nf'], loc='upper left')
-plt.savefig('./output/Nf_Ni_vs_part_fact_startin_nr_of_drops_{}.png'.format(variables.total_drop_nr))
+#plt.savefig('./output/Nf_Ni_vs_part_fact_startin_nr_of_drops_{}.png'.format(variables.total_drop_nr))
 plt.show()
 
