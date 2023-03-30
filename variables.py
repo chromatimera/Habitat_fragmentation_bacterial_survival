@@ -1,7 +1,7 @@
 ### To do list:
 
 ## 1. do countTotalMass for all AB conc and add it to survival fracion - get survival fraction and total mass at the same time,
-## 2. do partition fact for deterministic case; - NOT WORKING RIGHT NOW 
+## 2. do partition fact for deterministic case; - NOT WORKING RIGHT NOW
 ## 3. check to see that surv frac fct and count total mass work for det case too
 ## why changing Nsat changes results??? - ### When running for loop different partitions, the bacteria seem to grow - I believe there is something wrong in either degradation or volume or something else
 
@@ -15,14 +15,13 @@ getcontext().prec = 50
 total_drop_nr = 1000
 ## don't change the 2 lines below
 part_min = 0
-part_max = math.floor(math.log(total_drop_nr, 10)) + 1
-
+part_max = int(math.log10(1000) + 1)
 
 t_start = 0
 t_end = 300
 dt = 5
 spec_time = 240
-total_sim = 10
+total_sim = 20
 
 ### nr timesteps for dt test; ignore dt for this test
 nr_timesteps = int(3e6)
@@ -61,8 +60,8 @@ epsilon = 0.03
 ##type of loading and growth
 loading = "rand"  # rand #det
 #growth = "midpoint_tau_binary" # for troubleshooting -- needs updating
-growth = "binary"
-#growth = 'gillespie_binary'
+#growth = "binary"
+growth = 'gillespie_binary'
 #degradation = 'MM_linear'
 degradation = 'MM_exponential'
 

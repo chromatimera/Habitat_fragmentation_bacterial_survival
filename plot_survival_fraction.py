@@ -10,7 +10,7 @@ print(os.getcwd())
 
 ### read dataframes
 surv_fraction = pd.read_csv('output/survival_fraction_growth_gillespie_binary_loading_rand_ABconc65.csv')
-
+print(surv_fraction)
 
 ### transpose of dataframe
 surv_fraction_transpose = surv_fraction.T

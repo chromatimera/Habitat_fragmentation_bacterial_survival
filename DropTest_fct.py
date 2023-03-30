@@ -51,7 +51,7 @@ class DropTest(object):
 
                     ## set new values for diff part factor
                     new_i = 5 ** i * 2 ** j
-                    #print('new_i', new_i)
+                    print('new_i', new_i)
 
                     new_nr_drops_total_mass = new_i
                     new_volume = variables.volume * new_nr_drops_total_mass
@@ -63,7 +63,7 @@ class DropTest(object):
                     else:
 
                         part_fct = 1 / total_drop_nr
-                        #print('part_fact', part_fct)
+                        print('part_fact', part_fct)
 
                         part_fact.append(part_fct)
 
