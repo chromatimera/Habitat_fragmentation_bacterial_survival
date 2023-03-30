@@ -36,7 +36,7 @@ for i in range(0, len(part_fact), 1):
         k = i + j * len(part_fact)
         var_nr_bact[:, i] += (df_total_mass.iloc[:, k] - avg_nr_bact[:, i]) ** 2
 
-var_nr_bact = np.sqrt(np.divide(var_nr_bact, nr_simu -1))
+var_nr_bact = np.sqrt(np.divide(var_nr_bact, nr_simu - 1))
 
 ### standard deviation of the mean which is
 error_nr_bact = np.divide(var_nr_bact, np.sqrt(nr_simu))
@@ -62,6 +62,6 @@ plt.title('Total mass versus partitioning factor, ab conc {}'.format(AB_conc))
 plt.ylabel('Total mass (nr of bacteria) Nf, Ni')
 plt.xlabel('Partition factor')
 plt.legend(['Ni', 'Nf'], loc='upper left')
-#plt.savefig('./output/Nf_Ni_vs_part_fact_startin_nr_of_drops_{}.png'.format(variables.total_drop_nr))
+plt.savefig('./output/Nf_Ni_vs_part_fact_startin_nr_of_drops_{} +error.png'.format(variables.total_drop_nr))
 plt.show()
 

@@ -1,7 +1,7 @@
 ### To do list:
 
 ## 1. do countTotalMass for all AB conc and add it to survival fracion - get survival fraction and total mass at the same time,
-## 2. do partition fact for deterministic case;
+## 2. do partition fact for deterministic case; - NOT WORKING RIGHT NOW 
 ## 3. check to see that surv frac fct and count total mass work for det case too
 ## why changing Nsat changes results??? - ### When running for loop different partitions, the bacteria seem to grow - I believe there is something wrong in either degradation or volume or something else
 

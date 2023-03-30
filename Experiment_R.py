@@ -21,13 +21,15 @@ def scientific_notation(n):
 
 class Experiment_R(object):
 
-    def __init__(self, strain_r, AB_conc, t_end, volume):
+    def __init__(self, strain_r, AB_conc, nr_drops_total_mass):
         self.strain_r = strain_r
         self.dt = variables.dt
         self.t_end = variables.t_end
-        self.timesteps = round(t_end/variables.dt)
+        self.timesteps = round(self.t_end/self.dt)
         self.AB_conc = AB_conc
-        self.volume = volume
+        self.Nsat = variables.Nsat * nr_drops_total_mass
+        self.nr_drops_total_mass = nr_drops_total_mass
+        self.volume = variables.volume * nr_drops_total_mass
 
     def initialise(self, init_type):
 
@@ -72,6 +74,7 @@ class Experiment_R(object):
             new_ab = AB_conc - deg_linear * AB_conc
             new_ab = max(0, new_ab)
         self.deg_list.append(deg_rate)
+
         return new_ab #deg_rate, new_ab
 
         # AB is degraded at rate Vmax proportional to number of resistant cells:
@@ -85,7 +88,7 @@ class Experiment_R(object):
             # Grow strain for dt: ###tau_grow VS grow
             if grow_meth == 'binary':
                 self.AB_conc_array[i+1] = self.degrade_ab_1_step_det(self.AB_conc_array[i], self.strain_r.N, self.dt,
-                                                                self.volume, nr_drops_total_mass=1) #self.deg_list[i+1],
+                                                                self.volume, self.nr_drops_total_mass) #self.deg_list[i+1],
                 self.strain_r.binary_grow(self.AB_conc_array[i+1])
                 self.N_array[i+1] = self.strain_r.N
 

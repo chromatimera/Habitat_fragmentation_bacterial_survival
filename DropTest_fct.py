@@ -31,100 +31,8 @@ class DropTest(object):
         Droplet_exp.plots(growth)
         Droplet_exp.countSurvival(growth)
 
-    def test_dt(self, dtmin, dtmax, stepdt): ## will be removed; fct to test difference in AB degradation between different dts -
-        # can estimate error in linear approximation; uncomment Deg_list in the Exp_R file
-        new = pd.DataFrame()
 
-        # loop for variables
-        for i in range(dtmin, dtmax, stepdt):
-            variables.dt = 1 / (10 ** i)
-            print(nr_timesteps)
-            print(variables.dt)
-            variables.t_end = round(variables.dt * nr_timesteps, i)
-            print(t_end)
-            print('dt = ', variables.dt, 't_end = ', variables.t_end)
-            strain_R = strain(nr_drops_total_mass=1)
-            Droplet_exp = droplets_R(strain_R, AB_conc)
-            Droplet_exp.run(loading, growth)
-            additional = pd.DataFrame({"" + str(variables.dt) + "": Droplet_exp.deg_list})
-            new = pd.concat([new, additional], axis=1)
-            Droplet_exp.save(
-                'initialN{}_growthrate{}_MIC{}_totaldropnr{}_ABconc{}_dt{}_loading{}_growth{}.csv'.format(initialN,
-                                                                                                          growthrate,
-                                                                                                          MIC,
-                                                                                                          total_drop_nr,
-                                                                                                          AB_conc,
-                                                                                                          variables.dt,
-                                                                                                          loading,
-                                                                                                          growth),
-                'ABconc{}_loading{}_growth{}.csv'.format(AB_conc, loading, growth),'Time{}.csv'.format(variables.dt), AB_conc)
-
-        # Get path of current folder
-        curr_path = os.getcwd()
-        # Check whether the specified path exists or not
-        folder_name = 'output/df_test_dt_nr_timesteps_{}.csv'.format(nr_timesteps)
-        path = os.path.join(curr_path, folder_name)
-        isExist = os.path.exists(path)
-
-        if not isExist:
-            # Create a new directory because it does not exist
-            os.makedirs(path, exist_ok=True)
-            print("The new directory is created!")
-
-        os.chdir(path)
-        pd.DataFrame(new).to_csv('df_degradation_{}_nr_timesteps_{}.csv'.format(degradation, nr_timesteps), index = None)
-
-        os.chdir(curr_path)
-
-    ## fct to calculate survival for a set nr of repeats
-    def calc_survival_prob_diff_part(self, partmin, partmax, step, spec_time, total_sim):
-
-        ## create list with part fact as column names
-        total_prob = pd.DataFrame()
-        survival_fraction = []
-        for nr_sim in range(0, total_sim, step):
-            prob_diff_part = []
-            part_fact = []
-            ## simulate droplets for different partitioning factors
-            for i in range(partmin, partmax, step):
-                 for j in range(partmin, partmax, step):
-                    ## set new values for diff part factor
-                    new_i = 5**i * 2**j
-                    new_nr_drops_total_mass = new_i
-                    new_volume = variables.volume * new_nr_drops_total_mass
-                    total_drop_nr = round(variables.total_drop_nr /new_nr_drops_total_mass)
-                    part_fct = 1 / total_drop_nr
-                    part_fact.append(part_fct)
-                    ## simulate growth with new params
-                    strain_R = strain(new_nr_drops_total_mass)
-                    Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc, new_volume)  # 0.5, 300
-                    Droplet_exp.run(loading, growth)
-
-
-                    ## calculate the total nr of bacteria in all droplets, if any survived, prob survival = 1
-                    Droplet_exp.countTotalMass(growth)
-                    nr_bact_each_ts = Droplet_exp.total_mass
-                    index = int(spec_time/variables.dt)
-                    if nr_bact_each_ts[index] == 0:
-                        prob_survival = 0
-                    else:
-                        prob_survival = 1
-                    ## append probs to a list with diff probs for diff part factors
-                    prob_diff_part.append(prob_survival)
-            ## append row at the end of each simulation for each partition factor
-            additional = pd.DataFrame(data=[prob_diff_part])
-            total_prob = pd.concat([total_prob, additional])
-        total_prob.columns = part_fact
-        print(total_prob)
-        ## calculate the survival fraction and make new dataframe
-        total_prob.loc['surv_Frac'] = total_prob.sum()/ (len(total_prob.axes[0]))
-        print(total_prob)
-
-        surv_df = total_prob.tail(1)
-        pd.DataFrame(surv_df).to_csv('output/survival_fraction_growth_{}_loading_{}_ABconc{}.csv'.format(growth, loading, AB_conc), index = None)
-        # print("--- %s seconds ---" % (time.time() - start_time))
-
-    ## fct to calculate survival +  N(t) for a set nr of repeats
+       ## fct to calculate survival +  N(t) for a set nr of repeats
     def calc_survival_prob_total_nr_bact_diff_part(self, partmin, partmax, step, spec_time, total_sim):
         ## create list with part fact as column names
         total_prob = pd.DataFrame()
@@ -161,7 +69,7 @@ class DropTest(object):
 
                         ## simulate growth with new params
                         strain_R = strain(new_nr_drops_total_mass)
-                        Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc, new_volume)  # 0.5, 300
+                        Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc, new_volume, new_nr_drops_total_mass)  # 0.5, 300
                         Droplet_exp.run(loading, growth)
 
                         ## calculate the total nr of bacteria in all droplets, if any survived, prob survival = 1

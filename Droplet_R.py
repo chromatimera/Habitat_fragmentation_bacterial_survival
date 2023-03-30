@@ -17,7 +17,7 @@ getcontext().prec = 50
 
 class droplets_R():
 
-    def __init__(self, total_drop_nr, strain_r, AB_conc, volume):
+    def __init__(self, total_drop_nr, strain_r, AB_conc, volume, nr_drops_total_mass):
         self.total_drop_number = total_drop_nr
         self.strain_r = strain_r
         self.AB_conc = AB_conc
@@ -25,6 +25,7 @@ class droplets_R():
         self.t_end = variables.t_end
         self.timesteps = round(self.t_end / variables.dt)
         self.volume = volume
+        self.nr_drops_total_mass = nr_drops_total_mass
 
         ## if doing deterministic growth
         self.N_r_array = np.empty((self.total_drop_number, self.timesteps))#.astype(int) # initialize empty array
@@ -42,7 +43,7 @@ class droplets_R():
 
     def run(self, init_type, grow_meth):
         #run identical experiments in each droplet
-        Exp = Experiment_R(self.strain_r, self.AB_conc, self.t_end, self.volume)
+        Exp = Experiment_R(self.strain_r, self.AB_conc, self.nr_drops_total_mass)
 
         for k in range(0, self.total_drop_number):
             #print('drop. nr:', k)
@@ -57,8 +58,6 @@ class droplets_R():
                 self.N_r_array[k] = Exp.N_array
                 self.time_list_array[k] = Exp.ts
                 self.AB_conc_array[k] = Exp.AB_conc_array
-        ## uncomment this line if doing comparison between types of ab degradation; otherwise not necessary; should be only once per droplet
-        #self.deg_list = Exp.deg_list
 
 
     def plots(self, grow_meth):
