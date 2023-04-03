@@ -178,40 +178,15 @@ class droplets_R():
     def countTotalMass(self, grow_meth):
         self.total_mass = np.empty(self.timesteps)
 
-        if (grow_meth != "binary") or (grow_meth != "tau_binary")  or (grow_meth != "balanced"):
-
-            # time_list = [sorted(j for j in self.time_list_gillespie[i] if j <= t * self.dt) for i in
-            #             range(0, len(self.N_list_gillespie)) for t in range(0, self.timesteps + 1)]
-            # print('time list', time_list)
-
-            # self.mass_droplet = [self.N_list_gillespie[i][len(time_list[i]) - 1] for i in
-            #                     range(0, len(self.N_list_gillespie))]
-            # print('mass_droplet',self.mass_droplet)
+        if (grow_meth != "binary"):
 
             ## for all times with increment dt from 0 until t_end
             for t in range(0, self.timesteps):
-                #print('time', t * self.dt)
-                ## define a list that takes the mass values at a specific time_point
                 self.mass_droplet = []
                 ## for each droplet
                 for i in range(0, len(self.N_list_gillespie)):
-                    ##
-                    #print('drop_nr', i)
-                    #print('time_list_gillespie', self.time_list_gillespie[i])
-                    #print(t * self.dt)
                     time_list = sorted(j for j in self.time_list_gillespie[i] if j <= t * self.dt)
-                    #print('time_list', time_list)
-
-                    ## put int as without it error comes up
-                    # 'ValueError: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (1000,) + inhomogeneous part.'
-
-                    #print('nr of items in time list', len(time_list)) ### but as an index it has to be -1
                     self.mass_droplet.append(int(self.N_list_gillespie[i][len(time_list)-1]))
-                      #print(self.N_list_gillespie[i][len(time_list) -1])
-                #print('mass_droplet', self.mass_droplet) ### last N at a specific time
-                #print('mass_droplet', self.mass_droplet)
-                #print('sum mass droplet', np.sum(self.mass_droplet))
-                #print('total_mass', self.total_mass)
                 self.total_mass[t] = np.sum(self.mass_droplet)
         else:
             for i in range(0, self.timesteps):
@@ -219,6 +194,8 @@ class droplets_R():
                     self.total_mass[i] = 0
                 else:
                     self.total_mass[i] = np.sum(self.N_r_array[:, i])
+                print(self.total_mass[i])
+
             #print('total_mass', self.total_mass)
             #print("Total mass in droplets where bacteria survived=  " + str(self.total_mass))
 

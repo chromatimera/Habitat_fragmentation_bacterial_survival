@@ -11,26 +11,11 @@ import warnings
 warnings.filterwarnings("ignore")
 getcontext().prec = 50
 
-
 import time
 start_time = time.time()
 
 
 class DropTest(object):
-    def run(self): ## simulation for one AB concentration; used in troubleshooting
-
-        strain_R = strain(nr_drops_total_mass=1)
-        Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc, volume)
-        Droplet_exp.run(loading, growth)
-        Droplet_exp.save('Ni{}'
-                         '_MIC{}_totaldropnr{}_ABconc{}_'
-                         '_loading{}_growth{}.csv'.format(initialN, growthrate, MIC, total_drop_nr, AB_conc, dt,
-                                                              loading, growth), 'ABconc{}_loading{}_growth{}.csv'.format(AB_conc, loading, growth),'Time_list.csv', AB_conc)
-
-        #print("--- %s seconds ---" % (time.time() - start_time))
-        Droplet_exp.plots(growth)
-        Droplet_exp.countSurvival(growth)
-
 
        ## fct to calculate survival +  N(t) for a set nr of repeats
     def calc_survival_prob_total_nr_bact_diff_part(self, partmin, partmax, step, spec_time, total_sim):
@@ -44,15 +29,9 @@ class DropTest(object):
             print('Simulation nr:', nr_sim)
             ## simulate droplets for different partitioning factors
             for i in range(partmin, partmax, step):
-                #print('i', i)
-
                 for j in range(partmin, partmax, step):
-                    #print('j', j)
-
                     ## set new values for diff part factor
                     new_i = 5 ** i * 2 ** j
-                    print('new_i', new_i)
-
                     new_nr_drops_total_mass = new_i
                     new_volume = variables.volume * new_nr_drops_total_mass
                     total_drop_nr = round(variables.total_drop_nr / new_nr_drops_total_mass)
@@ -71,12 +50,13 @@ class DropTest(object):
                         strain_R = strain(new_nr_drops_total_mass)
                         Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc, new_volume, new_nr_drops_total_mass)  # 0.5, 300
                         Droplet_exp.run(loading, growth)
-
+                        #print('growth', growth)
+                        #print('N_array', Droplet_exp.N_r_array)
                         ## calculate the total nr of bacteria in all droplets, if any survived, prob survival = 1
                         Droplet_exp.countTotalMass(growth)
                         nr_bact_each_ts = Droplet_exp.total_mass
                         ## append the nr of bacteria to dataframe with N(t) vs part factor
-                        df_total_mass['{}_{}'.format(part_fct, nr_sim)] = nr_bact_each_ts
+                        df_total_mass['{} {}'.format(part_fct, nr_sim)] = nr_bact_each_ts
 
                         index = int(spec_time / variables.dt)
 
@@ -92,13 +72,19 @@ class DropTest(object):
             prob_part_per_iteration = pd.DataFrame(data=[prob_diff_part])
             total_prob = pd.concat([total_prob, prob_part_per_iteration])
 
+        part_fact = sorted(part_fact)
+        print(df_total_mass.columns.tolist())
+        df_total_mass = df_total_mass.reindex(sorted(df_total_mass.columns), axis=1)
+        print(df_total_mass.columns.tolist())
         total_prob.columns = part_fact
         ## calculate the survival fraction and add it to the last row of the dataframe
         total_prob.loc['surv_Frac'] = total_prob.sum() / (len(total_prob.axes[0]))
         #print(total_prob)
-
+        print(part_fact)
         ## make new dataframe with the last row of the df as survival fraction
         surv_df = total_prob.tail(1)
+        surv_df = surv_df.reindex(sorted(surv_df.columns), axis=1)
+        print(surv_df.head(10))
 
         ##start building the average N(t) over simulations
         total_nr_bact = np.zeros((df_total_mass.shape[0], len(part_fact)))
@@ -106,13 +92,14 @@ class DropTest(object):
         ## for each partition factor, calculate the sum over the simulation of N(t)
         for i in range(0, len(part_fact), 1):
            for j in range(0, total_sim, 1):
-               k = i + j * len(part_fact)
+               k = j + i * total_sim
                total_nr_bact[:, i] += df_total_mass.iloc[:, k]
 
         ## at this stage we have a np array with a sum of N(t) across all iterations -> we need to divide it by the nr of sim
         nr_simu = np.array(total_sim)
         avg_nr_bact = np.divide(total_nr_bact, nr_simu)
         avg_nr_bact = pd.DataFrame(avg_nr_bact, columns = part_fact)
+
 
        ## save all df
         pd.DataFrame(surv_df).to_csv('output/survival_fraction_growth_{}_loading_{}_ABconc{}.csv'.format(growth, loading, AB_conc), index=None)
@@ -226,10 +213,5 @@ class DropTest(object):
 
 
 simulate = DropTest()
-#simulate.run()
-#simulate.test_dt(0, 10, 1)
 #simulate.count_total_mass(part_min, part_max, step)
-#simulate.test_surv_frac_diff_ab_conc(abmin, abmax, step)
 simulate.calc_survival_prob_total_nr_bact_diff_part(part_min, part_max, step, spec_time, total_sim)
-#simulate.count_total_mass_diff_ab(part_min, part_max, abmin, abmax, step)
-#simulate.count_total_mass(abmin, abmax, step)
