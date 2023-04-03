@@ -67,8 +67,6 @@ class droplets_R():
         #print(curr_path)
 
         # Check whether the specified path exists or not
-
-
         folder_name = 'output/' \
                       'dropnr_{}_loading_{}_growth_{}_initialN_{}_abconc_{}_gr_{}_dt_{}_Nsat_{}'.format(variables.total_drop_nr,loading,growth, variables.initialN, self.AB_conc, growthrate, self.dt,variables.Nsat)
         path = os.path.join(curr_path, folder_name)
@@ -101,21 +99,21 @@ class droplets_R():
             plt.ylim(bottom=0)
             plt.savefig('plot_Nbact_loading_{}_growth_{}ab_conc_{}.png'.format(loading, growth, str(AB_conc)))
 
-
             plt.figure(2)
             for i in range(0, self.total_drop_number):
                 plt.plot(self.time_list_gillespie[i], self.AB_conc_array_gillespie[i])
             plt.grid(True)
             # plt.title('Concentration of antibiotic over time in each droplet.')
-            plt.ylabel('Antibiotic (ug/nL)')
+            plt.ylabel('Antibiotic (ug/mL)')
             plt.xlabel('Time (mins)')
             plt.xlim(0, self.t_end)
             plt.ylim(bottom=0)
             plt.title('{}_growth'.format(growth))
             plt.savefig('plot_ABconc_{}_loading_{}_growth_{}.png'.format(str(AB_conc), loading, growth))
-            plt.show()
 
-        else:
+
+
+        else:  # is this filter is working ?
             X = np.arange(0, self.t_end, self.dt).tolist()
             XX= np.tile(X, (self.total_drop_number, 1))
 
@@ -128,8 +126,7 @@ class droplets_R():
             #plt.title('Growth of resistant strain')
             plt.title ('{}_growth'.format(growth))
             plt.ylabel('Number of bacteria')
-            plt.xlabel('Time (mins)')
-            plt.xlim(0,self.t_end)
+            plt.xlabel('Time (min)')
             plt.xlim(0,self.t_end)
             #tick_spacing = 2
             #ax.yaxis.set_major_locator(ticker.MultipleLocator(tick_spacing))
@@ -143,13 +140,24 @@ class droplets_R():
             plt.grid(True)
             #plt.title('Concentration of antibiotic over time in each droplet.')
             plt.ylabel('Antibiotic (ug/mL)')
-            plt.xlabel('Time (mins)')
+            plt.xlabel('Time (min)')
             plt.xlim(0, self.t_end)
             plt.ylim(bottom=0)
             plt.title ('{}_growth'.format(growth))
             plt.savefig('plot_ABconc_{}_loading_{}_growth_{}'.format(self.AB_conc, loading, growth))
+
+
+            plt.figure(3)
+            plt.plot(XX.T, self.N_r_array.T/ self.volume)
+            plt.grid(True)
+            plt.ylabel('N/V')
+            plt.xlabel('Time (min)')
+            plt.xlim(0, self.t_end)
+            plt.ylim(bottom=0)
+            plt.title('{}_growth'.format(growth))
             plt.show()
-        os.chdir(curr_path)
+            os.chdir(curr_path)
+
 
     def countSurvival(self, grow_meth):
         self.last_N_list = []
@@ -314,3 +322,12 @@ class droplets_R():
         shutil.copyfile(experiment_script_path, scripts_dir + '/' + experiment_script_name)
 
         os.chdir(curr_path)
+
+    def calc_tau(self): # calculates tau (paper eq 7) for the det case
+        b=1
+        F = (self.AB_conc- self.strain_r.MIC) + Km*np.log(self.AB_conc/self.strain_r.MIC)
+        B = self.strain_r.deathrate*self.volume / (self.strain_r.initialN *Vmax*b)  # do we need to add a value for b in the simulations
+        C= np.log(1 - B*F)
+        tau= (-1 / self.strain_r.deathrate)*C
+        print('Tau= ',tau, 'min')
+        return tau

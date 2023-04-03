@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.stats import poisson
+#from scipy.stats import poisson  #I'm getting an error message here for some reason?!
+#from scipy.stats import levy_stable
 import math
 import strain
 import variables

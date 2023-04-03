@@ -4,6 +4,10 @@
 ## 2. do partition fact for deterministic case; - NOT WORKING RIGHT NOW
 ## 3. check to see that surv frac fct and count total mass work for det case too
 ## why changing Nsat changes results??? - ### When running for loop different partitions, the bacteria seem to grow - I believe there is something wrong in either degradation or volume or something else
+#Error for importing scipy possion -- is this just my end?
+#What is the new var of nr_drops_total_mass, why isn't it in the variables file ? (i think i've missed something)
+#n/V plot -- to troubleshoot; this is working in the loop
+#calc tau method
 
 ## set all variables here and settings
 import os.path
@@ -42,7 +46,7 @@ deathrate  = 0.045  # per minute from Gore 2013
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
-AB_conc = 65 #ug/mL
+AB_conc = 10 #ug/mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL
@@ -58,10 +62,10 @@ step = 1
 epsilon = 0.03
 
 ##type of loading and growth
-loading = "rand"  # rand #det
+loading = "det"  # rand #det
 #growth = "midpoint_tau_binary" # for troubleshooting -- needs updating
-#growth = "binary"
-growth = 'gillespie_binary'
+growth = "binary"
+#growth = 'gillespie_binary'
 #degradation = 'MM_linear'
 degradation = 'MM_exponential'
 

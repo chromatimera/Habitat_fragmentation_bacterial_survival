@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 print(os.getcwd())
 
 ### read dataframes
-surv_fraction = pd.read_csv('output/survival_fraction_growth_gillespie_binary_loading_rand_ABconc65.csv')
+surv_fraction = pd.read_csv('output/df_growth_gillespie_binary_count_survival_nr_drop_0_partition_factor.csv')
 print(surv_fraction)
 
 ### transpose of dataframe

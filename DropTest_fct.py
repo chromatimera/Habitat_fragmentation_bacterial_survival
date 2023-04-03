@@ -20,7 +20,7 @@ class DropTest(object):
     def run(self): ## simulation for one AB concentration; used in troubleshooting
 
         strain_R = strain(nr_drops_total_mass=1)
-        Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc, volume)
+        Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc, volume,100) # placeholder-- not sure what this var is
         Droplet_exp.run(loading, growth)
         Droplet_exp.save('Ni{}'
                          '_MIC{}_totaldropnr{}_ABconc{}_'
@@ -141,10 +141,11 @@ class DropTest(object):
                 else:
 
                     strain_R = strain(new_nr_drops_total_mass)
-                    Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc, new_volume)  # 0.5, 300
+                    Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc, new_volume,1000) ##???
                     Droplet_exp.run(loading, growth)
                     Droplet_exp.countTotalMass(growth)
-
+                    Droplet_exp.calc_tau()
+                    Droplet_exp.plots("binary")
                     ##this is the total number of bacteria at each timestep
                     nr_bact_each_ts = Droplet_exp.total_mass
                     part_fct = 1/total_drop_nr
@@ -228,8 +229,8 @@ class DropTest(object):
 simulate = DropTest()
 #simulate.run()
 #simulate.test_dt(0, 10, 1)
-#simulate.count_total_mass(part_min, part_max, step)
+simulate.count_total_mass(part_min, part_max, step)
 #simulate.test_surv_frac_diff_ab_conc(abmin, abmax, step)
-simulate.calc_survival_prob_total_nr_bact_diff_part(part_min, part_max, step, spec_time, total_sim)
+#simulate.calc_survival_prob_total_nr_bact_diff_part(part_min, part_max, step, spec_time, total_sim)
 #simulate.count_total_mass_diff_ab(part_min, part_max, abmin, abmax, step)
 #simulate.count_total_mass(abmin, abmax, step)
