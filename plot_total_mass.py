@@ -6,13 +6,9 @@ import matplotlib.pyplot as plt
 import variables
 from variables import *
 
+df_total_mass = pd.read_csv('./output/dropnr_1000_loading_rand_growth_gillespie_binary_initialN_10_abconc_57/df_growth_{}_starting_nr_drops_{}_ABconc{}.csv'.format(growth, variables.total_drop_nr, AB_conc))
 
-def read_csv():
-    df = pd.read_csv('./output/df_growth_{}_starting_nr_drops_{}_ABconc{}.csv'.format(growth, variables.total_drop_nr, AB_conc))
-    return df
-
-df_total_mass = read_csv()
-part_fact = np.loadtxt("output/part_fact.txt", delimiter=",", unpack=False)
+part_fact = np.loadtxt("output/dropnr_1000_loading_rand_growth_gillespie_binary_initialN_10_abconc_57/part_fact.txt", delimiter=",", unpack=False)
 
 ##start building the average N(t) and SD(t) over simulations
 total_nr_bact = np.zeros((df_total_mass.shape[0], len(part_fact)))

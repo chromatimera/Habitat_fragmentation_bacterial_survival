@@ -26,12 +26,15 @@ class DropTest(object):
         for nr_sim in range(0, total_sim, step):
             prob_diff_part = []
             part_fact = []
+            #part_fact2 = np.linspace(0, 1, 5)
+            #print(part_fact2)
             print('Simulation nr:', nr_sim)
             ## simulate droplets for different partitioning factors
             for i in range(partmin, partmax, step):
                 for j in range(partmin, partmax, step):
                     ## set new values for diff part factor
                     new_i = 5 ** i * 2 ** j
+            #for i in part_fact2:
                     new_nr_drops_total_mass = new_i
                     new_volume = variables.volume * new_nr_drops_total_mass
                     total_drop_nr = round(variables.total_drop_nr / new_nr_drops_total_mass)
@@ -54,8 +57,8 @@ class DropTest(object):
                         #print('N_array', Droplet_exp.N_r_array)
                         ## calculate the total nr of bacteria in all droplets, if any survived, prob survival = 1
                         Droplet_exp.countTotalMass(growth)
-                        Droplet_exp.calc_tau_det(Droplet_exp.N_r_array)
-                        Droplet_exp.plots(growth)
+                        #Droplet_exp.calc_tau_det(Droplet_exp.N_r_array)
+                        #Droplet_exp.plots(growth)
 
                         nr_bact_each_ts = Droplet_exp.total_mass
                         ## append the nr of bacteria to dataframe with N(t) vs part factor
@@ -71,7 +74,7 @@ class DropTest(object):
                         ## append probs to a list with diff probs for diff part factors
                         prob_diff_part.append(prob_survival)
 
-             ## append row at the end of each simulation for each partition factor
+                ## append row at the end of each simulation for each partition factor
             prob_part_per_iteration = pd.DataFrame(data=[prob_diff_part])
             total_prob = pd.concat([total_prob, prob_part_per_iteration])
 
@@ -110,10 +113,28 @@ class DropTest(object):
 
 
        ## save all df
-        pd.DataFrame(surv_df).to_csv('output/survival_fraction_growth_{}_loading_{}_ABconc{}.csv'.format(growth, loading, AB_conc), index=None)
-        pd.DataFrame(avg_nr_bact).to_csv('output/average_df_growth_{}_loading_{}_ABconc{}.csv'.format(growth, loading, AB_conc), index=None)
-        pd.DataFrame(df_total_mass).to_csv('output/df_growth_{}_starting_nr_drops_{}_ABconc{}.csv'.format(growth, variables.total_drop_nr, AB_conc), index=None)
-        np.savetxt('output/part_fact.txt', part_fact, delimiter=',')  # X is an array
+        # Get path of current folder
+        curr_path = os.getcwd()
+        # print(curr_path)
+
+        # Check whether the specified path exists or not
+
+        folder_name = 'output/dropnr_{}_loading_{}_growth_{}_initialN_{}_abconc_{}'.format(
+            variables.total_drop_nr, variables.loading, variables.growth, variables.initialN, AB_conc)
+        path = os.path.join(curr_path, folder_name)
+        isExist = os.path.exists(path)
+
+        if not isExist:
+            # Create a new directory because it does not exist
+            os.makedirs(path, exist_ok=True)
+            print("The new directory is created!")
+
+        os.chdir(path)
+
+        pd.DataFrame(surv_df).to_csv('survival_fraction_growth_{}_loading_{}_ABconc{}.csv'.format(growth, loading, AB_conc), index=None)
+        pd.DataFrame(avg_nr_bact).to_csv('average_df_growth_{}_loading_{}_ABconc{}.csv'.format(growth, loading, AB_conc), index=None)
+        pd.DataFrame(df_total_mass).to_csv('df_growth_{}_starting_nr_drops_{}_ABconc{}.csv'.format(growth, variables.total_drop_nr, AB_conc), index=None)
+        np.savetxt('part_fact.txt', part_fact, delimiter=',')  # X is an array
 
         # print("--- %s seconds ---" % (time.time() - start_time))
 

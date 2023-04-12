@@ -1,8 +1,12 @@
 ### To do list:
+## 1. do script for plotting for df ab surv frac, total mass
+## 2. part fact list instead of 2 loops - confusing results, can change around
+## 3. sort out tau - get a tau for each droplet (based on N0) and store taus in a list // for gillespie
 
-## 1. do countTotalMass for all AB conc and add it to survival fracion - get survival fraction and total mass at the same time,
-##do the for loop ptr
-## 2. N(t), survival fraction for deterministic case look weird
+##To ask Rosalind:
+## 1. b - should we change b to lower the ab concentration
+
+
 ## why changing Nsat changes results??? -
 
 ## set all variables here and settings
@@ -21,7 +25,7 @@ t_start = 0
 t_end = 300
 dt = 1
 spec_time = 240
-total_sim = 3
+total_sim = 5
 
 ### nr timesteps for dt test; ignore dt for this test
 nr_timesteps = int(3e6)
@@ -42,7 +46,7 @@ deathrate  = 0.045  # per minute from Gore 2013
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
-AB_conc = 10 #ug/mL
+AB_conc = 25 #ug/mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL
@@ -58,10 +62,10 @@ step = 1
 epsilon = 0.03
 
 ##type of loading and growth
-loading = "det"  # rand #det
+loading = "rand"  # rand #det
 #growth = "midpoint_tau_binary" # for troubleshooting -- needs updating
-growth = "binary"
-#growth = 'gillespie_binary'
+#growth = "binary"
+growth = 'gillespie_binary'
 degradation = 'MM_exponential'
 
 

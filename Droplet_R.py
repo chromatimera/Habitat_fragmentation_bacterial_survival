@@ -115,6 +115,17 @@ class droplets_R():
             plt.savefig('plot_ABconc_{}_loading_{}_growth_{}.png'.format(str(AB_conc), loading, growth))
             plt.show()
 
+            plt.figure(3)
+            for i in range(0, self.total_drop_number):
+                plt.plot(self.time_list_gillespie[i], self.N_list_gillespie[i]/self.volume)
+            plt.grid(True)
+            plt.ylabel('N/V')
+            plt.xlabel('Time (min)')
+            plt.xlim(0, self.t_end)
+            plt.ylim(bottom=0)
+            plt.title('{}_growth'.format(growth))
+            plt.show()
+
         else:
             X = np.arange(0, self.t_end, self.dt).tolist()
             XX= np.tile(X, (self.total_drop_number, 1))
@@ -149,6 +160,17 @@ class droplets_R():
             plt.title ('{}_growth'.format(growth))
             plt.savefig('plot_ABconc_{}_loading_{}_growth_{}'.format(self.AB_conc, loading, growth))
             plt.show()
+
+            plt.figure(3)
+            plt.plot(XX.T, self.N_r_array.T / self.volume)
+            plt.grid(True)
+            plt.ylabel('N/V')
+            plt.xlabel('Time (min)')
+            plt.xlim(0, self.t_end)
+            plt.ylim(bottom=0)
+            plt.title('{}_growth'.format(growth))
+            plt.show()
+
         os.chdir(curr_path)
 
     def countSurvival(self, grow_meth):
