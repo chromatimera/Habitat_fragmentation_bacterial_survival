@@ -194,13 +194,20 @@ class droplets_R():
                     self.total_mass[i] = 0
                 else:
                     self.total_mass[i] = np.sum(self.N_r_array[:, i])
-                print(self.total_mass[i])
+                #print(self.total_mass[i])
 
             #print('total_mass', self.total_mass)
             #print("Total mass in droplets where bacteria survived=  " + str(self.total_mass))
 
-
-
+    def calc_tau_det(self, N_array):  # calculates tau (paper eq 7) for the det case
+        b = 1
+        F = (self.AB_conc - self.strain_r.MIC) + Km * np.log(self.AB_conc / self.strain_r.MIC)
+        B = self.strain_r.deathrate * self.volume / (N_array[0,0] * Vmax * b)  # do we need to add a value for b in the simulations
+        C = np.log(1 - B * F)
+        #print(F,B,C)
+        tau = (-1 / self.strain_r.deathrate) * C
+        print('Tau= ', tau, 'min')
+        return tau
 
 
 

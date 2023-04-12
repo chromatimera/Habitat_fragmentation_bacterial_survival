@@ -8,7 +8,7 @@ from variables import *
 
 
 def read_csv():
-    df = pd.read_csv('./output/df_growth_{}_starting_nr_drops_{}.csv'.format(growth, variables.total_drop_nr))
+    df = pd.read_csv('./output/df_growth_{}_starting_nr_drops_{}_ABconc{}.csv'.format(growth, variables.total_drop_nr, AB_conc))
     return df
 
 df_total_mass = read_csv()

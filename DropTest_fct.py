@@ -36,7 +36,7 @@ class DropTest(object):
                     new_volume = variables.volume * new_nr_drops_total_mass
                     total_drop_nr = round(variables.total_drop_nr / new_nr_drops_total_mass)
 
-                    print('total_droplets', total_drop_nr)
+                    #print('total_droplets', total_drop_nr)
                     if total_drop_nr == 0:
                         print("Error in partitioning; the partitioning factor is so small that you're trying to simulate 0 droplets")
                     else:
@@ -54,6 +54,9 @@ class DropTest(object):
                         #print('N_array', Droplet_exp.N_r_array)
                         ## calculate the total nr of bacteria in all droplets, if any survived, prob survival = 1
                         Droplet_exp.countTotalMass(growth)
+                        Droplet_exp.calc_tau_det(Droplet_exp.N_r_array)
+                        Droplet_exp.plots(growth)
+
                         nr_bact_each_ts = Droplet_exp.total_mass
                         ## append the nr of bacteria to dataframe with N(t) vs part factor
                         df_total_mass['{} {}'.format(part_fct, nr_sim)] = nr_bact_each_ts
@@ -72,18 +75,23 @@ class DropTest(object):
             prob_part_per_iteration = pd.DataFrame(data=[prob_diff_part])
             total_prob = pd.concat([total_prob, prob_part_per_iteration])
 
+        total_prob.columns = part_fact
+        print('total prob before sorting ', total_prob.columns.tolist())
+        print('part fact', part_fact)
         part_fact = sorted(part_fact)
+
         print(df_total_mass.columns.tolist())
         df_total_mass = df_total_mass.reindex(sorted(df_total_mass.columns), axis=1)
         print(df_total_mass.columns.tolist())
-        total_prob.columns = part_fact
+
+        total_prob = total_prob.reindex(sorted(total_prob.columns), axis = 1)
         ## calculate the survival fraction and add it to the last row of the dataframe
         total_prob.loc['surv_Frac'] = total_prob.sum() / (len(total_prob.axes[0]))
-        #print(total_prob)
-        print(part_fact)
+        print('total prob after sorting ', total_prob.columns.tolist())
+        print('part fact', part_fact)
         ## make new dataframe with the last row of the df as survival fraction
         surv_df = total_prob.tail(1)
-        surv_df = surv_df.reindex(sorted(surv_df.columns), axis=1)
+        #surv_df = surv_df.reindex(sorted(surv_df.columns), axis=1)
         print(surv_df.head(10))
 
         ##start building the average N(t) over simulations
@@ -104,7 +112,7 @@ class DropTest(object):
        ## save all df
         pd.DataFrame(surv_df).to_csv('output/survival_fraction_growth_{}_loading_{}_ABconc{}.csv'.format(growth, loading, AB_conc), index=None)
         pd.DataFrame(avg_nr_bact).to_csv('output/average_df_growth_{}_loading_{}_ABconc{}.csv'.format(growth, loading, AB_conc), index=None)
-        pd.DataFrame(df_total_mass).to_csv('output/df_growth_{}_starting_nr_drops_{}.csv'.format(growth, variables.total_drop_nr), index=None)
+        pd.DataFrame(df_total_mass).to_csv('output/df_growth_{}_starting_nr_drops_{}_ABconc{}.csv'.format(growth, variables.total_drop_nr, AB_conc), index=None)
         np.savetxt('output/part_fact.txt', part_fact, delimiter=',')  # X is an array
 
         # print("--- %s seconds ---" % (time.time() - start_time))

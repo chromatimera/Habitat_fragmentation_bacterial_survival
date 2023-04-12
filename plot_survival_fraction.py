@@ -9,12 +9,13 @@ import matplotlib.pyplot as plt
 print(os.getcwd())
 
 ### read dataframes
-surv_fraction = pd.read_csv('output/survival_fraction_growth_gillespie_binary_loading_rand_ABconc55.csv')
-print(surv_fraction)
+surv_fraction = pd.read_csv('output/survival_fraction_growth_{}_loading_{}_ABconc{}.csv'.format(growth, loading, AB_conc))
+print(print(surv_fraction.columns.tolist()))
 
 ### transpose of dataframe
 surv_fraction_transpose = surv_fraction.T
 surv_fraction_transpose.index.name = 'Part_fact'
+print(surv_fraction_transpose)
 
 
 surv_fraction_transpose.columns = ['Surv frac']
