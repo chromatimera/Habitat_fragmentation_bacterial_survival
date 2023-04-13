@@ -2,7 +2,7 @@
 ## 1. do script for plotting for df ab surv frac, total mass
 ## 2. part fact list instead of 2 loops - confusing results, can change around
 ## 3. sort out tau - get a tau for each droplet (based on N0) and store taus in a list // for gillespie
-
+## 4. sort out b factor
 ##To ask Rosalind:
 ## 1. b - should we change b to lower the ab concentration
 
@@ -46,7 +46,7 @@ deathrate  = 0.045  # per minute from Gore 2013
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
-AB_conc = 40 #ug/mL
+AB_conc = 70 #ug/mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL
@@ -64,8 +64,8 @@ epsilon = 0.03
 ##type of loading and growth
 loading = "rand"  # rand #det
 #growth = "midpoint_tau_binary" # for troubleshooting -- needs updating
-#growth = "binary"
-growth = 'gillespie_binary'
+growth = "binary"
+#growth = 'gillespie_binary'
 degradation = 'MM_exponential'
 
 

@@ -13,12 +13,13 @@ rootdir = 'output/'
 ab = [10, 25, 30, 35, 40, 55, 70]
 
 os.chdir(rootdir)
-print(os.getcwd())
+print('current dir', os.getcwd())
 
 
 plt.figure(1)
 
 for i in ab:
+    print(i)
     os.chdir('dropnr_1000_loading_rand_growth_gillespie_binary_initialN_10_abconc_{}'.format(i))
     print(os.getcwd())
     path = os.getcwd()
@@ -31,6 +32,8 @@ for i in ab:
     print(surv_fraction)
     part_fact = np.loadtxt(onlyfiles[2])
     print(part_fact)
+
+
 
     ### transpose of dataframe
     surv_fraction_transpose = surv_fraction.T
@@ -46,10 +49,12 @@ for i in ab:
 # plt.grid(True)
     surv_fraction_errors = surv_fraction_transpose.Error95.to_frame('Surv frac')
     surv_fraction_transpose["Surv frac"].plot.line(yerr = surv_fraction_errors)#, color = 'orange')
+    os.chdir('..')
+    print(os.getcwd())
 
 plt.title('Fraction of droplets surviving a round of treatment')
 plt.ylabel('Fraction of droplets surviving')
 plt.xlabel('Partitioning factor')
 plt.legend(ab, title='Antibiotic conc',  loc='upper right')
-plt.savefig('./output/Survival fraction Gillespie + errors.png')
+plt.savefig('Survival fraction Gillespie + errors diff ab.png')
 plt.show()
