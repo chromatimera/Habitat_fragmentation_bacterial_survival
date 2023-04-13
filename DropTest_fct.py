@@ -26,15 +26,23 @@ class DropTest(object):
         for nr_sim in range(0, total_sim, step):
             prob_diff_part = []
             part_fact = []
-            #part_fact2 = np.linspace(0, 1, 5)
+
+            ## trying instead of loop to make a list of predefined partitioning factors to use
+            #part_fact2 = np.linspace(0.001, 1, 5)
             #print(part_fact2)
+
             print('Simulation nr:', nr_sim)
+
             ## simulate droplets for different partitioning factors
             for i in range(partmin, partmax, step):
                 for j in range(partmin, partmax, step):
-                    ## set new values for diff part factor
-                    new_i = 5 ** i * 2 ** j
+
             #for i in part_fact2:
+                    #new_i = variables.total_drop_nr * i
+
+                    new_i = 5 ** i * 2 ** j
+                    print('new_i', new_i)
+
                     new_nr_drops_total_mass = new_i
                     new_volume = variables.volume * new_nr_drops_total_mass
                     total_drop_nr = round(variables.total_drop_nr / new_nr_drops_total_mass)
@@ -45,6 +53,7 @@ class DropTest(object):
                     else:
 
                         part_fct = 1 / total_drop_nr
+
                         print('part_fact', part_fct)
 
                         part_fact.append(part_fct)

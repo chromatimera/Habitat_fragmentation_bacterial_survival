@@ -7,7 +7,7 @@ from variables import *
 import matplotlib.pyplot as plt
 
 rootdir = 'output/'
-ab = [10,25,  55, 70]
+ab = [25, 30, 35, 40, 55, 70]
 
 os.chdir(rootdir)
 print(os.getcwd())
