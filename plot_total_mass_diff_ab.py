@@ -3,16 +3,17 @@ import os
 from os.path import isfile, join
 import pandas as pd
 import numpy as np
-from variables import *
+from variables import total_sim
 import matplotlib.pyplot as plt
 
+growth = 'binary'
 rootdir = 'output/'
-ab = [25, 30, 35, 40, 55, 70]
+ab = [40, 55, 70]
 
 os.chdir(rootdir)
 print(os.getcwd())
 for i in ab:
-    os.chdir('dropnr_1000_loading_rand_growth_gillespie_binary_initialN_10_abconc_{}'.format(i))
+    os.chdir('dropnr_1000_loading_rand_growth_{}_initialN_10_abconc_{}'.format(growth, i))
     print(os.getcwd())
     path = os.getcwd()
 
@@ -73,8 +74,7 @@ plt.title('Total mass at time 300 versus partitioning factor')
 plt.ylabel('Total mass (nr of bacteria)')
 plt.xlabel('Partition factor')
 plt.legend(ab, title='Antibiotic conc',  loc='upper right')
-
-#plt.savefig('./output/Nf_Ni_vs_part_fact_startin_nr_of_drops_{} +error.png'.format(variables.total_drop_nr))
+plt.savefig('Nf_vs_part_fact {} + error.png'.format(growth))
 plt.show()
 
 

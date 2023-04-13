@@ -8,9 +8,9 @@ import numpy as np
 from variables import *
 import matplotlib.pyplot as plt
 
-
+growth = 'binary'
 rootdir = 'output/'
-ab = [10, 25, 30, 35, 40, 55, 70]
+ab = [40, 55, 70]
 
 os.chdir(rootdir)
 print('current dir', os.getcwd())
@@ -20,7 +20,7 @@ plt.figure(1)
 
 for i in ab:
     print(i)
-    os.chdir('dropnr_1000_loading_rand_growth_gillespie_binary_initialN_10_abconc_{}'.format(i))
+    os.chdir('dropnr_1000_loading_rand_growth_{}_initialN_10_abconc_{}'.format(growth, i))
     print(os.getcwd())
     path = os.getcwd()
 
@@ -56,5 +56,5 @@ plt.title('Fraction of droplets surviving a round of treatment')
 plt.ylabel('Fraction of droplets surviving')
 plt.xlabel('Partitioning factor')
 plt.legend(ab, title='Antibiotic conc',  loc='upper right')
-plt.savefig('Survival fraction Gillespie + errors diff ab.png')
+plt.savefig('Survival fraction {} + errors diff ab.png'.format(growth))
 plt.show()
