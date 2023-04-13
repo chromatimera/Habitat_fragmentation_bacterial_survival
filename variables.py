@@ -1,10 +1,12 @@
 ### To do list:
-## 1. do script for plotting for df ab surv frac, total mass
-## 2. part fact list instead of 2 loops - confusing results, can change around
+
 ## 3. sort out tau - get a tau for each droplet (based on N0) and store taus in a list // for gillespie
 ## 4. sort out b factor
+
 ##To ask Rosalind:
 ## 1. b - should we change b to lower the ab concentration
+
+## 2. part fact list instead of 2 loops - confusing results, can change around
 
 
 ## why changing Nsat changes results??? -
