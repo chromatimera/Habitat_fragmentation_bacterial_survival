@@ -51,9 +51,9 @@ print(error_nr_bact.iloc[-1, 1:len(part_fact)+1].tolist())
 avg_nr_bact.iloc[0, 1:(len(part_fact) + 1)].plot(yerr = error_nr_bact.iloc[0, 1:len(part_fact)+1].tolist())  ### plot initial nr of bacteria
 avg_nr_bact.iloc[-1, 1:(len(part_fact) + 1)].plot(yerr = error_nr_bact.iloc[-1, 1:len(part_fact)+1].tolist()) ### plot final nr of bacteria
 plt.grid(True)
-plt.title('Total mass versus partitioning factor, ab conc {}'.format(AB_conc))
-plt.ylabel('Total mass (nr of bacteria) Nf, Ni')
-plt.xlabel('Partition factor')
+plt.title('Total mass versus partitioning factor, ab conc {}'.format(AB_conc), fontsize=text_size)
+plt.ylabel('Total mass (nr of bacteria) Nf, Ni',fontsize=text_size)
+plt.xlabel('Partition factor', fontsize=text_size)
 plt.legend(['Ni', 'Nf'], loc='upper left')
 plt.savefig('./output/Nf_Ni_vs_part_fact_startin_nr_of_drops_{} +error.png'.format(variables.total_drop_nr))
 plt.show()

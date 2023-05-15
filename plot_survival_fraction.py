@@ -52,9 +52,9 @@ for i in ab:
     os.chdir('..')
     print(os.getcwd())
 
-plt.title('Fraction of droplets surviving a round of treatment')
-plt.ylabel('Fraction of droplets surviving')
-plt.xlabel('Partitioning factor')
-plt.legend(ab, title='Antibiotic conc',  loc='upper right')
+plt.title('Fraction of droplets surviving a round of treatment', fontsize=text_size)
+plt.ylabel('Fraction of droplets surviving', fontsize=text_size)
+plt.xlabel('Partitioning factor', fontsize=text_size)
+plt.legend(ab, title='Antibiotic conc', loc='upper right')
 plt.savefig('Survival fraction {} + errors diff ab.png'.format(growth))
 plt.show()

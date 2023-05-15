@@ -6,6 +6,7 @@ from decimal import *
 import pandas as pd
 import numpy as np
 import warnings
+import operator
 
 ##ignore warnings
 warnings.filterwarnings("ignore")
@@ -52,8 +53,7 @@ class DropTest(object):
                         print("Error in partitioning; the partitioning factor is so small that you're trying to simulate 0 droplets")
                     else:
 
-                        part_fct = 1 / total_drop_nr
-
+                        part_fct = total_drop_nr
                         print('part_fact', part_fct)
 
                         part_fact.append(part_fct)
@@ -89,18 +89,39 @@ class DropTest(object):
 
         total_prob.columns = part_fact
         print('total prob before sorting ', total_prob.columns.tolist())
-        print('part fact', part_fact)
-        part_fact = sorted(part_fact)
+        print('part fact before sorting', part_fact)
+        part_fact = sorted(part_fact, reverse=True)
 
         print(df_total_mass.columns.tolist())
-        df_total_mass = df_total_mass.reindex(sorted(df_total_mass.columns), axis=1)
+        columns = list(df_total_mass.columns)
+
+        columns_split = []
+        for word in columns:
+            tmp = word.split(' ')
+            print(tmp)
+            tmp = [int(x) for x in tmp]
+            columns_split.append(tmp)
+        print(columns_split)
+
+        columns_sorted = sorted(columns_split, key=operator.itemgetter(1))
+        print(columns_sorted)
+        columns_sorted_joined = []
+        for word in columns_sorted:
+            print(word)
+            print(len(word))
+            word = str(word[0]) +' '+ str(word[1])
+            print(word)
+
+            columns_sorted_joined.append(word)
+        print(columns_sorted_joined)
+        df_total_mass = df_total_mass.reindex(columns_sorted_joined, axis=1)
         print(df_total_mass.columns.tolist())
 
-        total_prob = total_prob.reindex(sorted(total_prob.columns), axis = 1)
+        total_prob = total_prob.reindex(sorted(total_prob.columns, reverse=True), axis = 1)
         ## calculate the survival fraction and add it to the last row of the dataframe
         total_prob.loc['surv_Frac'] = total_prob.sum() / (len(total_prob.axes[0]))
         print('total prob after sorting ', total_prob.columns.tolist())
-        print('part fact', part_fact)
+        print('part fact after sorting', part_fact)
         ## make new dataframe with the last row of the df as survival fraction
         surv_df = total_prob.tail(1)
         #surv_df = surv_df.reindex(sorted(surv_df.columns), axis=1)
@@ -178,8 +199,6 @@ class DropTest(object):
                     ## append all parition factors, next step will transform this into partition factors
                     part_fact.append(part_fct)
 
-
-        #
         ### insert the time array into the dataframe
         df_total_mass.insert(loc=0, column='Time', value = np.linspace(t_start, t_end, num=round(t_end/dt)))
         ## See below how the dataframe should look like:

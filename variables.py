@@ -4,8 +4,6 @@
 ## 4. sort out b factor
 
 ##To ask Rosalind:
-## 1. b - should we change b to lower the ab concentration
-
 ## 2. part fact list instead of 2 loops - confusing results, can change around
 
 
@@ -42,13 +40,13 @@ nr_drop_max = 10
 step_drop = 5
 
 Nsat = 1e8
-initialN = 10
+initialN = 5
 growthrate = 0.01 # per minute from experimental data Nia thesis
 deathrate  = 0.045  # per minute from Gore 2013
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
-AB_conc = 70 #ug/mL
+AB_conc = 15 #ug/mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL
@@ -70,7 +68,8 @@ growth = "binary"
 #growth = 'gillespie_binary'
 degradation = 'MM_exponential'
 
-
+# Parameters for plotting
+text_size = 'x-large'
 
 variables_script_path = __file__
 variables_script_name = os.path.basename(__file__)

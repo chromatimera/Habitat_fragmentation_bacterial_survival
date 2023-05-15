@@ -6,22 +6,16 @@ from mpl_toolkits import mplot3d
 
 import variables
 from variables import *
+from numpy import loadtxt
 
 
 def read_csv():
     df = pd.read_csv('./output/df_growth_{}_starting_nr_drops_{}.csv'.format(growth, variables.total_drop_nr))
     return df
 
-### PLS IGNORE THIS BIT - FOR ADDING ERROR BARS
-#def add_error95_bar(df):
-#    df['Error95_{}'.format(x)] = df.apply(lambda x: 2 * math.sqrt(df.iloc[:, x] * (1 - df.iloc[:, x])) / math.sqrt(variables.total_drop_nr * ), axis=1)
-#    return df
 print(os.getcwd())
 df = read_csv()
-#df = add_error95_bar()
 print(df)
-
-from numpy import loadtxt
 
 part_fact = loadtxt("output/part_fact.txt", delimiter=",", unpack=False)
 print(part_fact)
@@ -65,8 +59,8 @@ plt.show()
 
 ### Plot p-T projection of phase diagram - x colour coded
 plt.figure(figsize=(6.4*2.5,4.8*2.5))
-plt.xlabel('Pressure', fontsize='large', fontweight='bold')
-plt.ylabel('Temperature', fontsize='large', fontweight='bold')
+plt.xlabel('Pressure', fontsize=text_size, fontweight='bold')
+plt.ylabel('Temperature', fontsize=text_size, fontweight='bold')
 plt.contourf(X, Y, nf_diff_ab, 20, rstride=1,  cstride=1, cmap='viridis', linewidth=0, antialiased=False)
 #im = plt.imshow(x_array_bdu, cmap='viridis', origin='lower')
 cbar = plt.colorbar(orientation='vertical',ticks=[0,0.2,0.4,0.6,0.8,1])
