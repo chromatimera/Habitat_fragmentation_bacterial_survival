@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 growth = 'binary'
 rootdir = 'output/'
-ab = [40, 55, 70]
+ab = [15, 25]
 
 os.chdir(rootdir)
 print('current dir', os.getcwd())
@@ -20,7 +20,7 @@ plt.figure(1)
 
 for i in ab:
     print(i)
-    os.chdir('dropnr_1000_loading_rand_growth_{}_initialN_10_abconc_{}'.format(growth, i))
+    os.chdir('dropnr_1000_loading_rand_growth_{}_initialN_5_abconc_{}'.format(growth, i))
     print(os.getcwd())
     path = os.getcwd()
 
@@ -54,7 +54,7 @@ for i in ab:
 
 plt.title('Fraction of droplets surviving a round of treatment', fontsize=text_size)
 plt.ylabel('Fraction of droplets surviving', fontsize=text_size)
-plt.xlabel('Partitioning factor', fontsize=text_size)
+plt.xlabel('m (number of subvolumes)', fontsize=text_size)
 plt.legend(ab, title='Antibiotic conc', loc='upper right')
 plt.savefig('Survival fraction {} + errors diff ab.png'.format(growth))
 plt.show()

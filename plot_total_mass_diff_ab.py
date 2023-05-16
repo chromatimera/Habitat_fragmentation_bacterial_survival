@@ -1,7 +1,7 @@
 from os import listdir
 import os
 from os.path import isfile, join
-from variables import text_size, spec_time
+from variables import text_size
 import pandas as pd
 import numpy as np
 from variables import total_sim
@@ -15,6 +15,9 @@ ab = [15, 25]
 
 os.chdir(rootdir)
 print(os.getcwd())
+
+plt.figure(figsize=(7.5,5))
+
 for i in ab:
     os.chdir('dropnr_1000_loading_rand_growth_{}_initialN_5_abconc_{}'.format(growth, i))
     #print(os.getcwd())
@@ -39,7 +42,7 @@ for i in ab:
     ## for each partition factor, calculate the sum over the simulation of N(t)
     for i in range(0, len(part_fact), 1):
         for j in range(0, total_sim, 1):
-            k = j + i * total_sim
+            k = i * 5 + j
             total_nr_bact[:, i] += df_total_mass.iloc[:, k]
 
     ## at this stage we have a np array with a sum of N(t) across all iterations -> we need to divide it by the nr of sim
@@ -78,9 +81,9 @@ for i in ab:
     os.chdir('..')
 
 plt.grid(True)
-plt.title('Total mass at time {} versus partitioning factor'.format(spec_time), fontsize=text_size)
-plt.ylabel('Total mass (nr of bacteria)', fontsize=text_size)
-plt.xlabel('Partition factor', fontsize=text_size)
+plt.title('Total mass at time 300 versus partitioning factor', fontsize=text_size)
+plt.ylabel('Surviving nr of bacteria)', fontsize=text_size)
+plt.xlabel('m (number of subvolumes)', fontsize=text_size)
 plt.legend(ab, title='Antibiotic conc', fontsize='large',  loc='upper right')
 plt.savefig('Nf_vs_part_fact {} + error.png'.format(growth))
 plt.show()

@@ -90,7 +90,7 @@ class DropTest(object):
         total_prob.columns = part_fact
         print('total prob before sorting ', total_prob.columns.tolist())
         print('part fact before sorting', part_fact)
-        part_fact = sorted(part_fact, reverse=True)
+        part_fact = sorted(part_fact)
 
         print(df_total_mass.columns.tolist())
         columns = list(df_total_mass.columns)
@@ -103,7 +103,7 @@ class DropTest(object):
             columns_split.append(tmp)
         print(columns_split)
 
-        columns_sorted = sorted(columns_split, key=operator.itemgetter(1))
+        columns_sorted = sorted(columns_split, key=operator.itemgetter(0))
         print(columns_sorted)
         columns_sorted_joined = []
         for word in columns_sorted:
@@ -133,8 +133,9 @@ class DropTest(object):
         ## for each partition factor, calculate the sum over the simulation of N(t)
         for i in range(0, len(part_fact), 1):
            for j in range(0, total_sim, 1):
-               k = j + i * total_sim
+               k = i * 5 + j
                total_nr_bact[:, i] += df_total_mass.iloc[:, k]
+           print('stop')
 
         ## at this stage we have a np array with a sum of N(t) across all iterations -> we need to divide it by the nr of sim
         nr_simu = np.array(total_sim)

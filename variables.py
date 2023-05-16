@@ -24,7 +24,7 @@ part_max = int(math.log10(total_drop_nr) + 1)
 t_start = 0
 t_end = 300
 dt = 1
-spec_time = 240
+#spec_time = 240
 total_sim = 5
 
 ### nr timesteps for dt test; ignore dt for this test
@@ -69,7 +69,7 @@ growth = "binary"
 degradation = 'MM_exponential'
 
 # Parameters for plotting
-text_size = 'x-large'
+text_size = 'xx-large'
 
 variables_script_path = __file__
 variables_script_name = os.path.basename(__file__)
