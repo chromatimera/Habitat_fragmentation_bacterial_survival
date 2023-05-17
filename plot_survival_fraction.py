@@ -52,7 +52,7 @@ for i in ab:
     os.chdir('..')
     print(os.getcwd())
 
-plt.title('Fraction of droplets surviving a round of treatment', fontsize=text_size)
+plt.title('Fraction of repeats with any bacteria surviving', fontsize=text_size)
 plt.ylabel('Fraction of droplets surviving', fontsize=text_size)
 plt.xlabel('m (number of subvolumes)', fontsize=text_size)
 plt.legend(ab, title='Antibiotic conc', loc='upper right')

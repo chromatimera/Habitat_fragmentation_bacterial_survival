@@ -28,18 +28,11 @@ class DropTest(object):
             prob_diff_part = []
             part_fact = []
 
-            ## trying instead of loop to make a list of predefined partitioning factors to use
-            #part_fact2 = np.linspace(0.001, 1, 5)
-            #print(part_fact2)
-
             print('Simulation nr:', nr_sim)
 
             ## simulate droplets for different partitioning factors
             for i in range(partmin, partmax, step):
                 for j in range(partmin, partmax, step):
-
-            #for i in part_fact2:
-                    #new_i = variables.total_drop_nr * i
 
                     new_i = 5 ** i * 2 ** j
                     print('new_i', new_i)
@@ -54,7 +47,7 @@ class DropTest(object):
                     else:
 
                         part_fct = total_drop_nr
-                        print('part_fact', part_fct)
+                        print('m (nr of subvolumes)', part_fct)
 
                         part_fact.append(part_fct)
 
@@ -68,6 +61,7 @@ class DropTest(object):
                         Droplet_exp.countTotalMass(growth)
                         #Droplet_exp.calc_tau_det(Droplet_exp.N_r_array)
                         #Droplet_exp.plots(growth)
+                        #rho_T, N_T, ps = Droplet_exp.calc_theo_survival_prob(Droplet_exp.N_r_array)
 
                         nr_bact_each_ts = Droplet_exp.total_mass
                         ## append the nr of bacteria to dataframe with N(t) vs part factor

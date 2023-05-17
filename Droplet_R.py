@@ -11,7 +11,7 @@ from variables import *
 from strain import strain_script_name, strain_script_path
 from Experiment_R import experiment_script_name, experiment_script_path
 from decimal import *
-
+import scipy.special as sc
 getcontext().prec = 50
 
 
@@ -231,6 +231,32 @@ class droplets_R():
         print('Tau= ', tau, 'min')
         return tau
 
+    def calc_theo_survival_prob(self, N_array):
+        ##calculate rho_threshold; eq (9) from paper
+        b = 1
+        F1 = self.strain_r.deathrate/(b * Vmax)
+        F = (self.AB_conc - self.strain_r.MIC) + Km * np.log(self.AB_conc / self.strain_r.MIC)
+        rho_T = F1 * F
+        print('Rho_T',rho_T)
+
+        ## calculate N_T
+
+        N_T = rho_T * self.volume
+        print('N_T',N_T)
+
+        ## calculate the theoretical survival probability; eq. (10) from paper
+        ## rhobulk*v form the paper is initialN from the simulations and the first value from the N_array
+        rho_bulk = variables.initialN * variables.total_drop_nr/variables.volume * variables.total_drop_nr
+
+        print('rhobulk*v', rho_bulk * self.volume)
+        print(self.volume)
+        print('N0',  N_array[0,0])
+        G = sc.gammainc(N_T+1, rho_bulk * self.volume)
+        print('G', G)
+        ps = 1 - (G/math.gamma(N_T+1))
+        print('ps', ps)
+
+        return rho_T, N_T, ps
 
 
 

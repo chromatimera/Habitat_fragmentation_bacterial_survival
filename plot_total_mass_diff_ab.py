@@ -76,7 +76,16 @@ for i in ab:
 
     #avg_nr_bact.iloc[0, 0:(len(part_fact))].plot(
     #    yerr=error_nr_bact.iloc[0, 1:len(part_fact) + 1].tolist())  ### plot initial nr of bacteria
-    avg_nr_bact.iloc[-1, 0:(len(part_fact))].plot(yerr=error_nr_bact.iloc[-1, 0:len(part_fact)].tolist())  ### plot final nr of bacteria
+
+    ## IF PLOTTING NORMALIZED FRACTIONAL INCREASE
+    Nt_over_N0 = (avg_nr_bact.iloc[-1, 0:(len(part_fact))] / avg_nr_bact.iloc[0, 0:len(part_fact)])
+    norm_Nt_over_N0 = Nt_over_N0.apply(lambda x: (x - min(Nt_over_N0))/(max(Nt_over_N0)-min(Nt_over_N0)))
+    print(norm_Nt_over_N0)
+    (norm_Nt_over_N0).plot()
+
+    ##IF PLOTTING FRACTIONAL INCREASE
+    (avg_nr_bact.iloc[-1, 0:(len(part_fact))]/avg_nr_bact.iloc[0, 0:len(part_fact)]).plot(yerr=error_nr_bact.iloc[-1, 0:len(part_fact)].tolist())  ### plot final nr of bacteria
+
 
     os.chdir('..')
 
