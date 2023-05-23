@@ -46,7 +46,7 @@ deathrate  = 0.045  # per minute from Gore 2013
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
-AB_conc = 35 #ug/mL
+AB_conc = 25 #ug/mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL
@@ -62,7 +62,7 @@ step = 1
 epsilon = 0.03
 
 ##type of loading and growth
-loading = "det"  # rand #det
+loading = "rand"  # rand #det
 #growth = "midpoint_tau_binary" # for troubleshooting -- needs updating
 growth = "binary"
 #growth = 'gillespie_binary'

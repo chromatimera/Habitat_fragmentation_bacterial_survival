@@ -237,7 +237,7 @@ class droplets_R():
         F1 = self.strain_r.deathrate/(b * Vmax)
         F = (self.AB_conc - self.strain_r.MIC) + Km * np.log(self.AB_conc / self.strain_r.MIC)
         rho_T = F1 * F
-        print('Rho_T',rho_T)
+        #print('Rho_T',rho_T)
 
         ## calculate N_T
 
@@ -245,18 +245,23 @@ class droplets_R():
         print('N_T',N_T)
 
         ## calculate the theoretical survival probability; eq. (10) from paper
-        ## rhobulk*v form the paper is initialN from the simulations and the first value from the N_array
-        rho_bulk = variables.initialN * variables.total_drop_nr/variables.volume * variables.total_drop_nr
-
-        print('rhobulk*v', rho_bulk * self.volume)
-        print(self.volume)
-        print('N0',  N_array[0,0])
-        G = sc.gammainc(N_T+1, rho_bulk * self.volume)
+        ## rhobulk*v form the paper is initialN  (deterministic) from the simulations and the first value from the N_array
+        #rho_bulk = variables.initialN * variables.total_drop_nr/variables.volume * variables.total_drop_nr
+        rho_bulk = variables.initialN / variables.volume # constant in det
+        #print('rhobulk*v', rho_bulk * self.volume)
+        #print(self.volume)
+        #print('N0',  N_array[0,0])
+        G = sc.gammaincc(N_T+1, rho_bulk * self.volume) #UPPER incomplete gamma function
         print('G', G)
-        ps = 1 - (G/math.gamma(N_T+1))
-        print('ps', ps)
+        try:
+            fact= math.gamma(N_T+1)
+        except OverflowError:
+            fact=math.inf
+        ps = 1 - (G/fact)
+        #print('ps', ps)
+        bigPs= 1-(1-ps)**self.total_drop_number
 
-        return rho_T, N_T, ps
+        return rho_T, N_T, ps, bigPs
 
 
 
