@@ -89,7 +89,7 @@ for i in ab:
 
     os.chdir('..')
 
-plt.grid(True)
+plt.grid(False)
 plt.title('Total mass at time 300 versus partitioning factor', fontsize=text_size)
 plt.ylabel('Surviving nr of bacteria)', fontsize=text_size)
 plt.xlabel('m (number of subvolumes)', fontsize=text_size)

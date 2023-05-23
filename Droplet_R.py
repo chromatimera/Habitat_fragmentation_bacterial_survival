@@ -87,7 +87,7 @@ class droplets_R():
             fig, ax = plt.subplots()
             for i in range(0, self.total_drop_number):
                 plt.plot(self.time_list_gillespie[i], self.N_list_gillespie[i])
-            plt.grid(True)
+            plt.grid(False)
             # plt.title('Growth of resistant strain')
             plt.title('{}_growth'.format(growth))
             plt.ylabel('Number of bacteria')
@@ -103,7 +103,7 @@ class droplets_R():
             plt.figure(2)
             for i in range(0, self.total_drop_number):
                 plt.plot(self.time_list_gillespie[i], self.AB_conc_array_gillespie[i])
-            plt.grid(True)
+            plt.grid(False)
             # plt.title('Concentration of antibiotic over time in each droplet.')
             plt.ylabel('Antibiotic (ug/nL)')
             plt.xlabel('Time (mins)')
@@ -116,7 +116,7 @@ class droplets_R():
             plt.figure(3)
             for i in range(0, self.total_drop_number):
                 plt.plot(self.time_list_gillespie[i], self.N_list_gillespie[i]/self.volume)
-            plt.grid(True)
+            plt.grid(False)
             plt.ylabel('Number of bacteria per {} ml volume'.format(self.volume))
             plt.xlabel('Time (min)')
             plt.xlim(0, self.t_end)
@@ -131,9 +131,8 @@ class droplets_R():
             plt.rcParams.update({'font.size': 14})
 
             fig, ax= plt.subplots()
-            #plt.grid(True)
             plt.plot (XX.T, self.N_r_array.T)
-            plt.grid(True)
+            plt.grid(False)
             #plt.title('Growth of resistant strain')
             plt.title ('{}_growth'.format(growth))
             plt.ylabel('Number of bacteria')
@@ -147,9 +146,8 @@ class droplets_R():
 
 
             plt.figure(2)
-            #plt.grid(True)
             plt.plot(XX.T, self.AB_conc_array.T)
-            plt.grid(True)
+            plt.grid(False)
             #plt.title('Concentration of antibiotic over time in each droplet.')
             plt.ylabel('Antibiotic (ug/mL)')
             plt.xlabel('Time (mins)')
@@ -161,7 +159,7 @@ class droplets_R():
 
             plt.figure(3)
             plt.plot(XX.T, self.N_r_array.T / self.volume)
-            plt.grid(True)
+            plt.grid(False)
             plt.ylabel('Number of bacteria per {} ml volume'.format(self.volume))
             plt.xlabel('Time (min)')
             plt.xlim(0, self.t_end)

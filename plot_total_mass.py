@@ -50,7 +50,7 @@ print(error_nr_bact.iloc[-1, 1:len(part_fact)+1].tolist())
 
 avg_nr_bact.iloc[0, 1:(len(part_fact) + 1)].plot(yerr = error_nr_bact.iloc[0, 1:len(part_fact)+1].tolist())  ### plot initial nr of bacteria
 avg_nr_bact.iloc[-1, 1:(len(part_fact) + 1)].plot(yerr = error_nr_bact.iloc[-1, 1:len(part_fact)+1].tolist()) ### plot final nr of bacteria
-plt.grid(True)
+plt.grid(False)
 plt.title('Total mass versus partitioning factor, ab conc {}'.format(AB_conc), fontsize=text_size)
 plt.ylabel('Total mass (nr of bacteria) Nf, Ni',fontsize=text_size)
 plt.xlabel('m (number of subvolumes)', fontsize=text_size)
