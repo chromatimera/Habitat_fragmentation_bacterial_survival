@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 growth = 'binary'
 rootdir = 'output/'
-ab = [15, 25]
+ab = [35, 45]
 
 os.chdir(rootdir)
 print('current dir', os.getcwd())
@@ -32,8 +32,6 @@ for i in ab:
     print(surv_fraction)
     part_fact = np.loadtxt(onlyfiles[2])
     print(part_fact)
-
-
 
     ### transpose of dataframe
     surv_fraction_transpose = surv_fraction.T

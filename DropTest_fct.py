@@ -60,7 +60,7 @@ class DropTest(object):
                         ## calculate the total nr of bacteria in all droplets, if any survived, prob survival = 1
                         Droplet_exp.countTotalMass(growth)
                         #Droplet_exp.calc_tau_det(Droplet_exp.N_r_array)
-                        Droplet_exp.plots(growth)
+                        #Droplet_exp.plots(growth)
                         #5rho_T, N_T, ps = Droplet_exp.calc_theo_survival_prob(Droplet_exp.N_r_array)
 
                         nr_bact_each_ts = Droplet_exp.total_mass
