@@ -19,8 +19,8 @@ print('current dir', os.getcwd())
 plt.figure(1)
 
 for i in ab:
-    print(i)
-    os.chdir('dropnr_1000_loading_rand_growth_{}_initialN_5_abconc_{}'.format(growth, i))
+    #print(i)
+    os.chdir('dropnr_1000_loading_rand_growth_binary_initialN_5_abconc_25'.format(growth, i))
     print(os.getcwd())
     path = os.getcwd()
 
@@ -29,9 +29,9 @@ for i in ab:
     print(onlyfiles)
 
     surv_fraction = pd.read_csv(onlyfiles[3])
-    print(surv_fraction)
+   # print(surv_fraction)
     part_fact = np.loadtxt(onlyfiles[2])
-    print(part_fact)
+   # print(part_fact)
 
     ### transpose of dataframe
     surv_fraction_transpose = surv_fraction.T
@@ -42,6 +42,12 @@ for i in ab:
     surv_fraction_transpose.columns = ['Surv frac']
     surv_fraction_transpose['Error95'] = surv_fraction_transpose.apply(lambda x: 2 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(variables.total_sim), axis=1)
     surv_fraction_transpose['Error99'] = surv_fraction_transpose.apply(lambda x: 2.6 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(variables.total_sim), axis=1)
+
+    #### Theory line
+
+    theory = pd.read_csv(onlyfiles[4])
+
+    plt.plot(theory, '--')
 
 
 # plt.grid(True)

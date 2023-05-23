@@ -27,13 +27,14 @@ class DropTest(object):
         for nr_sim in range(0, total_sim, step):
             prob_diff_part = []
             part_fact = []
-
+            ps_array = np.empty([partmax*partmax,2])
             print('Simulation nr:', nr_sim)
-
+            #j=np.arange(partmin, partmax, step)
             ## simulate droplets for different partitioning factors
+            k=-1
             for i in range(partmin, partmax, step):
                 for j in range(partmin, partmax, step):
-
+                    k=k+1
                     new_i = 5 ** i * 2 ** j
                     print('new_i', new_i)
 
@@ -61,7 +62,12 @@ class DropTest(object):
                         Droplet_exp.countTotalMass(growth)
                         #Droplet_exp.calc_tau_det(Droplet_exp.N_r_array)
                         #Droplet_exp.plots(growth)
+
                         #5rho_T, N_T, ps = Droplet_exp.calc_theo_survival_prob(Droplet_exp.N_r_array)
+
+                        #rho_T, N_T, ps, bigPs = Droplet_exp.calc_theo_survival_prob(Droplet_exp.N_r_array)
+                        #ps_array[k,0]=ps
+                        #ps_array[k, 1] = bigPs
 
                         nr_bact_each_ts = Droplet_exp.total_mass
                         ## append the nr of bacteria to dataframe with N(t) vs part factor
@@ -159,6 +165,7 @@ class DropTest(object):
         pd.DataFrame(surv_df).to_csv('survival_fraction_growth_{}_loading_{}_ABconc{}.csv'.format(growth, loading, AB_conc), index=None)
         pd.DataFrame(avg_nr_bact).to_csv('average_df_growth_{}_loading_{}_ABconc{}.csv'.format(growth, loading, AB_conc), index=None)
         pd.DataFrame(df_total_mass).to_csv('df_growth_{}_starting_nr_drops_{}_ABconc{}.csv'.format(growth, variables.total_drop_nr, AB_conc), index=None)
+        pd.DataFrame(ps_array).to_csv('theory_growth_{}_starting_nr_drops_{}_ABconc{}.csv'.format(growth, variables.total_drop_nr, AB_conc), index=None)
         np.savetxt('part_fact.txt', part_fact, delimiter=',')  # X is an array
 
         # print("--- %s seconds ---" % (time.time() - start_time))
