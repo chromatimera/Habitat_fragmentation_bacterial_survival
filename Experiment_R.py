@@ -35,7 +35,7 @@ class Experiment_R(object):
 
         # Zero arrays:
         self.AB_conc_array = np.empty(self.timesteps)
-        self.N_array = np.empty(self.timesteps).astype(int)    #astype(float)
+        self.N_array = np.empty(self.timesteps).astype(float)    #astype(float)
         self.strain_r.N = self.strain_r.initialN
         self.deg_list = []
 

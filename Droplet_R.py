@@ -67,8 +67,6 @@ class droplets_R():
         #print(curr_path)
 
         # Check whether the specified path exists or not
-
-
         folder_name = 'output/' \
                       'dropnr_{}_loading_{}_growth_{}_initialN_{}_abconc_{}_gr_{}_dt_{}_Nsat_{}'.format(variables.total_drop_nr,loading,growth, variables.initialN, self.AB_conc, growthrate, self.dt,variables.Nsat)
         path = os.path.join(curr_path, folder_name)
@@ -119,7 +117,7 @@ class droplets_R():
             for i in range(0, self.total_drop_number):
                 plt.plot(self.time_list_gillespie[i], self.N_list_gillespie[i]/self.volume)
             plt.grid(True)
-            plt.ylabel('N/V')
+            plt.ylabel('Number of bacteria per {} ml volume'.format(self.volume))
             plt.xlabel('Time (min)')
             plt.xlim(0, self.t_end)
             plt.ylim(bottom=0)
@@ -164,7 +162,7 @@ class droplets_R():
             plt.figure(3)
             plt.plot(XX.T, self.N_r_array.T / self.volume)
             plt.grid(True)
-            plt.ylabel('N/V')
+            plt.ylabel('Number of bacteria per {} ml volume'.format(self.volume))
             plt.xlabel('Time (min)')
             plt.xlim(0, self.t_end)
             plt.ylim(bottom=0)

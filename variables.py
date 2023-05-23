@@ -4,9 +4,6 @@
 ## 4. sort out b factor
 
 ##To ask Rosalind:
-## 2. part fact list instead of 2 loops - confusing results, can change around
-
-
 ## why changing Nsat changes results??? -
 
 ## set all variables here and settings
@@ -62,7 +59,7 @@ step = 1
 epsilon = 0.03
 
 ##type of loading and growth
-loading = "det"  # rand #det
+loading = "rand"  # rand #det
 #growth = "midpoint_tau_binary" # for troubleshooting -- needs updating
 growth = "binary"
 #growth = 'gillespie_binary'

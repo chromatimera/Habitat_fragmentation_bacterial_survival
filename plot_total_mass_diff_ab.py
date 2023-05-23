@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 ### FIGURE 4 in paper
 growth = 'binary'
 rootdir = 'output/'
-ab = [15, 25]
+ab = [35, 45, 55]
 
 os.chdir(rootdir)
 print(os.getcwd())
