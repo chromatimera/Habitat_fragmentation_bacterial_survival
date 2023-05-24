@@ -13,8 +13,6 @@ growth2 = 'gillespie_binary'
 rootdir = 'output/'
 ab = [35, 45]
 
-ab1 = ['35 deterministic', '35 stochastic',  '45 deterministic', '45 stochastic']
-
 os.chdir(rootdir)
 print('current dir', os.getcwd())
 
@@ -22,6 +20,7 @@ print('current dir', os.getcwd())
 plt.figure(1)
 label_list = []
 for i in ab:
+    ### plot the deterministic value + error
     os.chdir('dropnr_1000_loading_rand_growth_{}_initialN_5_abconc_{}'.format(growth1, i))
     path = os.getcwd()
 
@@ -30,6 +29,7 @@ for i in ab:
 
     surv_fraction1 = pd.read_csv(onlyfiles[3])
     part_fact1 = np.loadtxt(onlyfiles[2])
+    m_list = [round(1/x) for x in part_fact1]
 
     ### transpose of dataframe
     surv_fraction_transpose1 = surv_fraction1.T
@@ -42,6 +42,8 @@ for i in ab:
     surv_fraction_transpose1["Surv frac"].plot.line(yerr = surv_fraction_errors1)#, color = 'orange')
     label_list.append('{} deterministic'.format(i))
     os.chdir('..')
+
+    ### plot the stochastic value + error
 
     os.chdir('dropnr_1000_loading_rand_growth_{}_initialN_5_abconc_{}'.format(growth2, i))
     path = os.getcwd()

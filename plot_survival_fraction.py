@@ -19,8 +19,8 @@ print('current dir', os.getcwd())
 plt.figure(1)
 
 for i in ab:
-    #print(i)
-    os.chdir('dropnr_1000_loading_rand_growth_binary_initialN_5_abconc_25'.format(growth, i))
+    print(i)
+    os.chdir('dropnr_1000_loading_rand_growth_{}_initialN_5_abconc_{}'.format(growth, i))
     print(os.getcwd())
     path = os.getcwd()
 
@@ -31,6 +31,9 @@ for i in ab:
     surv_fraction = pd.read_csv(onlyfiles[3])
    # print(surv_fraction)
     part_fact = np.loadtxt(onlyfiles[2])
+    print(part_fact)
+    m_list = [round(1/x) for x in part_fact]
+
    # print(part_fact)
 
     ### transpose of dataframe
