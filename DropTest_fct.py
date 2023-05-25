@@ -57,7 +57,7 @@ class DropTest(object):
                         Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc, new_volume, new_nr_drops_total_mass)  # 0.5, 300
                         Droplet_exp.run(loading, growth)
                         #print('growth', growth)
-                        print('N_array', Droplet_exp.N_r_array)
+                        #print('N_array', Droplet_exp.N_r_array)
                         ## calculate the total nr of bacteria in all droplets, if any survived, prob survival = 1
                         Droplet_exp.countTotalMass(growth)
                         #Droplet_exp.calc_tau_det(Droplet_exp.N_r_array)
