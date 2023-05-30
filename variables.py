@@ -43,7 +43,7 @@ deathrate  = 0.045  # per minute from Gore 2013
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
-AB_conc = 45 #ug/mL
+AB_conc = 75 #ug/mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL

@@ -8,9 +8,9 @@ import numpy as np
 from variables import *
 import matplotlib.pyplot as plt
 
-growth = 'gillespie_binary'
+growth = 'binary'
 rootdir = 'output/'
-ab = [35, 45]
+ab = [15,25,45,55,75]
 
 os.chdir(rootdir)
 print('current dir', os.getcwd())
@@ -26,24 +26,24 @@ for i in ab:
     onlyfiles = sorted(onlyfiles)
 
     surv_fraction = pd.read_csv(onlyfiles[3])
-    print('surf fraction df', surv_fraction)
+    #print('surf fraction df', surv_fraction)
     part_fact = np.loadtxt(onlyfiles[2])
 
     ### transpose of dataframe
     surv_fraction_transpose = surv_fraction.T
     surv_fraction_transpose.index.name = 'Part_fact'
-    print('transpose', surv_fraction_transpose)
+    #print('transpose', surv_fraction_transpose)
 
     surv_fraction_transpose.columns = ['Surv frac']
     surv_fraction_transpose['Error95'] = surv_fraction_transpose.apply(lambda x: 2 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(variables.total_sim), axis=1)
     surv_fraction_transpose['Error99'] = surv_fraction_transpose.apply(lambda x: 2.6 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(variables.total_sim), axis=1)
-    print(surv_fraction_transpose)
+    #print(surv_fraction_transpose)
 
     # #### Theory line
     #
-    # theory = pd.read_csv(onlyfiles[4])
-    #
-    # plt.plot(theory, '--')
+    theory = pd.read_csv(onlyfiles[4])
+
+    plt.plot(part_fact,theory.iloc[:,1], '--') #plot() bigPs
 
 
     surv_fraction_errors = surv_fraction_transpose.Error95.to_frame('Surv frac')

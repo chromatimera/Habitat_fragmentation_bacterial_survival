@@ -231,14 +231,14 @@ class droplets_R():
         ##calculate rho_threshold; eq (9) from paper
         b = 1
         F1 = self.strain_r.deathrate/(b * Vmax)
-        F = (self.AB_conc - self.strain_r.MIC) + Km * np.log(self.AB_conc / self.strain_r.MIC)
-        rho_T = F1 * F
+        F = (self.AB_conc - self.strain_r.MIC) + Km * np.log(self.AB_conc / self.strain_r.MIC) #eq4
+        rho_T = F1 * F ## **units??
         #print('Rho_T',rho_T)
 
         ## calculate N_T
 
         N_T = rho_T * self.volume
-        print('N_T',N_T)
+        #print('N_T',N_T)
 
         ## calculate the theoretical survival probability; eq. (10) from paper
         ## rhobulk*v form the paper is initialN  (deterministic) from the simulations and the first value from the N_array
@@ -248,7 +248,7 @@ class droplets_R():
         #print(self.volume)
         #print('N0',  N_array[0,0])
         G = sc.gammaincc(N_T+1, rho_bulk * self.volume) #UPPER incomplete gamma function
-        print('G', G)
+        #print('G', G)
         try:
             fact= math.gamma(N_T+1)
         except OverflowError:
