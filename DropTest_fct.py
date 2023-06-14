@@ -99,19 +99,19 @@ class DropTest(object):
         columns_split = []
         for word in columns:
             tmp = word.split(' ')
-            print(tmp)
+            #print(tmp)
             tmp = [int(x) for x in tmp]
             columns_split.append(tmp)
-        print(columns_split)
+        #print(columns_split)
 
         columns_sorted = sorted(columns_split, key=operator.itemgetter(0))
-        print(columns_sorted)
+        #print(columns_sorted)
         columns_sorted_joined = []
         for word in columns_sorted:
-            print(word)
-            print(len(word))
+            #print(word)
+            #print(len(word))
             word = str(word[0]) +' '+ str(word[1])
-            print(word)
+            #print(word)
 
             columns_sorted_joined.append(word)
         #print(columns_sorted_joined)
@@ -275,3 +275,4 @@ class DropTest(object):
 simulate = DropTest()
 #simulate.count_total_mass(part_min, part_max, step)
 simulate.calc_survival_prob_total_nr_bact_diff_part(part_min, part_max, step, spec_time, total_sim)
+

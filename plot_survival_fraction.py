@@ -10,10 +10,10 @@ import matplotlib.pyplot as plt
 
 growth = 'binary'
 rootdir = 'output/'
-ab = [15,25,45,55,75]
+ab = [15,75]
 
 os.chdir(rootdir)
-print('current dir', os.getcwd())
+#print('current dir', os.getcwd())
 
 
 plt.figure(1)
@@ -42,22 +42,22 @@ for i in ab:
     # #### Theory line
     #
     theory = pd.read_csv(onlyfiles[4])
-
+    plt.figure(2)
     plt.plot(part_fact,theory.iloc[:,1], '--') #plot() bigPs
 
-
+    plt.figure(1)
     surv_fraction_errors = surv_fraction_transpose.Error95.to_frame('Surv frac')
     surv_fraction_errors.index = surv_fraction_errors.index.map(int)
     surv_fraction_errors = surv_fraction_errors.sort_index(ascending=True)
-    print(surv_fraction_errors)
+    #print(surv_fraction_errors)
     surv_fraction_transpose.index = surv_fraction_transpose.index.map(int)
     surv_fraction_transpose = surv_fraction_transpose.sort_index(ascending=True)
     surv_fraction_transpose["Surv frac"].plot.line(yerr = surv_fraction_errors)#, color = 'orange')
     os.chdir('..')
-    print(os.getcwd())
+    #print(os.getcwd())
 
-plt.title('Fraction of repeats with any bacteria surviving', fontsize=text_size)
-plt.ylabel('Fraction of droplets surviving', fontsize=text_size)
+#plt.title('Fraction of repeats with any bacteria surviving', fontsize=text_size)
+plt.ylabel('Survival fraction', fontsize=text_size)
 plt.xlabel('m (number of subvolumes)', fontsize=text_size)
 plt.legend(ab, title='Antibiotic conc', loc='upper right')
 plt.savefig('Survival fraction {} + errors diff ab.png'.format(growth))
