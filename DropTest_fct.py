@@ -270,3 +270,4 @@ class DropTest(object):
 simulate = DropTest()
 #simulate.count_total_mass(part_min, part_max, step)
 simulate.calc_survival_prob_total_nr_bact_diff_part(part_min, part_max, step, spec_time, total_sim)
+

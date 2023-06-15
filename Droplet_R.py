@@ -232,12 +232,11 @@ class droplets_R():
         b = 1
         F1 = self.strain_r.deathrate/(b * Vmax)
         F = (self.AB_conc - self.strain_r.MIC) + Km * np.log(self.AB_conc / self.strain_r.MIC) #eq4
-        rho_T = F1 * F ## **units??
-        #print('Rho_T',rho_T)
+        rho_T = F1 * F ## **units: cell/vol if Vmax is ug/min
 
         ## calculate N_T
 
-        N_T = rho_T * self.volume
+        N_T = np.floor(rho_T * self.volume)
         #print('N_T',N_T)
 
         ## calculate the theoretical survival probability; eq. (10) from paper
@@ -260,7 +259,7 @@ class droplets_R():
         #    fact=math.inf
         #ps = 1 - (G/fact)
         #print('ps', ps)
-        bigPs= 1-(1-ps)**self.total_drop_number
+        bigPs= 1- (1-ps)**self.total_drop_number
 
         return rho_T, N_T, ps, bigPs
 
