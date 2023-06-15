@@ -5,38 +5,44 @@ import numpy as np
 import matplotlib.pyplot as plt
 from variables import *
 import scipy.special as sc
+from mpmath import *
+import pandas as pd
 
 
 def calc_theo_survival_prob():
-
     b = 1
+    Ab_concs=[5, 10, 15, 25, 35,45,55,65,75,100]
+    vol_fac=[1, 2, 5, 10, 100, 125, 250, 500, 1000]
     rho_bulk = variables.initialN / variables.volume # constant in det # rho_bulk = variables.initialN * variables.total_drop_nr/variables.volume * variables.total_drop_nr
-    bigPs= np.empty([10,10])
-    ps =np.empty([10,10])
+    bigPs= np.empty([len(Ab_concs),len(vol_fac)])
+    ps =np.empty([len(Ab_concs),len(vol_fac)])
+
     #for each AB conc;
-    for A in [5,10,15,25,35,45,55,65,75,100]:
+    for aa in range (0,10):
+     A= Ab_concs[aa]
      F1 = deathrate /(b * Vmax)
      F = (A - MIC) + Km * np.log(A / MIC)  # eq4
     ##calculate rho_threshold; eq (9) from paper
      rho_T = F1 * F ## **units: cell/vol if Vmax is ug/min (per enzyme)
 
-     for m in [1,2,3,5,10,100, 125,250, 500,1000]:
-    ## calculate N_T
-       vol=10E-4 /m #ml
+     for mm in range (0, 9):
+       m=vol_fac[mm]
+       vol=1E-4 /m #ml
        lam = np.floor(rho_bulk * vol)
-       N_T = np.floor(rho_T * vol)
+       N_T = np.floor(rho_T * vol)  #is this at least? OR inclusive
     ## calculate the theoretical survival probability; eq. (10) from paper
-       prob = np.empty([int(N_T)])
-       for i in range(1,int(N_T)):
-           try:
-               prob[i] = (lam ** i) / math.factorial(i)
-           except OverflowError:
-               prob[i]=math.inf
+    # ps  (prob that N(0) > Nt for a given droplet)
+       exp_fact = exp(-lam) # math.exp;;goes to zero when lam is too high
+       #ps[aa,mm] = exp_fact * nsum(lambda j: (lam) ** j / fac(j), [N_T + 1, inf]) # from nt+1 to inf  # method='r+s+e' takes ages
+       ps_int=(exp_fact * nsum(lambda j: (lam) ** j / fac(j), [0, N_T]))  # from 0 to nt
+       ps[aa, mm] = 1 - ps_int
+       bigPs[aa, mm] = 1 - (1 - ps[aa, mm])**m  # prob of at least 1 subvol surviving
 
-    # ps  (prob that N(0) > nt for a given droplet)
-       ps[A,m]= 1 - (np.sum(prob) * math.exp(-lam))
-       bigPs[A,m]= 1- (1 - ps[A,m]) ** m
-       return ps, bigPs
+       # save:
+    np.save('prob_line.npy', bigPs)  #    pd.DataFrame(bigPs_sum).to_csv('prob_line.csv'.format(), index=None)
+    plt.plot(vol_fac, bigPs[4, :])
+    plt.show()
+    return ps, bigPs
 
 
 
@@ -87,16 +93,16 @@ def unsimplified_calc(a, x):  # paper eq
 
 
 # RUN
-a = 27
-x = 10
-result = upper_incomplete_gamma(a, x)
-print(result)
-pythonUIG=G = sc.gammaincc(a ,x)
-print(pythonUIG)
-result2=unsimplified_calc(a, x)
-print(result2)
-bigPs= 1- (1 - result2[0])**500
-print(bigPs)
+#a = 27
+#x = 10
+#result = upper_incomplete_gamma(a, x)
+#print(result)
+#pythonUIG=G = sc.gammaincc(a ,x)
+#print(pythonUIG)
+#result2=unsimplified_calc(a, x)
+#print(result2)
+#bigPs= 1- (1 - result2[0])**500
+#print(bigPs)
 
 RES=calc_theo_survival_prob()
-#save
+

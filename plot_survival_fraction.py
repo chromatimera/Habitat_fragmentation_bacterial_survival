@@ -13,7 +13,8 @@ growth = 'binary'
 rootdir = 'output/'
 ab = [15, 25, 45]
 
-
+zz=np.load('prob_line.npy')
+zzz=np.load('prob_line_finitesum.npy')
 os.chdir(rootdir)
 #print('current dir', os.getcwd())
 
