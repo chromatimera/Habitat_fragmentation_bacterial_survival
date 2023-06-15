@@ -28,8 +28,8 @@ class DropTest(object):
             prob_diff_part = []
             part_fact = []
             ps_array = np.empty([partmax*partmax,2])
-            #print('Simulation nr:', nr_sim)
-            #j=np.arange(partmin, partmax, step)
+            print('Simulation nr:', nr_sim)
+
             ## simulate droplets for different partitioning factors
             n=-1
             for i in range(partmin, partmax, step):  # change?? for k in (5 ** i * 2 ** j for i in range(partmin, partmax, step) for j in range(partmin, partmax, step)): OR for k in (5 ** ((n - partmin) * step) * 2 ** ((m - partmin) * step) for n in range(partmin, partmax, step) for m in range(partmin, partmax, step)):
@@ -37,19 +37,16 @@ class DropTest(object):
                 for j in range(partmin, partmax, step):
                     n=n+1
                     new_i = 5 ** i * 2 ** j
-                    #print('new_i', new_i)
-
                     new_nr_drops_total_mass = new_i
                     new_volume = variables.volume * new_nr_drops_total_mass
                     total_drop_nr = round(variables.total_drop_nr / new_nr_drops_total_mass)
 
-                    #print('total_droplets', total_drop_nr)
                     if total_drop_nr == 0:
                         print("Error in partitioning; the partitioning factor is so small that you're trying to simulate 0 droplets")
                     else:
 
                         part_fct = total_drop_nr
-                        #print('m (nr of subvolumes)', part_fct)
+                        print('m (nr of subvolumes)', part_fct)
 
                         part_fact.append(part_fct)
 
@@ -57,23 +54,21 @@ class DropTest(object):
                         strain_R = strain(new_nr_drops_total_mass)
                         Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc, new_volume, new_nr_drops_total_mass)  # 0.5, 300
                         Droplet_exp.run(loading, growth)
-                        #print('growth', growth)
-                        #print('N_array', Droplet_exp.N_r_array)
+
                         ## calculate the total nr of bacteria in all droplets, if any survived, prob survival = 1
                         Droplet_exp.countTotalMass(growth)
                         #Droplet_exp.calc_tau_det(Droplet_exp.N_r_array)
                         #Droplet_exp.plots(growth)
 
-                        #5rho_T, N_T, ps = Droplet_exp.calc_theo_survival_prob(Droplet_exp.N_r_array)
-
                         rho_T, N_T, ps, bigPs = Droplet_exp.calc_theo_survival_prob(Droplet_exp.N_r_array)
-                        ps_array[n,0]=ps
-                        ps_array[n, 1] = bigPs
+                        print('bigPs', bigPs)
+                        #rho_T, N_T, ps, bigPs = Droplet_exp.calc_theo_survival_prob(Droplet_exp.N_r_array)
+                        #ps_array[n,0]=ps
+                        #ps_array[n, 1] = bigPs
 
                         nr_bact_each_ts = Droplet_exp.total_mass
                         ## append the nr of bacteria to dataframe with N(t) vs part factor
                         df_total_mass['{} {}'.format(part_fct, nr_sim)] = nr_bact_each_ts
-
                         index = int(spec_time / variables.dt)
 
                         if nr_bact_each_ts[index] == 0:
@@ -93,31 +88,31 @@ class DropTest(object):
         #print('part fact before sorting', part_fact)
         part_fact = sorted(part_fact)
 
-        #print(df_total_mass.columns.tolist())
+        #print('df columns', df_total_mass.columns.tolist())
         columns = list(df_total_mass.columns)
 
         columns_split = []
         for word in columns:
             tmp = word.split(' ')
-            print(tmp)
+            #print(tmp)
             tmp = [int(x) for x in tmp]
             columns_split.append(tmp)
-        print(columns_split)
+        #print('split columns', columns_split)
 
         columns_sorted = sorted(columns_split, key=operator.itemgetter(0))
-        print(columns_sorted)
+        #print('sorted columns', columns_sorted)
         columns_sorted_joined = []
         for word in columns_sorted:
-            print(word)
-            print(len(word))
+            #print(word)
+            #print(len(word))
             word = str(word[0]) +' '+ str(word[1])
-            print(word)
+            #print(word)
 
             columns_sorted_joined.append(word)
-        #print(columns_sorted_joined)
+        #print('columns sorted joined', columns_sorted_joined)
         df_total_mass = df_total_mass.reindex(columns_sorted_joined, axis=1)
-        #print(df_total_mass.columns.tolist())
-
+        #print('new df columns list', df_total_mass.columns.tolist())
+        #print('new total prob columns list', sorted(total_prob.columns))
         total_prob = total_prob.reindex(sorted(total_prob.columns, reverse=True), axis = 1)
         ## calculate the survival fraction and add it to the last row of the dataframe
         total_prob.loc['surv_Frac'] = total_prob.sum() / (len(total_prob.axes[0]))
@@ -134,7 +129,7 @@ class DropTest(object):
         ## for each partition factor, calculate the sum over the simulation of N(t)
         for i in range(0, len(part_fact), 1):
            for j in range(0, total_sim, 1):
-               k = i * 5 + j
+               k = i * total_sim + j
                total_nr_bact[:, i] += df_total_mass.iloc[:, k]
            #print('stop')
 

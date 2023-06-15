@@ -7,11 +7,13 @@ import pandas as pd
 import numpy as np
 from variables import *
 import matplotlib.pyplot as plt
+from matplotlib.pyplot import cm
+from matplotlib.lines import Line2D
 
 growth1 = 'binary'
 growth2 = 'gillespie_binary'
 rootdir = 'output/'
-ab = [35, 45]
+ab = [15, 25, 55]
 
 os.chdir(rootdir)
 print('current dir', os.getcwd())
@@ -19,7 +21,10 @@ print('current dir', os.getcwd())
 
 plt.figure(1)
 label_list = []
-for antib in ab:
+color = iter(cm.rainbow(np.linspace(0, 1, 5)))
+color_list = []
+for antib, c in zip(ab, color):
+    color_list.append(c)
     ### plot the deterministic value + error
     os.chdir('dropnr_1000_loading_rand_growth_{}_initialN_5_abconc_{}'.format(growth1, antib))
     path = os.getcwd()
@@ -67,8 +72,8 @@ for antib in ab:
 
     surv_fraction_transpose1.index = surv_fraction_transpose1.index.map(int)
     surv_fraction_transpose1 = surv_fraction_transpose1.sort_index(ascending=True)
-    surv_fraction_transpose1["Surv frac"].plot.line(yerr=surv_fraction_errors1)  # , color = 'orange')
-    label_list.append('{} deterministic'.format(antib))
+    surv_fraction_transpose1["Surv frac"].plot.line(yerr=surv_fraction_errors1, color=c)  # , color = 'orange')
+    #label_list.append('{} deterministic'.format(antib))
 
     # plt.grid(True)
     surv_fraction_errors2 = surv_fraction_transpose2.Error95.to_frame('Surv frac')
@@ -77,14 +82,16 @@ for antib in ab:
 
     surv_fraction_transpose2.index = surv_fraction_transpose2.index.map(int)
     surv_fraction_transpose2 = surv_fraction_transpose2.sort_index(ascending=True)
-    surv_fraction_transpose2["Surv frac"].plot.line(yerr=surv_fraction_errors2, linestyle='dashed')  # , color = 'orange')
-    label_list.append('{} stochastic'.format(antib))
+    surv_fraction_transpose2["Surv frac"].plot.line(yerr=surv_fraction_errors2, linestyle='dashed', color=c, label='_nolegend_')  #color = 'orange')
+    label_list.append('{}'.format(antib))
 
 
-plt.title('Fraction of repeats with any bacteria surviving', fontsize=text_size)
+#plt.title('Fraction of repeats with any bacteria surviving', fontsize=text_size)
 plt.ylabel('Fraction of droplets surviving', fontsize=text_size)
 plt.ylim(-0.1,1.1)
 plt.xlabel('m (number of subvolumes)', fontsize=text_size)
-plt.legend(label_list, title='Antibiotic conc and type of growth', loc='upper right')
+#plt.legend(label_list, title='Antibiotic concentration in μg/mL', loc="bottom right", ncol=3, bbox_to_anchor=[0, 1.07], borderaxespad=0,)
+plt.legend(label_list, title='Antibiotic concentration in μg/mL', loc="lower right", ncol=3)
+
 plt.savefig('Survival fraction {} + {} + errors diff ab.png'.format(growth1, growth2))
 plt.show()

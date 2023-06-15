@@ -6,18 +6,21 @@ import pandas as pd
 import numpy as np
 from variables import total_sim
 import matplotlib.pyplot as plt
+from matplotlib.pyplot import cm
 
 
 ### FIGURE 4 in paper
 growth = 'binary'
 rootdir = 'output/'
-ab = [35, 45]
+ab = [15,25, 45,55,75]
 
 os.chdir(rootdir)
+color = iter(cm.rainbow(np.linspace(0, 1, 5)))
+
 plt.figure(figsize=(7.5,5))
 
-for i in ab:
-    os.chdir('dropnr_1000_loading_rand_growth_{}_initialN_5_abconc_{}'.format(growth, i))
+for antib, c in zip(ab, color):
+    os.chdir('dropnr_1000_loading_rand_growth_{}_initialN_5_abconc_{}'.format(growth, antib))
     path = os.getcwd()
 
     onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
@@ -65,7 +68,7 @@ for i in ab:
     #print(error_nr_bact.iloc[0, 1:len(part_fact)+1].tolist())
 
     ### old way of plotting
-    avg_nr_bact.iloc[-1, 0:(len(part_fact))].plot(yerr = error_nr_bact.iloc[-1, 0:len(part_fact)].tolist())  ### plot initial nr of bacteria
+    avg_nr_bact.iloc[-1, 0:(len(part_fact))].plot(yerr = error_nr_bact.iloc[-1, 0:len(part_fact)].tolist(),logy=True, c=c)  ### plot initial nr of bacteria
 
     # ## IF PLOTTING NORMALIZED FRACTIONAL INCREASE
     # Nt_over_N0 = (avg_nr_bact.iloc[-1, 0:(len(part_fact))] / avg_nr_bact.iloc[0, 0:len(part_fact)])

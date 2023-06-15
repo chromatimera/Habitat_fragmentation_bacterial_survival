@@ -6,19 +6,21 @@ import pandas as pd
 import numpy as np
 from variables import total_sim
 import matplotlib.pyplot as plt
+from matplotlib.pyplot import cm
 
 ### FIGURE 4 in paper
 growth1 = 'binary'
 growth2 = 'gillespie_binary'
 rootdir = 'output/'
-ab = [35, 45]
+ab = [15, 25, 55]
 label_list = []
-
+color = iter(cm.rainbow(np.linspace(0, 1, 5)))
+colour_list = []
 os.chdir(rootdir)
 plt.figure(figsize=(7.5, 5))
 
-for antib in ab:
-
+for antib, c in zip(ab, color):
+    colour_list.append(c)
     ### plot the deterministic points
     os.chdir('dropnr_1000_loading_rand_growth_{}_initialN_5_abconc_{}'.format(growth1, antib))
     path = os.getcwd()
@@ -38,7 +40,7 @@ for antib in ab:
     ## for each partition factor, calculate the sum over the simulation of N(t)
     for i in range(0, len(part_fact), 1):
         for j in range(0, total_sim, 1):
-            k = i * 5 + j
+            k = i * total_sim + j
             total_nr_bact[:, i] += df_total_mass.iloc[:, k]
 
     ## at this stage we have a np array with a sum of N(t) across all iterations -> we need to divide it by the nr of sim
@@ -68,9 +70,8 @@ for antib in ab:
     # print(error_nr_bact.iloc[0, 1:len(part_fact)+1].tolist())
 
     ### old way of plotting
-    avg_nr_bact.iloc[-1, 0:(len(part_fact))].plot(
-        yerr=error_nr_bact.iloc[-1, 0:len(part_fact)].tolist())  ### plot initial nr of bacteria
-    label_list.append('{} deterministic'.format(antib))
+    avg_nr_bact.iloc[-1, 0:(len(part_fact))].plot(yerr=error_nr_bact.iloc[-1, 0:len(part_fact)].tolist(), logy = False, c = c)  ### plot initial nr of bacteria
+    label_list.append('{}'.format(antib))
 
     # ## IF PLOTTING NORMALIZED FRACTIONAL INCREASE
     # Nt_over_N0 = (avg_nr_bact.iloc[-1, 0:(len(part_fact))] / avg_nr_bact.iloc[0, 0:len(part_fact)])
@@ -103,7 +104,7 @@ for antib in ab:
     ## for each partition factor, calculate the sum over the simulation of N(t)
     for i in range(0, len(part_fact), 1):
         for j in range(0, total_sim, 1):
-            k = i * 5 + j
+            k = i * total_sim + j
             total_nr_bact[:, i] += df_total_mass.iloc[:, k]
 
     ## at this stage we have a np array with a sum of N(t) across all iterations -> we need to divide it by the nr of sim
@@ -130,8 +131,8 @@ for antib in ab:
     ## to plot Nf, Ni  as a function of partition factors
 
     ### old way of plotting
-    avg_nr_bact.iloc[-1, 0:(len(part_fact))].plot(yerr=error_nr_bact.iloc[-1, 0:len(part_fact)].tolist(), linestyle='dashed')  ### plot final nr of bacteria
-    label_list.append('{} stochastic'.format(antib))
+    avg_nr_bact.iloc[-1, 0:(len(part_fact))].plot(yerr=error_nr_bact.iloc[-1, 0:len(part_fact)].tolist(), linestyle='dashed', logy = False,  c=c )  ### plot final nr of bacteria
+    label_list.append('{}'.format(antib))
 
     ## IF PLOTTING NORMALIZED FRACTIONAL INCREASE
     # Nt_over_N0 = (avg_nr_bact.iloc[-1, 0:(len(part_fact))] / avg_nr_bact.iloc[0, 0:len(part_fact)])
@@ -151,6 +152,6 @@ plt.grid(False)
 plt.title('Total mass at time 300 versus partitioning factor', fontsize=text_size)
 plt.ylabel('Surviving nr of bacteria)', fontsize=text_size)
 plt.xlabel('m (number of subvolumes)', fontsize=text_size)
-plt.legend(label_list, title='Antibiotic conc', fontsize='large', loc='upper right')
+#plt.legend(label_list, title='Antibiotic conc', fontsize='medium', loc='upper left')
 plt.savefig('Nf_vs_part_fact {} + {} error.png'.format(growth1, growth2))
 plt.show()

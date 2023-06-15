@@ -8,9 +8,9 @@ import numpy as np
 from variables import *
 import matplotlib.pyplot as plt
 
-growth = 'binary'
+growth = 'gillespie_binary'
 rootdir = 'output/'
-ab = [15,25,45,55,75]
+ab = [55]
 
 os.chdir(rootdir)
 print('current dir', os.getcwd())

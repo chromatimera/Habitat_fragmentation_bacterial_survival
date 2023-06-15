@@ -13,6 +13,7 @@ from Experiment_R import experiment_script_name, experiment_script_path
 from decimal import *
 import scipy.special as sc
 getcontext().prec = 50
+from mpmath import *
 
 
 class droplets_R():
@@ -83,21 +84,21 @@ class droplets_R():
         if (grow_meth != "binary"):
 
             plt.rcParams.update({'font.size': 14})
-
+            plt.figure(figsize=(7.5, 5))
             fig, ax = plt.subplots()
             for i in range(0, self.total_drop_number):
                 plt.plot(self.time_list_gillespie[i], self.N_list_gillespie[i])
             plt.grid(False)
             # plt.title('Growth of resistant strain')
-            plt.title('{}_growth'.format(growth))
-            plt.ylabel('Number of bacteria')
-            plt.xlabel('Time (mins)')
+            #©plt.title('{}_growth'.format(growth))
+            plt.ylabel('Number of bacteria', fontsize= text_size)
+            plt.xlabel('Time (mins)',  fontsize= text_size)
             plt.xlim(0, self.t_end)
             plt.xlim(0, self.t_end)
             # tick_spacing = 2
             # ax.yaxis.set_major_locator(ticker.MultipleLocator(tick_spacing))
             plt.ylim(bottom=0)
-            plt.savefig('plot_Nbact_loading_{}_growth_{}ab_conc_{}.png'.format(loading, growth, str(AB_conc)))
+            plt.savefig('plot_Nbact_loading_{}_growth_{}_ab_conc_{}.png'.format(loading, growth, str(AB_conc)))
 
 
             plt.figure(2)
@@ -105,8 +106,8 @@ class droplets_R():
                 plt.plot(self.time_list_gillespie[i], self.AB_conc_array_gillespie[i])
             plt.grid(False)
             # plt.title('Concentration of antibiotic over time in each droplet.')
-            plt.ylabel('Antibiotic (ug/nL)')
-            plt.xlabel('Time (mins)')
+            plt.ylabel('Antibiotic (ug/nL)',  fontsize= text_size)
+            plt.xlabel('Time (mins)',  fontsize= text_size)
             plt.xlim(0, self.t_end)
             plt.ylim(bottom=0)
             plt.title('{}_growth'.format(growth))
@@ -117,8 +118,8 @@ class droplets_R():
             for i in range(0, self.total_drop_number):
                 plt.plot(self.time_list_gillespie[i], self.N_list_gillespie[i]/self.volume)
             plt.grid(False)
-            plt.ylabel('Number of bacteria per {} ml volume'.format(self.volume))
-            plt.xlabel('Time (min)')
+            plt.ylabel('Number of bacteria per {} ml volume'.format(self.volume),  fontsize= text_size)
+            plt.xlabel('Time (min)',  fontsize= text_size)
             plt.xlim(0, self.t_end)
             plt.ylim(bottom=0)
             plt.title('{}_growth'.format(growth))
@@ -127,41 +128,40 @@ class droplets_R():
         else:
             X = np.arange(0, self.t_end, self.dt).tolist()
             XX= np.tile(X, (self.total_drop_number, 1))
-
             plt.rcParams.update({'font.size': 14})
 
-            fig, ax= plt.subplots()
+            fig, ax= plt.subplots(figsize=(8,6))
             plt.plot (XX.T, self.N_r_array.T)
             plt.grid(False)
             #plt.title('Growth of resistant strain')
-            plt.title ('{}_growth'.format(growth))
-            plt.ylabel('Number of bacteria')
-            plt.xlabel('Time (mins)')
+            #plt.title ('{}_growth'.format(growth))
+            plt.ylabel('Number of bacteria',  fontsize= text_size)
+            plt.xlabel('Time (mins)',  fontsize= text_size)
             plt.xlim(0,self.t_end)
             plt.xlim(0,self.t_end)
-            #tick_spacing = 2
             #ax.yaxis.set_major_locator(ticker.MultipleLocator(tick_spacing))
             plt.ylim(bottom=0)
             plt.savefig('plot_Nbact_loading_{}_growth_{}ab_conc_{}'.format(loading, growth, AB_conc))
+            plt.show()
 
 
-            plt.figure(2)
+            plt.figure(2, figsize=(8,6))
             plt.plot(XX.T, self.AB_conc_array.T)
             plt.grid(False)
             #plt.title('Concentration of antibiotic over time in each droplet.')
-            plt.ylabel('Antibiotic (ug/mL)')
-            plt.xlabel('Time (mins)')
+            plt.ylabel('Antibiotic (ug/mL)',  fontsize= text_size)
+            plt.xlabel('Time (mins)',  fontsize= text_size)
             plt.xlim(0, self.t_end)
             plt.ylim(bottom=0)
-            plt.title ('{}_growth'.format(growth))
+            #plt.title ('{}_growth'.format(growth))
             plt.savefig('plot_ABconc_{}_loading_{}_growth_{}'.format(self.AB_conc, loading, growth))
             plt.show()
 
-            plt.figure(3)
+            plt.figure(3, figsize=(8,6))
             plt.plot(XX.T, self.N_r_array.T / self.volume)
             plt.grid(False)
-            plt.ylabel('Number of bacteria per {} ml volume'.format(self.volume))
-            plt.xlabel('Time (min)')
+            plt.ylabel('Number of bacteria per {} ml volume'.format(self.volume),  fontsize= text_size)
+            plt.xlabel('Time (min)',  fontsize= text_size)
             plt.xlim(0, self.t_end)
             plt.ylim(bottom=0)
             plt.title('{}_growth'.format(growth))
@@ -247,13 +247,18 @@ class droplets_R():
         #print('rhobulk*v', rho_bulk * self.volume)
         #print(self.volume)
         #print('N0',  N_array[0,0])
-        G = sc.gammaincc(N_T+1, rho_bulk * self.volume) #UPPER incomplete gamma function
+        exp_fact = math.exp(-rho_bulk*self.volume)
+        ps = exp_fact * nsum(lambda n: (rho_bulk*self.volume)**n/fac(n), [N_T+1, inf])
+
+
+
+        #G = sc.gammaincc(N_T+1, rho_bulk * self.volume) #UPPER incomplete gamma function
         #print('G', G)
-        try:
-            fact= math.gamma(N_T+1)
-        except OverflowError:
-            fact=math.inf
-        ps = 1 - (G/fact)
+        #try:
+        #    fact= math.gamma(N_T+1)
+        #except OverflowError:
+        #    fact=math.inf
+        #ps = 1 - (G/fact)
         #print('ps', ps)
         bigPs= 1-(1-ps)**self.total_drop_number
 
