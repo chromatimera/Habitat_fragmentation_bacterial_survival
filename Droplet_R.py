@@ -243,22 +243,11 @@ class droplets_R():
         ## rhobulk*v form the paper is initialN  (deterministic) from the simulations and the first value from the N_array
         #rho_bulk = variables.initialN * variables.total_drop_nr/variables.volume * variables.total_drop_nr
         rho_bulk = variables.initialN / variables.volume # constant in det
-        #print('rhobulk*v', rho_bulk * self.volume)
-        #print(self.volume)
-        #print('N0',  N_array[0,0])
+        print('rho bulk', rho_bulk)
+        print('vol',self.volume)
+
         exp_fact = math.exp(-rho_bulk*self.volume)
         ps = exp_fact * nsum(lambda n: (rho_bulk*self.volume)**n/fac(n), [N_T+1, inf])
-
-
-
-        #G = sc.gammaincc(N_T+1, rho_bulk * self.volume) #UPPER incomplete gamma function
-        #print('G', G)
-        #try:
-        #    fact= math.gamma(N_T+1)
-        #except OverflowError:
-        #    fact=math.inf
-        #ps = 1 - (G/fact)
-        #print('ps', ps)
         bigPs= 1- (1-ps)**self.total_drop_number
 
         return rho_T, N_T, ps, bigPs

@@ -27,7 +27,7 @@ class DropTest(object):
         for nr_sim in range(0, total_sim, step):
             prob_diff_part = []
             part_fact = []
-            ps_array = np.empty([partmax*partmax,2])
+            ps_array = np.empty([partmax*partmax,3])
             print('Simulation nr:', nr_sim)
 
             ## simulate droplets for different partitioning factors
@@ -63,8 +63,9 @@ class DropTest(object):
                         rho_T, N_T, ps, bigPs = Droplet_exp.calc_theo_survival_prob(Droplet_exp.N_r_array)
                         print('bigPs', bigPs)
                         #rho_T, N_T, ps, bigPs = Droplet_exp.calc_theo_survival_prob(Droplet_exp.N_r_array)
-                        #ps_array[n,0]=ps
-                        #ps_array[n, 1] = bigPs
+                        ps_array[n, 0] = part_fct
+                        ps_array[n, 1] = ps
+                        ps_array[n, 2] = bigPs
 
                         nr_bact_each_ts = Droplet_exp.total_mass
                         ## append the nr of bacteria to dataframe with N(t) vs part factor

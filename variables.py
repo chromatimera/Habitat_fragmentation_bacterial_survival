@@ -22,7 +22,7 @@ t_start = 0
 t_end = 300
 dt = 1
 spec_time = 299
-total_sim = 2
+total_sim = 10
 
 ### nr timesteps for dt test; ignore dt for this test
 nr_timesteps = int(3e6)
@@ -43,7 +43,7 @@ deathrate  = 0.045  # per minute from Gore 2013
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
-AB_conc = 55 #ug per mL
+AB_conc = 75 #ug per mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL
@@ -62,7 +62,7 @@ epsilon = 0.03
 loading = "rand"  # rand #det
 #growth = "midpoint_tau_binary" # for troubleshooting -- needs updating
 #growth = "binary"
-growth = 'gillespie_binary'
+growth = 'binary'
 degradation = 'MM_exponential'
 
 
