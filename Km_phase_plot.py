@@ -7,7 +7,11 @@ from variables import *
 plt.rc('font', size=14)  # controls default text size
 #plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 #plt.rc('text', usetex=True)
-
+#font = {'family':'serif', 'serif': ['computer modern roman']}
+#plt.rc('font',**font)
+plt.rcParams["font.family"] = "serif"
+#plt.rc('font',**{'family':'serif','serif':['Times']})
+#plt.rc('text', usetex=True)
 
 medkm = 6.7  #UNITS: ug/mL
 lowkm = 1
@@ -37,8 +41,8 @@ ax2.fill_between(x, y, plt.ylim()[1], facecolor='green')
 
 xcoord = x[int((x.size/2.5)*2)]
 ycoord = y[int((x.size/6)*2)] / 2
-plt.text(xcoord,ycoord,"DEATH", weight='bold')
-plt.text(2,8e7,"SURVIVAL", weight='bold')
+#plt.text(xcoord,ycoord,"DEATH", weight='bold')
+#plt.text(2,8e7,"SURVIVAL", weight='bold')
 plt.xlabel('Initial antibiotic concentration ($\u03BC$g/mL)')
 plt.ylabel(r'$\rho$ (initial cells per mL)' )
 plt.xlim(0,24)
