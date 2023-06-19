@@ -1,7 +1,7 @@
 #!/bin/bash
 START=15
 END=75
-STEP=10
+STEP=20
 python DropTest_fct.py
 for ((f=START+STEP;f<=END;f=f+STEP)); do
 	echo $f

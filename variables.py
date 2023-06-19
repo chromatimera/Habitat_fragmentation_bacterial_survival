@@ -22,7 +22,7 @@ t_start = 0
 t_end = 300
 dt = 1
 spec_time = 299
-total_sim = 10
+total_sim = 200
 
 ### nr timesteps for dt test; ignore dt for this test
 nr_timesteps = int(3e6)
@@ -43,7 +43,7 @@ deathrate  = 0.045  # per minute from Gore 2013
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
-AB_conc = 75 #ug per mL
+AB_conc = 15 #ug per mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL

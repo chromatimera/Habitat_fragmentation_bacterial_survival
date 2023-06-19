@@ -9,6 +9,10 @@ from variables import *
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import cm
 from matplotlib.lines import Line2D
+from matplotlib import rc
+
+rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
+rc('text', usetex=True)
 
 growth1 = 'binary'
 growth2 = 'gillespie_binary'
@@ -22,13 +26,13 @@ label_list = []
 colors = plt.cm.rainbow(np.linspace(0, 1, 5))
 color_list = []
 
-plt.figure(figsize=(14, 7))
+plt.figure(figsize=(7, 9))
 plt.subplots_adjust(hspace=0.5)
 
 # loop through two types of plots
 for n in range(0, 2, 1):
     # add a new subplot iteratively
-    ax = plt.subplot(1, 2, n + 1)
+    ax = plt.subplot(2, 1, n + 1)
 
     for antib, c in zip(ab, colors):
         ### plot the deterministic value + error
@@ -143,33 +147,33 @@ for n in range(0, 2, 1):
         #os.chdir('..')
 
         if n==0:
-            ## plot survival fraction
-            surv_fraction_transpose1["Surv frac"].plot.line(yerr=surv_fraction_errors1, color=c, ax=ax)  # , color = 'orange')
-            surv_fraction_transpose2["Surv frac"].plot.line(yerr=surv_fraction_errors2, linestyle='dashed', color=c,
-                                                        label='_nolegend_', ax=ax)  # color = 'orange')
+
+            avg_nr_bact1.iloc[-1, 0:(len(part_fact1))].plot(
+                yerr=error_nr_bact_N_tot1.iloc[-1, 0:len(part_fact1)].tolist(),
+                logy=False, c=c, ax=ax)  ### plot initial nr of bacteria
+            avg_nr_bact2.iloc[-1, 0:(len(part_fact2))].plot(
+                yerr=error_nr_bact_N_tot2.iloc[-1, 0:len(part_fact2)].tolist(),
+                linestyle='dashed', logy=False, c=c, label='_nolegend_', ax=ax)
             color_list.append(c)
+
 
         else:
             ind = ab.index(antib)
-            avg_nr_bact1.iloc[-1, 0:(len(part_fact1))].plot(yerr=error_nr_bact_N_tot1.iloc[-1, 0:len(part_fact1)].tolist(),
-                                                        logy=False, c=color_list[ind], ax=ax)  ### plot initial nr of bacteria
-            avg_nr_bact2.iloc[-1, 0:(len(part_fact2))].plot(yerr=error_nr_bact_N_tot2.iloc[-1, 0:len(part_fact2)].tolist(),
-                                                        linestyle='dashed', logy=False, c=color_list[ind], label='_nolegend_', ax=ax)
+            ## plot survival fraction
+            surv_fraction_transpose1["Surv frac"].plot.line(yerr=surv_fraction_errors1, c=color_list[ind],
+                                                            ax=ax)  # , color = 'orange')
+            surv_fraction_transpose2["Surv frac"].plot.line(yerr=surv_fraction_errors2, linestyle='dashed', c=color_list[ind],
+                                                            label='_nolegend_', ax=ax)  # color = 'orange')
         label_list.append('{}'.format(antib))
     # chart formatting
-    ax.set_xlabel('m (number of subvolumes)', fontsize=text_size)
+    ax.set_xlabel(r'\bf{m (number of subvolumes)}', fontsize=text_size)
     if n==0:
-       plt.ylim(-0.1, 1.1)
-       plt.ylabel('Ps', fontsize=text_size)
-    else:
-        plt.ylabel('N(300)', fontsize=text_size)
-    ax.legend(label_list, title='Antibiotic concentration in μg/mL', loc='upper center', bbox_to_anchor=(0.5, 1.05),
-              ncol=3, fancybox=True, shadow=True)
+        plt.ylabel(r'\bf{N(300)}', fontsize=text_size)
 
-# plt.legend(label_list, title='Antibiotic concentration in μg/mL', loc="lower right", ncol=3)
-# #plt.legend(label_list, title='Antibiotic conc', fontsize='medium', loc='upper left')
-print(label_list)
-# Make room on top now
-#plt.legend(label_list,bbox_to_anchor=(-0.9, 1.2), title='Antibiotic concentration in μg/mL', loc="upper center")
+    else:
+        plt.ylim(-0.1, 1.1)
+        plt.ylabel(r'\bf{Ps}', fontsize=text_size)
+    ax.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.25),
+              ncol=3, fancybox=True, shadow=True, fontsize= 'large')
 plt.savefig('Survival fraction and Nf_vs_part_fact side by side.png')
 plt.show()
