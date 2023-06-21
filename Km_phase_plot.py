@@ -4,7 +4,7 @@ import variables
 from variables import *
 
 #Equation 9: rhoT
-plt.rc('font', size=16)  # controls default text size
+plt.rc('font', size=18)  # controls default text size
 #plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 #plt.rc('text', usetex=True)
 #font = {'family':'serif', 'serif': ['computer modern roman']}
@@ -46,8 +46,8 @@ xcoord = x[int((x.size/2.5)*2)]
 ycoord = y[int((x.size/6)*2)] / 2
 #plt.text(xcoord,ycoord,"DEATH", weight='bold')
 #plt.text(2,8e7,"SURVIVAL", weight='bold')
-plt.xlabel(r'\bf{Initial antibiotic concentration ($\u03BC$g/mL)}')
-plt.ylabel(r'\bf{$\rho$ (initial cells /mL)}' )
+plt.xlabel('Initial antibiotic concentration ($\u03BC$g/mL)', fontweight="bold")
+plt.ylabel(r'$\rho$ (initial cells /mL)', fontweight="bold")
 plt.xlim(0,24)
 plt.ylim(0,0.9e8)
 #plt.legend()
