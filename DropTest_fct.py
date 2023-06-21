@@ -28,7 +28,7 @@ class DropTest(object):
             prob_diff_part = []
             part_fact = []
             ps_array = np.empty([partmax*partmax,3])
-            print('Simulation nr:', nr_sim)
+            #print('Simulation nr:', nr_sim)
 
             ## simulate droplets for different partitioning factors
             n=-1
@@ -46,7 +46,7 @@ class DropTest(object):
                     else:
 
                         part_fct = total_drop_nr
-                        print('m (nr of subvolumes)', part_fct)
+                        #print('m (nr of subvolumes)', part_fct)
 
                         part_fact.append(part_fct)
 
@@ -61,7 +61,7 @@ class DropTest(object):
                         #Droplet_exp.plots(growth)
 
                         rho_T, N_T, ps, bigPs = Droplet_exp.calc_theo_survival_prob(Droplet_exp.N_r_array)
-                        print('bigPs', bigPs)
+                        #print('bigPs', bigPs)
                         #rho_T, N_T, ps, bigPs = Droplet_exp.calc_theo_survival_prob(Droplet_exp.N_r_array)
                         ps_array[n, 0] = part_fct
                         ps_array[n, 1] = ps
