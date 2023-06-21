@@ -46,8 +46,8 @@ xcoord = x[int((x.size/2.5)*2)]
 ycoord = y[int((x.size/6)*2)] / 2
 #plt.text(xcoord,ycoord,"DEATH", weight='bold')
 #plt.text(2,8e7,"SURVIVAL", weight='bold')
-plt.xlabel('Initial antibiotic concentration ($\u03BC$g/mL)', fontweight="bold")
-plt.ylabel(r'$\rho$ (initial cells /mL)', fontweight="bold")
+plt.xlabel('Initial antibiotic concentration ($\u03BC$g/mL)', fontweight="bold",fontsize='xx-large')
+plt.ylabel(r'$\rho$ (initial cells /mL)', fontweight="bold",fontsize='xx-large')
 plt.xlim(0,24)
 plt.ylim(0,0.9e8)
 #plt.legend()
