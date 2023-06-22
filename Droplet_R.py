@@ -247,7 +247,7 @@ class droplets_R():
         ## rhobulk*v form the paper is initialN  (deterministic) from the simulations and the first value from the N_array
         #rho_bulk = variables.initialN * variables.total_drop_nr/variables.volume * variables.total_drop_nr
         rho_bulk = variables.initialN / variables.volume # constant in det
-        print('rho bulk', rho_bulk)
+        #print('rho bulk', rho_bulk)
         print('vol',self.volume)
 
         exp_fact = math.exp(-rho_bulk*self.volume)

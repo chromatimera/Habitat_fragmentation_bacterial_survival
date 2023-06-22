@@ -7,12 +7,15 @@ rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 rc('text', usetex=True)
 
 #Equation 9: rhoT
-plt.rc('font', size=14)  # controls default text size
+plt.rc('font', size=18)  # controls default text size
 #plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 #plt.rc('text', usetex=True)
 #font = {'family':'serif', 'serif': ['computer modern roman']}
 #plt.rc('font',**font)
 plt.rcParams["font.family"] = "serif"
+
+
+
 #plt.rc('font',**{'family':'serif','serif':['Times']})
 #plt.rc('text', usetex=True)
 
