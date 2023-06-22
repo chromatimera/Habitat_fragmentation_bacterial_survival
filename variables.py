@@ -19,10 +19,10 @@ part_min = 0
 part_max = int(math.log10(total_drop_nr) + 1)
 
 t_start = 0
-t_end = 300
+t_end = 100
 dt = 1
-spec_time = 299
-total_sim = 200
+spec_time = 99
+total_sim = 50
 
 ### nr timesteps for dt test; ignore dt for this test
 nr_timesteps = int(3e6)
@@ -61,8 +61,8 @@ epsilon = 0.03
 ##type of loading and growth
 loading = "rand"  # rand #det
 #growth = "midpoint_tau_binary" # for troubleshooting -- needs updating
-#growth = "binary"
-growth = 'binary'
+growth = "binary"
+#growth = 'gillespie_binary'
 degradation = 'MM_exponential'
 
 

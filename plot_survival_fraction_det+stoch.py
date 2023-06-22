@@ -13,7 +13,7 @@ from matplotlib.lines import Line2D
 growth1 = 'binary'
 growth2 = 'gillespie_binary'
 rootdir = 'output/'
-ab = [15, 25, 55]
+ab = [15, 35, 55]
 
 os.chdir(rootdir)
 print('current dir', os.getcwd())

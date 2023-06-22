@@ -8,24 +8,25 @@ import scipy.special as sc
 from mpmath import *
 import pandas as pd
 
+os.chdir('./output/')
 
 def calc_theo_survival_prob():
     b = 1
-    Ab_concs=[5, 10, 15, 25, 35,45,55,65,75,100]
-    vol_fac=[1, 2, 5, 10, 100, 125, 250, 500, 1000]
+    Ab_concs=[15,35,55,75]
+    vol_fac=[1, 2, 5, 10, 100, 125,150, 200, 250,300,350,400,450, 500,550,600,700,800,900, 1000]
     rho_bulk = variables.initialN / variables.volume # constant in det # rho_bulk = variables.initialN * variables.total_drop_nr/variables.volume * variables.total_drop_nr
     bigPs= np.empty([len(Ab_concs),len(vol_fac)])
     ps =np.empty([len(Ab_concs),len(vol_fac)])
 
     #for each AB conc;
-    for aa in range (0,10):
+    for aa in range (len(Ab_concs)):
      A= Ab_concs[aa]
      F1 = deathrate /(b * Vmax)
      F = (A - MIC) + Km * np.log(A / MIC)  # eq4
     ##calculate rho_threshold; eq (9) from paper
      rho_T = F1 * F ## **units: cell/vol if Vmax is ug/min (per enzyme)
 
-     for mm in range (0, 9):
+     for mm in range(len(vol_fac)):
        m=vol_fac[mm]
        vol=1E-4 /m #ml
        lam = np.floor(rho_bulk * vol)
@@ -40,8 +41,8 @@ def calc_theo_survival_prob():
 
        # save:
     np.save('prob_line.npy', bigPs)  #    pd.DataFrame(bigPs_sum).to_csv('prob_line.csv'.format(), index=None)
-    plt.plot(vol_fac, bigPs[4, :])
-    plt.show()
+    #plt.plot(vol_fac, bigPs[4, :])
+    #plt.show()
     return ps, bigPs
 
 

@@ -7,27 +7,38 @@ import pandas as pd
 import numpy as np
 from variables import *
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import cm
+from matplotlib.pyplot import cm, rc
+
+rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
+rc('text', usetex=True)
 
 growth = 'binary'
 rootdir = 'output/'
-ab = [15, 25, 45]
+ab = [15, 35, 55, 75]
 
-zz=np.load('prob_line.npy')
-zzz=np.load('prob_line_finitesum.npy')
+#zzz=np.load('prob_line_finitesum.npy')
 os.chdir(rootdir)
+zz=np.load('prob_line.npy')
+zzz= zz.T
+print(zzz)
 #print('current dir', os.getcwd())
 
 
-plt.figure(1)
+plt.figure(figsize=(7, 6))
 color = iter(cm.rainbow(np.linspace(0, 1, 5)))
 color_list = []
-for antib, c in zip(ab, color):
+for antib, c, ind in zip(ab, color, range(len(ab))):
     os.chdir('dropnr_1000_loading_rand_growth_{}_initialN_5_abconc_{}'.format(growth, antib))
     path = os.getcwd()
 
     onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
     onlyfiles = sorted(onlyfiles)
+    print(onlyfiles)
+
+    if '.DS_Store' in onlyfiles:
+        onlyfiles.remove('.DS_Store')
+    else:
+        pass
 
     surv_fraction = pd.read_csv(onlyfiles[3])
     #print('surf fraction df', surv_fraction)
@@ -40,6 +51,10 @@ for antib, c in zip(ab, color):
 
     theory = theory.sort_values(by = "Part_fact",ascending = False)
     print(theory)
+
+    theory_line_df = pd.DataFrame(zzz[:, ind], columns=['big_Ps'])
+    print(theory_line_df)
+
 
     ### transpose of dataframe
     surv_fraction_transpose = surv_fraction.T
@@ -59,15 +74,15 @@ for antib, c in zip(ab, color):
     surv_fraction_transpose.index = surv_fraction_transpose.index.map(int)
     surv_fraction_transpose = surv_fraction_transpose.sort_index(ascending=True)
     surv_fraction_transpose["Surv frac"].plot.line(yerr = surv_fraction_errors, c=c)#, color = 'orange')
-    theory["big_Ps"].plot.line(c=c, linestyle='dashed')#, color = 'orange')
+    theory_line_df["big_Ps"].plot.line(c=c, linestyle='dashed')#, color = 'orange')
 
 
     os.chdir('..')
     #print(os.getcwd())
 
-#plt.title('Fraction of repeats with any bacteria surviving', fontsize=text_size)
-plt.ylabel('Survival fraction', fontsize=text_size)
-plt.xlabel('m (number of subvolumes)', fontsize=text_size)
-plt.legend(ab, title='Antibiotic conc', loc='upper right')
-plt.savefig('Survival fraction {} + errors diff ab.png'.format(growth))
+plt.ylabel(r'\bf{Probability of survival}', fontsize=text_size)
+plt.xlabel(r'\bf{m (number of subvolumes)}', fontsize=text_size, )
+
+plt.legend(ab, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=4, fancybox=True, shadow=True, fontsize= 'large')
+plt.savefig('Survival fraction {} + errors diff ab+ legend.png'.format(growth))
 plt.show()

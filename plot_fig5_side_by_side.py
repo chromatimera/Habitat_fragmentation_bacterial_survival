@@ -17,7 +17,7 @@ rc('text', usetex=True)
 growth1 = 'binary'
 growth2 = 'gillespie_binary'
 rootdir = 'output/'
-ab = [15, 25]
+ab = [15, 35, 75]
 
 os.chdir(rootdir)
 print('current dir', os.getcwd())
@@ -91,6 +91,9 @@ for n in range(0, 2, 1):
         surv_fraction_errors2 = surv_fraction_transpose2.Error95.to_frame('Surv frac')
         surv_fraction_errors2.index = surv_fraction_errors2.index.map(int)
         surv_fraction_errors2 = surv_fraction_errors2.sort_index(ascending=True)
+        print('antib', antib)
+        print('surv frac errors 1', surv_fraction_errors1)
+        print('surv frac errors 2', surv_fraction_errors2)
 
         surv_fraction_transpose2.index = surv_fraction_transpose2.index.map(int)
         surv_fraction_transpose2 = surv_fraction_transpose2.sort_index(ascending=True)
@@ -153,17 +156,15 @@ for n in range(0, 2, 1):
                 logy=False, c=c, ax=ax)  ### plot initial nr of bacteria
             avg_nr_bact2.iloc[-1, 0:(len(part_fact2))].plot(
                 yerr=error_nr_bact_N_tot2.iloc[-1, 0:len(part_fact2)].tolist(),
-                linestyle='dashed', logy=False, c=c, label='_nolegend_', ax=ax)
+                linestyle='dashed', logy=False, c=c, ax=ax)
             color_list.append(c)
-
+            #label = '_nolegend_'
 
         else:
             ind = ab.index(antib)
             ## plot survival fraction
-            surv_fraction_transpose1["Surv frac"].plot.line(yerr=surv_fraction_errors1, c=color_list[ind],
-                                                            ax=ax)  # , color = 'orange')
-            surv_fraction_transpose2["Surv frac"].plot.line(yerr=surv_fraction_errors2, linestyle='dashed', c=color_list[ind],
-                                                            label='_nolegend_', ax=ax)  # color = 'orange')
+            surv_fraction_transpose1["Surv frac"].plot.line(yerr=surv_fraction_errors1, c=color_list[ind], ax=ax)  # , color = 'orange')
+            surv_fraction_transpose2["Surv frac"].plot.line(yerr=surv_fraction_errors2, linestyle='dashed',  c=color_list[ind], ax=ax)  # color = 'orange')
         label_list.append('{}'.format(antib))
     # chart formatting
     ax.set_xlabel(r'\bf{m (number of subvolumes)}', fontsize=text_size)
@@ -173,7 +174,6 @@ for n in range(0, 2, 1):
     else:
         plt.ylim(-0.1, 1.1)
         plt.ylabel(r'\bf{Ps}', fontsize=text_size)
-    ax.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.25),
-              ncol=3, fancybox=True, shadow=True, fontsize= 'large')
+    #ax.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.25), ncol=4, fancybox=True, shadow=True, fontsize= 'large')
 plt.savefig('Survival fraction and Nf_vs_part_fact side by side.png')
 plt.show()

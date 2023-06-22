@@ -14,6 +14,10 @@ from decimal import *
 import scipy.special as sc
 getcontext().prec = 50
 from mpmath import *
+from matplotlib import rc
+
+rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
+rc('text', usetex=True)
 
 
 class droplets_R():
@@ -135,8 +139,8 @@ class droplets_R():
             plt.grid(False)
             #plt.title('Growth of resistant strain')
             #plt.title ('{}_growth'.format(growth))
-            plt.ylabel('Number of bacteria',  fontsize= text_size)
-            plt.xlabel('Time (min)',  fontsize= text_size)
+            plt.ylabel(r'\bf{Number of bacteria}',  fontsize= text_size)
+            plt.xlabel(r'\bf{Time (min)}',  fontsize= text_size)
             plt.xlim(0,self.t_end)
             plt.xlim(0,self.t_end)
             #ax.yaxis.set_major_locator(ticker.MultipleLocator(tick_spacing))
@@ -149,8 +153,8 @@ class droplets_R():
             plt.plot(XX.T, self.AB_conc_array.T)
             plt.grid(False)
             #plt.title('Concentration of antibiotic over time in each droplet.')
-            plt.ylabel('Antibiotic (ug/mL)',  fontsize= text_size)
-            plt.xlabel('Time (min)',  fontsize= text_size)
+            plt.ylabel(r'\bf{Antibiotic ($\mu$g/mL)}',  fontsize= text_size)
+            plt.xlabel(r'\bf{Time (min)}',  fontsize= text_size)
             plt.xlim(0, self.t_end)
             plt.ylim(bottom=0)
             #plt.title ('{}_growth'.format(growth))

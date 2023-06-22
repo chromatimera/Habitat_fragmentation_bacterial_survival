@@ -1,7 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import variables
 from variables import *
+from matplotlib import rc
+
+rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
+rc('text', usetex=True)
 
 #Equation 9: rhoT
 plt.rc('font', size=14)  # controls default text size
@@ -43,9 +46,8 @@ xcoord = x[int((x.size/2.5)*2)]
 ycoord = y[int((x.size/6)*2)] / 2
 #plt.text(xcoord,ycoord,"DEATH", weight='bold')
 #plt.text(2,8e7,"SURVIVAL", weight='bold')
-plt.xlabel('Initial antibiotic concentration ($\u03BC$g/mL)')
-plt.ylabel(r'$\rho$ (initial cells per mL)' )
+plt.xlabel(r'\bf{Initial antibiotic concentration ($\mu$g/mL)}', fontsize= 'x-large')
+plt.ylabel(r'\bf{$\rho$ (initial cells/mL)}', fontsize='x-large' )
 plt.xlim(0,24)
 plt.ylim(0,0.9e8)
-#plt.legend()
 plt.show()

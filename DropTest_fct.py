@@ -8,6 +8,7 @@ import numpy as np
 import warnings
 import operator
 
+
 ##ignore warnings
 warnings.filterwarnings("ignore")
 getcontext().prec = 50
@@ -58,7 +59,7 @@ class DropTest(object):
                         ## calculate the total nr of bacteria in all droplets, if any survived, prob survival = 1
                         Droplet_exp.countTotalMass(growth)
                         #Droplet_exp.calc_tau_det(Droplet_exp.N_r_array)
-                        #Droplet_exp.plots(growth)
+                        Droplet_exp.plots(growth)
 
                         rho_T, N_T, ps, bigPs = Droplet_exp.calc_theo_survival_prob(Droplet_exp.N_r_array)
                         print('bigPs', bigPs)
@@ -245,12 +246,12 @@ class DropTest(object):
                         ##this is the total number of bacteria at each timestep
                         nr_bact_each_ts = Droplet_exp.total_mass
                         part_fct = 1 / total_drop_nr
-                        print('part fct', part_fct)
+                        #print('part fct', part_fct)
                         df_total_mass['p_{}_ab_{}'.format(part_fct, ab)] = nr_bact_each_ts
                         ## append all parition factors, next step will transform this into partition factors
                         part_fact.append(part_fct)
 
-        print(df_total_mass)
+        #print(df_total_mass)
         ### insert the time array into the dataframe
         df_total_mass.insert(loc=0, column='Time', value=np.linspace(t_start, t_end, num=round(t_end / dt)))
         ## See below how the dataframe should look like:
