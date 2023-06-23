@@ -8,6 +8,7 @@ import numpy as np
 from variables import *
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import cm, rc
+from ps_theory import vol_fac
 
 rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 rc('text', usetex=True)
@@ -17,7 +18,8 @@ rootdir = 'output/'
 ab = [15, 35, 55, 75]
 
 #zzz=np.load('prob_line_finitesum.npy')
-os.chdir(rootdir)
+print(os.getcwd())
+#os.chdir(rootdir)
 zz=np.load('prob_line.npy')
 zzz= zz.T
 print(zzz)
@@ -43,17 +45,21 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     surv_fraction = pd.read_csv(onlyfiles[3])
     #print('surf fraction df', surv_fraction)
     part_fact = np.loadtxt(onlyfiles[2])
-    theory = pd.read_csv(onlyfiles[4], index_col='0')
-    print(theory)
+    #theory = pd.read_csv(onlyfiles[4], index_col='0')
+    #print(theory)
     #theory.set_index('0')
-    theory.index.name = 'Part_fact'
-    theory.columns = ['small_ps', 'big_Ps']
+    #theory.index.name = 'Part_fact'
+    #theory.columns = ['small_ps', 'big_Ps']
 
-    theory = theory.sort_values(by = "Part_fact",ascending = False)
-    print(theory)
+    #theory = theory.sort_values(by = "Part_fact",ascending = False)
+    #print(theory)
 
-    theory_line_df = pd.DataFrame(zzz[:, ind], columns=['big_Ps'])
-    print(theory_line_df)
+    theory_line_df = pd.DataFrame(zzz[:, ind], columns=['big_Ps'], index = vol_fac)
+    theory_line_df.index.name = 'Part_fact'
+    theory_line_df = theory_line_df.sort_values(by = "Part_fact",ascending = False)
+
+
+    print('THEORY DF', theory_line_df)
 
 
     ### transpose of dataframe

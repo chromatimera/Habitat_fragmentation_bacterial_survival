@@ -10,10 +10,11 @@ import pandas as pd
 
 os.chdir('./output/')
 
-def calc_theo_survival_prob():
+
+
+def calc_theo_survival_prob(vol_fac):
     b = 1
-    Ab_concs=[15,35,55,75]
-    vol_fac=[1, 2, 5, 10, 100, 125,150, 200, 250,300,350,400,450, 500,550,600,700,800,900, 1000]
+    Ab_concs = [15, 35, 55, 75]
     rho_bulk = variables.initialN / variables.volume # constant in det # rho_bulk = variables.initialN * variables.total_drop_nr/variables.volume * variables.total_drop_nr
     bigPs= np.empty([len(Ab_concs),len(vol_fac)])
     ps =np.empty([len(Ab_concs),len(vol_fac)])
@@ -38,6 +39,8 @@ def calc_theo_survival_prob():
        ps_int=(exp_fact * nsum(lambda j: (lam) ** j / fac(j), [0, N_T]))  # from 0 to nt
        ps[aa, mm] = 1 - ps_int
        bigPs[aa, mm] = 1 - (1 - ps[aa, mm])**m  # prob of at least 1 subvol surviving
+
+
 
        # save:
     np.save('prob_line.npy', bigPs)  #    pd.DataFrame(bigPs_sum).to_csv('prob_line.csv'.format(), index=None)
@@ -105,5 +108,7 @@ def unsimplified_calc(a, x):  # paper eq
 #bigPs= 1- (1 - result2[0])**500
 #print(bigPs)
 
-RES=calc_theo_survival_prob()
+vol_fac=np.arange(1, 1000, 2)
+
+RES=calc_theo_survival_prob(vol_fac)
 

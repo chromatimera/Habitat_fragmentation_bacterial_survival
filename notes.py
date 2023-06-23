@@ -8,7 +8,7 @@ import numpy as np
 from variables import *
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import cm
-
+from ps_theory import vol_fac
 growth = 'binary'
 rootdir = 'output/'
 ab = [15, 35, 55, 75]
