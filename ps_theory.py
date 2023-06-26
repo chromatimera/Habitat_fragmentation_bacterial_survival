@@ -20,7 +20,7 @@ def calc_theo_survival_prob(vol_fac):
     ps =np.empty([len(Ab_concs),len(vol_fac)])
 
     #for each AB conc;
-    for aa in range (len(Ab_concs)):
+    for aa in range(len(Ab_concs)):
      A= Ab_concs[aa]
      F1 = deathrate /(b * Vmax)
      F = (A - MIC) + Km * np.log(A / MIC)  # eq4
@@ -30,14 +30,24 @@ def calc_theo_survival_prob(vol_fac):
      for mm in range(len(vol_fac)):
        m=vol_fac[mm]
        vol=1E-4 /m #ml
-       lam = np.floor(rho_bulk * vol)
-       N_T = np.floor(rho_T * vol)  #is this at least? OR inclusive
+
+       lam = rho_bulk * vol
+       N_T = (rho_T * vol)
+
+       # old
+       #lam = np.floor(rho_bulk * vol)
+       #N_T = np.floor(rho_T * vol)
+
     ## calculate the theoretical survival probability; eq. (10) from paper
     # ps  (prob that N(0) > Nt for a given droplet)
+
        exp_fact = exp(-lam) # math.exp;;goes to zero when lam is too high
-       #ps[aa,mm] = exp_fact * nsum(lambda j: (lam) ** j / fac(j), [N_T + 1, inf]) # from nt+1 to inf  # method='r+s+e' takes ages
-       ps_int=(exp_fact * nsum(lambda j: (lam) ** j / fac(j), [0, N_T]))  # from 0 to nt
-       ps[aa, mm] = 1 - ps_int
+
+
+       ps[aa,mm] = exp_fact * nsum(lambda j: (lam) ** j / fac(j), [N_T + 1, inf]) # from nt+1 to inf  # method='r+s+e' takes ages
+
+       #ps_int=(exp_fact * nsum(lambda j: (lam) ** j / fac(j), [0, N_T]))  # from 0 to nt
+       #ps[aa, mm] = 1 - ps_int
        bigPs[aa, mm] = 1 - (1 - ps[aa, mm])**m  # prob of at least 1 subvol surviving
 
 
@@ -108,7 +118,7 @@ def unsimplified_calc(a, x):  # paper eq
 #bigPs= 1- (1 - result2[0])**500
 #print(bigPs)
 
-vol_fac=np.arange(1, 1000, 2)
+vol_fac=np.arange(1,1000,2)
 
 RES=calc_theo_survival_prob(vol_fac)
 

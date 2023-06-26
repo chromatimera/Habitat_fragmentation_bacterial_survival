@@ -241,7 +241,7 @@ class droplets_R():
         ## calculate N_T
 
         N_T = np.floor(rho_T * self.volume)
-        #print('N_T',N_T)
+        print('N_T',N_T)
 
         ## calculate the theoretical survival probability; eq. (10) from paper
         ## rhobulk*v form the paper is initialN  (deterministic) from the simulations and the first value from the N_array
