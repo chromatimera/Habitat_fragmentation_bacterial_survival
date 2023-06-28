@@ -17,12 +17,9 @@ growth = 'binary'
 rootdir = 'output/'
 ab = [15, 35, 55, 75]
 
-#zzz=np.load('prob_line_finitesum.npy')
-print(os.getcwd())
 #os.chdir(rootdir)
 zz=np.load('prob_line.npy')
 zzz= zz.T
-print(zzz)
 #print('current dir', os.getcwd())
 
 
@@ -43,18 +40,12 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
         pass
 
     surv_fraction = pd.read_csv(onlyfiles[3])
-    #print('surf fraction df', surv_fraction)
+    print('surf fraction df', surv_fraction)
     part_fact = np.loadtxt(onlyfiles[2])
-    theory = pd.read_csv(onlyfiles[4], index_col='0')
-    theory.index.name = 'Part_fact'
-    theory.columns = ['small_ps', 'big_Ps']
 
-    theory = theory.sort_values(by = "Part_fact",ascending = False)
-    print('sim theory',theory)
-
-    theory_line_df = pd.DataFrame(zzz[:, ind], columns=['big_Ps'], index = vol_fac)
-    theory_line_df.index.name = 'Part_fact'
-    theory_line_df = theory_line_df.sort_values(by = "Part_fact",ascending = False)
+    theory_line_df = pd.DataFrame(zzz[:, ind], columns=['big_Ps'], index=vol_fac)
+    theory_line_df.index.name = 'Vol_fac'
+    theory_line_df = theory_line_df.sort_values(by="Vol_fac", ascending=True)
 
 
     print('THEORY DF', theory_line_df)
@@ -63,7 +54,7 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     ### transpose of dataframe
     surv_fraction_transpose = surv_fraction.T
     surv_fraction_transpose.index.name = 'Part_fact'
-    #print('transpose', surv_fraction_transpose)
+    print('transpose', surv_fraction_transpose)
 
     surv_fraction_transpose.columns = ['Surv frac']
     surv_fraction_transpose['Error95'] = surv_fraction_transpose.apply(lambda x: 2 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(variables.total_sim), axis=1)
@@ -73,11 +64,13 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     plt.figure(1)
     surv_fraction_errors = surv_fraction_transpose.Error95.to_frame('Surv frac')
     surv_fraction_errors.index = surv_fraction_errors.index.map(int)
-    surv_fraction_errors = surv_fraction_errors.sort_index(ascending=False)
-    #print(surv_fraction_errors)
+    #surv_fraction_errors = surv_fraction_errors.sort_index(ascending=True)
+    print('errors',surv_fraction_errors)
+
     surv_fraction_transpose.index = surv_fraction_transpose.index.map(int)
-    surv_fraction_transpose = surv_fraction_transpose.sort_index(ascending=True)
-    surv_fraction_transpose["Surv frac"].plot.line(yerr = surv_fraction_errors, c=c)#, color = 'orange')
+    #surv_fraction_transpose = surv_fraction_transpose.sort_index(ascending=True)
+    print('trp', surv_fraction_transpose)
+    surv_fraction_transpose["Surv frac"].plot.line(yerr=surv_fraction_errors, c=c)#, color = 'orange')
     theory_line_df["big_Ps"].plot.line(c=c, linestyle='dashed')#, color = 'orange')
 
 
@@ -85,7 +78,7 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     #print(os.getcwd())
 
 plt.ylabel(r'\bf{Probability of survival}', fontsize=text_size)
-plt.xlabel(r'\bf{m (number of subvolumes)}', fontsize=text_size, )
+plt.xlabel(r'\bf{m (number of subvolumes)}', fontsize=text_size)
 
 plt.legend(ab, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=4, fancybox=True, shadow=True, fontsize= 'large')
 plt.savefig('Survival fraction {} + errors diff ab+ legend.png'.format(growth))

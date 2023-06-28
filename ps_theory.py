@@ -32,11 +32,8 @@ def calc_theo_survival_prob(vol_fac):
        vol=1E-4 /m #ml
 
        lam = rho_bulk * vol
-       N_T = (rho_T * vol)
-
-       # old
-       #lam = np.floor(rho_bulk * vol)
-       #N_T = np.floor(rho_T * vol)
+       #N_T = (rho_T * vol)
+       N_T = np.floor(rho_T * vol)
 
     ## calculate the theoretical survival probability; eq. (10) from paper
     # ps  (prob that N(0) > Nt for a given droplet)
@@ -118,7 +115,6 @@ def unsimplified_calc(a, x):  # paper eq
 #bigPs= 1- (1 - result2[0])**500
 #print(bigPs)
 
-vol_fac=np.arange(1,1000,2)
-
-RES=calc_theo_survival_prob(vol_fac)
+vol_fac = np.arange(1,1000,2)
+RES = calc_theo_survival_prob(vol_fac)
 

@@ -10,26 +10,33 @@
 import os.path
 from decimal import *
 import math
+
+import numpy as np
+
 getcontext().prec = 50
 
 ### nr of droplets and the power of i and j in the partitioning loop are related i.e. for 100 droplets, the loop goes from 0 to 3.
 total_drop_nr = 1000
+droplet_list = np.arange(0, 1001, 50)
+droplet_list[0] = 1
+
 ## don't change the 2 lines below
 part_min = 0
 part_max = int(math.log10(total_drop_nr) + 1)
 
 t_start = 0
-t_end = 100
+t_end = 300
 dt = 1
-spec_time = 99
-total_sim = 50
+spec_time = 299
+total_sim = 100
 
 ### nr timesteps for dt test; ignore dt for this test
 nr_timesteps = int(3e6)
 
 # n_crit used in one of the tau_leaping algorithms
 n_crit = 2
-volume = 1e-7   # volume of droplets ~100pL; 1pL is 1e-6 ul; 100pL - 1e-4 ul UNITS: mL
+volume = 1e-7   # volume of droplets from experiments ~100pL; 1pL is 1e-6 ul; 100pL - 1e-4 ul UNITS: mL
+
 
 ##simulating multiple fake droplets (this a factor ie. 2 means 2 * initial N, but total_droplet_nr/2)
 nr_drop_min = 1

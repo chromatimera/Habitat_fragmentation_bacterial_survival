@@ -49,7 +49,6 @@ class droplets_R():
     def run(self, init_type, grow_meth):
         #run identical experiments in each droplet
         Exp = Experiment_R(self.strain_r, self.AB_conc, self.nr_drops_total_mass)
-
         for k in range(0, self.total_drop_number):
             #print('drop. nr:', k)
             if (grow_meth != "binary"):

@@ -48,6 +48,8 @@ class Experiment_R(object):
         elif init_type == "rand":
             #randomize initial starting numbers:
             self.strain_r.N = poisson.rvs(mu=self.strain_r.initialN, size=1)
+            ##print('nr drops total mass', self.nr_drops_total_mass)
+            #print('initial N', self.strain_r.N)
             self.N_array[0] = self.strain_r.N
         else:
             print("Error in initialisation; type 'det' or 'rand' in run()")
@@ -102,11 +104,6 @@ class Experiment_R(object):
 
         if grow_meth == "gillespie_binary":
             self.ts, self.N_array, self.AB_conc_array = self.strain_r.gillespie_binary_grow(self.AB_conc)
-        if grow_meth == "midpoint_tau_binary":
-            self.ts, self.N_array, self.AB_conc_array = self.strain_r.midpoint_tau_binary_grow(epsilon, self.AB_conc)
-        if grow_meth == "adaptive_tau_binary":
-            self.ts, self.N_array, self.AB_conc_array = self.strain_r.adaptive_tau_binary_grow(epsilon, self.AB_conc)
-
 
 experiment_script_path = __file__
 experiment_script_name = os.path.basename(__file__)
