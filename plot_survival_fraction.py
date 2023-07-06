@@ -18,7 +18,7 @@ rootdir = 'output/'
 ab = [15, 35, 55, 75]
 
 #os.chdir(rootdir)
-zz=np.load('prob_line.npy')
+zz=np.load('prob_line_forloop.npy')
 zzz= zz.T
 #print('current dir', os.getcwd())
 

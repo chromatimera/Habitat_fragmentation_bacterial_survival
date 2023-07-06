@@ -56,6 +56,40 @@ def calc_theo_survival_prob(vol_fac):
     return ps, bigPs
 
 
+def for_loop_sum(vol_fac):  # paper eq
+    #zz = np.load('prob_line_forloop.npy')
+    b = 1
+    Ab_concs = [15, 35, 55, 75]
+    rho_bulk = variables.initialN / variables.volume # constant in det # rho_bulk = variables.initialN * variables.total_drop_nr/variables.volume * variables.total_drop_nr
+    bigPs= np.empty([len(Ab_concs),len(vol_fac)])
+    ps =np.empty([len(Ab_concs),len(vol_fac)])
+
+    #for each AB conc;
+    for aa in range(len(Ab_concs)):
+     A= Ab_concs[aa]
+     F1 = deathrate /(b * Vmax)
+     F = (A - MIC) + Km * np.log(A / MIC)  # eq4
+    ##calculate rho_threshold; eq (9) from paper
+     rho_T = F1 * F ## **units: cell/vol if Vmax is ug/min (per enzyme)
+
+     for mm in range(len(vol_fac)):
+       m=vol_fac[mm]
+       vol=1E-4 /m #ml
+
+       lam = rho_bulk * vol
+       #N_T = (rho_T * vol)
+       N_T = np.ceil(rho_T * vol).astype('int')
+
+    ## calculate the theoretical survival probability; eq. (10) from paper
+    # ps  (prob that N(0) > Nt for a given droplet)
+       exp_fact = exp(-lam) # math.exp;;goes to zero when lam is too high
+       probability = np.empty(N_T-1)
+       for i in range(N_T-1):
+           probability[i] = ((lam ** i)*exp_fact) / math.factorial(i)
+       ps[aa,mm] = 1- sum(probability)
+       bigPs[aa, mm] = 1 - (1 - ps[aa, mm])**m  # prob of at least 1 subvol surviving
+       np.save('prob_line_forloop.npy', bigPs)
+    return ps, bigPs
 
 
 def upper_incomplete_gamma(a, x):  # Lentz's method
@@ -87,6 +121,10 @@ def upper_incomplete_gamma(a, x):  # Lentz's method
     return gamma
 
 
+
+
+
+
 def unsimplified_calc(a, x):  # paper eq
 
     nt=a
@@ -116,5 +154,5 @@ def unsimplified_calc(a, x):  # paper eq
 #print(bigPs)
 
 vol_fac = np.arange(1,1000,2)
-RES = calc_theo_survival_prob(vol_fac)
+RES = for_loop_sum(vol_fac)
 
