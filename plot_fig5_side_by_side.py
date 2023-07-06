@@ -10,9 +10,14 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import cm
 from matplotlib.lines import Line2D
 from matplotlib import rc
+BIGGER_SIZE = 16
 
 rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 rc('text', usetex=True)
+rc('xtick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
+rc('ytick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
+plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
+plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsiz
 
 growth1 = 'binary'
 growth2 = 'gillespie_binary'
@@ -167,13 +172,13 @@ for n in range(0, 2, 1):
             surv_fraction_transpose2["Surv frac"].plot.line(yerr=surv_fraction_errors2, linestyle='dashed',  c=color_list[ind], ax=ax)  # color = 'orange')
         label_list.append('{}'.format(antib))
     # chart formatting
-    ax.set_xlabel(r'\bf{m (number of subvolumes)}', fontsize=text_size)
+    ax.set_xlabel(r'\bf{m (number of subvolumes)}')
     if n==0:
-        plt.ylabel(r'\bf{N(300)}', fontsize=text_size)
+        plt.ylabel(r'\bf{N(300)}')
 
     else:
         plt.ylim(-0.1, 1.1)
-        plt.ylabel(r'\bf{Ps}', fontsize=text_size)
+        plt.ylabel(r'\bf{Ps}')
     #ax.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.25), ncol=4, fancybox=True, shadow=True, fontsize= 'large')
 plt.savefig('Survival fraction and Nf_vs_part_fact side by side.png')
 plt.show()

@@ -14,10 +14,16 @@ from decimal import *
 import scipy.special as sc
 getcontext().prec = 50
 from mpmath import *
-from matplotlib import rc
+import matplotlib.pyplot as plt
 
-rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
-rc('text', usetex=True)
+BIGGER_SIZE = 40
+
+plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
+plt.rc('text', usetex=True)
+plt.rc('xtick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
+plt.rc('ytick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
+plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
+plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsize
 
 
 class droplets_R():
@@ -42,7 +48,6 @@ class droplets_R():
         self.time_list_gillespie = []
         self.AB_conc_array_gillespie = []
 
-        plt.rc('font', size=14)  # controls default text size
         plt.rcParams['axes.spines.right'] = False
         plt.rcParams['axes.spines.top'] = False
 
@@ -72,7 +77,7 @@ class droplets_R():
 
         # Check whether the specified path exists or not
         folder_name = 'output/' \
-                      'dropnr_{}_loading_{}_growth_{}_initialN_{}_abconc_{}_gr_{}_dt_{}_Nsat_{}'.format(variables.total_drop_nr,loading,growth, variables.initialN, self.AB_conc, growthrate, self.dt,variables.Nsat)
+                      'dropnr_{}_loading_{}_growth_{}_initialN_{}_abconc_{}_gr_{}_dt_{}_Nsat_{}'.format(variables.droplet_list[-1],loading,growth, variables.initialN, self.AB_conc, growthrate, self.dt,variables.Nsat)
         path = os.path.join(curr_path, folder_name)
         isExist = os.path.exists(path)
 
@@ -86,7 +91,6 @@ class droplets_R():
         # create x axis of time in minutes:
         if (grow_meth != "binary"):
 
-            plt.rcParams.update({'font.size': 14})
             plt.figure(figsize=(7.5, 5))
             fig, ax = plt.subplots()
             for i in range(0, self.total_drop_number):
@@ -94,8 +98,8 @@ class droplets_R():
             plt.grid(False)
             # plt.title('Growth of resistant strain')
             #©plt.title('{}_growth'.format(growth))
-            plt.ylabel('Number of bacteria', fontsize= text_size)
-            plt.xlabel('Time (min)',  fontsize= text_size)
+            plt.ylabel('Number of bacteria)')
+            plt.xlabel('Time (min)')
             plt.xlim(0, self.t_end)
             plt.xlim(0, self.t_end)
             # tick_spacing = 2
@@ -109,8 +113,8 @@ class droplets_R():
                 plt.plot(self.time_list_gillespie[i], self.AB_conc_array_gillespie[i])
             plt.grid(False)
             # plt.title('Concentration of antibiotic over time in each droplet.')
-            plt.ylabel('Antibiotic (ug/mL)',  fontsize= text_size)
-            plt.xlabel('Time (min)',  fontsize= text_size)
+            plt.ylabel('Antibiotic (ug/ml)')
+            plt.xlabel('Time (min)')
             plt.xlim(0, self.t_end)
             plt.ylim(bottom=0)
             plt.title('{}_growth'.format(growth))
@@ -121,8 +125,8 @@ class droplets_R():
             for i in range(0, self.total_drop_number):
                 plt.plot(self.time_list_gillespie[i], self.N_list_gillespie[i]/self.volume)
             plt.grid(False)
-            plt.ylabel('Number of bacteria per {} ml volume'.format(self.volume),  fontsize= text_size)
-            plt.xlabel('Time (min)',  fontsize= text_size)
+            plt.ylabel('Number of bacteria per {} ml volume'.format(self.volume))
+            plt.xlabel('Time (min)')
             plt.xlim(0, self.t_end)
             plt.ylim(bottom=0)
             plt.title('{}_growth'.format(growth))
@@ -131,44 +135,71 @@ class droplets_R():
         else:
             X = np.arange(0, self.t_end, self.dt).tolist()
             XX= np.tile(X, (self.total_drop_number, 1))
-            plt.rcParams.update({'font.size': 14})
 
-            fig, ax= plt.subplots(figsize=(8,6))
+            fig, ax= plt.subplots(figsize=(8,6.2))
             plt.plot (XX.T, self.N_r_array.T)
+            print('N_R.T', self.N_r_array.T)
             plt.grid(False)
             #plt.title('Growth of resistant strain')
             #plt.title ('{}_growth'.format(growth))
-            plt.ylabel(r'\bf{Number of bacteria}',  fontsize= text_size)
-            plt.xlabel(r'\bf{Time (min)}',  fontsize= text_size)
+            plt.ylabel(r'\bf{N(t)}')
+            plt.xlabel(r'\bf{Time (min)}')
             plt.xlim(0,self.t_end)
             plt.xlim(0,self.t_end)
             #ax.yaxis.set_major_locator(ticker.MultipleLocator(tick_spacing))
             plt.ylim(bottom=0)
+            #plt.axhline(threshold, color='green', lw=2, alpha=0.7)
+            y_survival=np.argwhere(np.array(self.N_r_array.T[0,:])==6)
+            print(y_survival)
+            y_death = np.argwhere(np.array(self.N_r_array.T[0,:])==5)
+            print(y_death)
+            col_ind_y_survival = int(y_survival[0].item())
+            y_surv = list(self.N_r_array.T[:, col_ind_y_survival])
+
+            col_ind_y_death = int(y_death[0].item())
+            y_deth = list(self.N_r_array.T[:, col_ind_y_death])
+
+
+            print('y_surv', y_surv)
+            print('XX.T', XX.T[:,1])
+            plt.fill_between(list(XX.T[:,0]), y_surv, 100, color='g', alpha=0.1, interpolate=True)
+            plt.fill_between(list(XX.T[:,0]), 0, y_deth, color='r', alpha=0.1, interpolate=True)
+            plt.xticks(np.arange(0,self.t_end + 1, 25))
+            plt.tight_layout()
             plt.savefig('plot_Nbact_loading_{}_growth_{}ab_conc_{}'.format(loading, growth, AB_conc))
             plt.show()
 
 
-            plt.figure(2, figsize=(8,6))
+            plt.figure(2, figsize=(8,6.2))
             plt.plot(XX.T, self.AB_conc_array.T)
             plt.grid(False)
             #plt.title('Concentration of antibiotic over time in each droplet.')
-            plt.ylabel(r'\bf{Antibiotic ($\mu$g/mL)}',  fontsize= text_size)
-            plt.xlabel(r'\bf{Time (min)}',  fontsize= text_size)
+            plt.ylabel(r'\bf{Antibiotic ($\mu$g/ml)}')
+            plt.xlabel(r'\bf{Time (min)}')
             plt.xlim(0, self.t_end)
             plt.ylim(bottom=0)
-            #plt.title ('{}_growth'.format(growth))
+            # plt.axhline(threshold, color='green', lw=2, alpha=0.7)
+            y_surv = list(self.AB_conc_array.T[:, col_ind_y_survival])
+            y_deth = list(self.AB_conc_array.T[:, col_ind_y_death])
+
+            print('y_surv', y_surv)
+            print('XX.T', XX.T[:, 1])
+            plt.fill_between(list(XX.T[:, 0]), y_deth, 100, color='red', alpha=0.1, interpolate=True)
+            plt.fill_between(list(XX.T[:, 0]), 0, y_surv, color='g', alpha=0.1, interpolate=True)
+            plt.xticks(np.arange(0, self.t_end + 1, 25))
+            plt.tight_layout()
             plt.savefig('plot_ABconc_{}_loading_{}_growth_{}'.format(self.AB_conc, loading, growth))
             plt.show()
 
             plt.figure(3, figsize=(8,6))
             plt.plot(XX.T, self.N_r_array.T / self.volume)
             plt.grid(False)
-            plt.ylabel('Number of bacteria per {} ml volume'.format(self.volume),  fontsize= text_size)
-            plt.xlabel('Time (min)',  fontsize= text_size)
+            plt.ylabel('Number of bacteria per {} ml volume'.format(self.volume))
+            plt.xlabel('Time (min)')
             plt.xlim(0, self.t_end)
             plt.ylim(bottom=0)
             plt.title('{}_growth'.format(growth))
-            plt.show()
+            #plt.show()
 
         os.chdir(curr_path)
 

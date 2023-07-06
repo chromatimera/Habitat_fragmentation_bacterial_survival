@@ -7,25 +7,34 @@ import pandas as pd
 import numpy as np
 from variables import *
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import cm, rc
+
 from ps_theory import vol_fac
 
-rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
-rc('text', usetex=True)
+BIGGER_SIZE = 16
 
-growth = 'binary'
-rootdir = 'output/'
+plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
+plt.rc('text', usetex=True)
+plt.rc('xtick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
+plt.rc('ytick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
+plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
+plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsize
+
+#rootdir = './output/'
 ab = [15, 35, 55, 75]
 
-#os.chdir(rootdir)
 zz=np.load('prob_line.npy')
 zzz= zz.T
-#print('current dir', os.getcwd())
+#os.chdir(rootdir)
+
+print('current dir', os.getcwd())
 
 
-plt.figure(figsize=(7, 6))
-color = iter(cm.rainbow(np.linspace(0, 1, 5)))
+plt.figure(figsize=(7, 7))
+color = iter(plt.cm.rainbow(np.linspace(0, 1, 5)))
 color_list = []
+label_list = []
+print(color)
+
 for antib, c, ind in zip(ab, color, range(len(ab))):
     os.chdir('dropnr_1000_loading_rand_growth_{}_initialN_5_abconc_{}'.format(growth, antib))
     path = os.getcwd()
@@ -70,16 +79,17 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     surv_fraction_transpose.index = surv_fraction_transpose.index.map(int)
     #surv_fraction_transpose = surv_fraction_transpose.sort_index(ascending=True)
     print('trp', surv_fraction_transpose)
+    theory_line_df["big_Ps"].plot.line(c=c, linestyle='dashed', label='_nolegend_')#, color = 'orange')
     surv_fraction_transpose["Surv frac"].plot.line(yerr=surv_fraction_errors, c=c)#, color = 'orange')
-    theory_line_df["big_Ps"].plot.line(c=c, linestyle='dashed')#, color = 'orange')
+    label_list.append('{}'.format(antib))
 
 
     os.chdir('..')
     #print(os.getcwd())
 
-plt.ylabel(r'\bf{Probability of survival}', fontsize=text_size)
-plt.xlabel(r'\bf{m (number of subvolumes)}', fontsize=text_size)
+plt.ylabel(r'\bf{Probability of survival}')
+plt.xlabel(r'\bf{m (number of subvolumes)}')
 
-plt.legend(ab, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=4, fancybox=True, shadow=True, fontsize= 'large')
+plt.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.17), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE)
 plt.savefig('Survival fraction {} + errors diff ab+ legend.png'.format(growth))
 plt.show()

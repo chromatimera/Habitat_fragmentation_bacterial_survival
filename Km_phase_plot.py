@@ -2,17 +2,23 @@ import numpy as np
 import matplotlib.pyplot as plt
 from variables import *
 from matplotlib import rc
+import matplotlib.pyplot as plt
+BIGGER_SIZE = 20
 
-rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
-rc('text', usetex=True)
+plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
+plt.rc('text', usetex=True)
+plt.rc('xtick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
+plt.rc('ytick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
+plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
+plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsize
 
 #Equation 9: rhoT
-plt.rc('font', size=18)  # controls default text size
+#plt.rc('font', size=18)  # controls default text size
 #plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 #plt.rc('text', usetex=True)
 #font = {'family':'serif', 'serif': ['computer modern roman']}
 #plt.rc('font',**font)
-plt.rcParams["font.family"] = "serif"
+#plt.rcParams["font.family"] = "serif"
 
 
 
@@ -24,14 +30,10 @@ lowkm = 1
 highkm = 15
 AB_x = np.arange(0, 25,0.5)
 #calculate rho values;
-F= (AB_x-MIC )+ medkm* np.log (AB_x/MIC)
-rhoT=    (deathrate/ Vmax) *F
+F=(AB_x-MIC )+medkm* np.log (AB_x/MIC)
+rhoT=(deathrate/ Vmax)*F
 rhoT_low=((AB_x-MIC )+ lowkm* np.log (AB_x/MIC) )* (deathrate/ Vmax)
 rhoT_high= ((AB_x-MIC )+ highkm* np.log (AB_x/MIC)) * (deathrate/ Vmax)
-
-#
-
-
 
 y =rhoT
 y[0]=0
@@ -41,16 +43,17 @@ x=AB_x
 plt.plot(x,rhoT_high,'--', linewidth=4, label="Large KM", color='black')
 plt.plot(x,rhoT_low,'.', linewidth=4,label="Small KM", color='black')
 plt.plot(x,rhoT, linewidth=4,label="Small KM", color='black')
-ax2.fill_between(x, y, facecolor='red')
-ax2.fill_between(x, y, plt.ylim()[1], facecolor='green')
+ax2.fill_between(x, y, facecolor='red', alpha=0.2)
+ax2.fill_between(x, y, plt.ylim()[1], facecolor='green', alpha=0.2)
 
 
 xcoord = x[int((x.size/2.5)*2)]
 ycoord = y[int((x.size/6)*2)] / 2
 #plt.text(xcoord,ycoord,"DEATH", weight='bold')
 #plt.text(2,8e7,"SURVIVAL", weight='bold')
-plt.xlabel(r'\bf{Initial antibiotic concentration ($\mu$g/mL)}', fontsize= 'x-large')
-plt.ylabel(r'\bf{$\rho$ (initial cells/mL)}', fontsize='x-large' )
+plt.xlabel(r'\bf{Initial antibiotic concentration ($\mu$g/ml)}')
+plt.ylabel(r'\bf{$\rho$ (initial cells/ml)}')
 plt.xlim(0,24)
 plt.ylim(0,0.9e8)
+plt.tight_layout()
 plt.show()

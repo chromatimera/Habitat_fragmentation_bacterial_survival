@@ -10,7 +10,19 @@ import pandas as pd
 
 os.chdir('./output/')
 
+def range_prod(lo,hi):
+    if lo+1 < hi:
+        mid = (hi+lo)//2
+        return range_prod(lo,mid) * range_prod(mid+1,hi)
+    if lo == hi:
+        return lo
+    return lo*hi
 
+
+def treefactorial(n):
+    if n < 2:
+        return 1
+    return range_prod(1,n)
 
 def calc_theo_survival_prob(vol_fac):
     b = 1
@@ -33,7 +45,8 @@ def calc_theo_survival_prob(vol_fac):
 
        lam = rho_bulk * vol
        #N_T = (rho_T * vol)
-       N_T = np.floor(rho_T * vol)
+       N_T = np.ceil(rho_T * vol)
+
 
     ## calculate the theoretical survival probability; eq. (10) from paper
     # ps  (prob that N(0) > Nt for a given droplet)
@@ -41,16 +54,17 @@ def calc_theo_survival_prob(vol_fac):
        exp_fact = exp(-lam) # math.exp;;goes to zero when lam is too high
 
 
-       ps[aa,mm] = exp_fact * nsum(lambda j: (lam) ** j / fac(j), [N_T + 1, inf]) # from nt+1 to inf  # method='r+s+e' takes ages
-
-       #ps_int=(exp_fact * nsum(lambda j: (lam) ** j / fac(j), [0, N_T]))  # from 0 to nt
+       #ps[aa,mm] = exp_fact * nsum(lambda j: (lam) ** j / fac(j), [N_T + 1 , inf],  method='r+s+e') # from nt+1 to inf  # method='r+s+e' takes ages
+       ps[aa, mm]=  1 - sc.gammaincc(N_T+1, lam)
+       #ps_int=(exp_fact * nsum(lambda j: (lam) ** j / fac(j), [0, N_T - 1]))  # from 0 to nt
        #ps[aa, mm] = 1 - ps_int
        bigPs[aa, mm] = 1 - (1 - ps[aa, mm])**m  # prob of at least 1 subvol surviving
 
 
 
        # save:
-    np.save('prob_line.npy', bigPs)  #    pd.DataFrame(bigPs_sum).to_csv('prob_line.csv'.format(), index=None)
+    np.save('prob_line.npy', bigPs)  #
+    pd.DataFrame(bigPs).to_csv('prob_line.csv'.format(), index=None)
     #plt.plot(vol_fac, bigPs[4, :])
     #plt.show()
     return ps, bigPs

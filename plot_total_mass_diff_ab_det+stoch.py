@@ -12,7 +12,7 @@ from matplotlib.pyplot import cm
 growth1 = 'binary'
 growth2 = 'gillespie_binary'
 rootdir = 'output/'
-ab = [15, 25, 55]
+ab = [15, 35, 75]
 label_list = []
 color = iter(cm.rainbow(np.linspace(0, 1, 5)))
 colour_list = []

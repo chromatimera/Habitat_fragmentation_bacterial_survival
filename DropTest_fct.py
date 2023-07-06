@@ -20,7 +20,7 @@ start_time = time.time()
 class DropTest(object):
 
        ## fct to calculate survival +  N(t) for a set nr of repeats
-    def calc_survival_prob_total_nr_bact_diff_part(self, partmin, partmax, step, spec_time, total_sim):
+    def calc_survival_prob_total_nr_bact_diff_part(self, step, spec_time, total_sim):
         ## create list with part fact as column names
         total_prob = pd.DataFrame()
         df_total_mass = pd.DataFrame()
@@ -35,7 +35,6 @@ class DropTest(object):
                 total_drop_nr = droplet_list[i]
                 #print('drop nr', total_drop_nr)
                 m_fact = droplet_list[-1]/total_drop_nr
-                #print('m', m_fact)
                 ## volume for one small droplet is 1e-7, but we're starting the simulation from the one big droplet and further getting to smaller droplets
                 new_volume = variables.volume * droplet_list[-1]/ droplet_list[i]
 
@@ -132,12 +131,12 @@ class DropTest(object):
 
         pd.DataFrame(surv_df).to_csv('survival_fraction_growth_{}_loading_{}_ABconc{}.csv'.format(growth, loading, AB_conc), index=None)
         pd.DataFrame(avg_nr_bact).to_csv('average_df_growth_{}_loading_{}_ABconc{}.csv'.format(growth, loading, AB_conc), index=None)
-        pd.DataFrame(df_total_mass).to_csv('df_growth_{}_starting_nr_drops_{}_ABconc{}.csv'.format(growth, variables.total_drop_nr, AB_conc), index=None)
+        pd.DataFrame(df_total_mass).to_csv('df_growth_{}_starting_nr_drops_{}_ABconc{}.csv'.format(growth, variables.droplet_list[-1], AB_conc), index=None)
         np.savetxt('part_fact.txt', part_fact, delimiter=',')  # X is an array
 
         # print("--- %s seconds ---" % (time.time() - start_time))
 
 
 simulate = DropTest()
-simulate.calc_survival_prob_total_nr_bact_diff_part(part_min, part_max, step, spec_time, total_sim)
+simulate.calc_survival_prob_total_nr_bact_diff_part(step, spec_time, total_sim)
 
