@@ -26,7 +26,7 @@ def treefactorial(n):
 
 def calc_theo_survival_prob(vol_fac):
     b = 1
-    Ab_concs = [15, 35, 55, 75]
+    Ab_concs = [15,35,75]
     rho_bulk = variables.initialN / variables.volume # constant in det # rho_bulk = variables.initialN * variables.total_drop_nr/variables.volume * variables.total_drop_nr
     bigPs= np.empty([len(Ab_concs),len(vol_fac)])
     ps =np.empty([len(Ab_concs),len(vol_fac)])
@@ -168,5 +168,5 @@ def unsimplified_calc(a, x):  # paper eq
 #print(bigPs)
 
 vol_fac = np.arange(1,1000,2)
-RES = for_loop_sum(vol_fac)
+RES = calc_theo_survival_prob(vol_fac)
 

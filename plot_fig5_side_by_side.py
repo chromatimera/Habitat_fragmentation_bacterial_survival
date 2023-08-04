@@ -9,7 +9,9 @@ from variables import *
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import cm
 from matplotlib.lines import Line2D
+from collections import Counter
 from matplotlib import rc
+
 BIGGER_SIZE = 16
 
 rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
@@ -22,7 +24,7 @@ plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsiz
 growth1 = 'binary'
 growth2 = 'gillespie_binary'
 rootdir = 'output/'
-ab = [15, 35, 75]
+ab = [35, 55, 75]
 
 os.chdir(rootdir)
 print('current dir', os.getcwd())
@@ -30,7 +32,7 @@ print('current dir', os.getcwd())
 label_list = []
 colors = plt.cm.rainbow(np.linspace(0, 1, 5))
 color_list = []
-
+print(colors)
 plt.figure(figsize=(7, 9))
 plt.subplots_adjust(hspace=0.5)
 
@@ -40,6 +42,9 @@ for n in range(0, 2, 1):
     ax = plt.subplot(2, 1, n + 1)
 
     for antib, c in zip(ab, colors):
+        #print(ind)
+        if Counter(c) == Counter(colors[2]):
+           c = colors[3]
         ### plot the deterministic value + error
         os.chdir('dropnr_1000_loading_rand_growth_{}_initialN_5_abconc_{}'.format(growth1, antib))
         path = os.getcwd()
@@ -97,8 +102,8 @@ for n in range(0, 2, 1):
         surv_fraction_errors2.index = surv_fraction_errors2.index.map(int)
         surv_fraction_errors2 = surv_fraction_errors2.sort_index(ascending=True)
         print('antib', antib)
-        print('surv frac errors 1', surv_fraction_errors1)
-        print('surv frac errors 2', surv_fraction_errors2)
+        #print('surv frac errors 1', surv_fraction_errors1)
+        #print('surv frac errors 2', surv_fraction_errors2)
 
         surv_fraction_transpose2.index = surv_fraction_transpose2.index.map(int)
         surv_fraction_transpose2 = surv_fraction_transpose2.sort_index(ascending=True)
@@ -174,7 +179,7 @@ for n in range(0, 2, 1):
     # chart formatting
     ax.set_xlabel(r'\bf{m (number of subvolumes)}')
     if n==0:
-        plt.ylabel(r'\bf{N(300)}')
+        plt.ylabel(r'\bf{N(300 mins)}')
 
     else:
         plt.ylim(-0.1, 1.1)

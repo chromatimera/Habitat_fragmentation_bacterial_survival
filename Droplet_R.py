@@ -55,7 +55,7 @@ class droplets_R():
         #run identical experiments in each droplet
         Exp = Experiment_R(self.strain_r, self.AB_conc, self.nr_drops_total_mass)
         for k in range(0, self.total_drop_number):
-            #print('drop. nr:', k)
+            print('drop. nr:', k)
             if (grow_meth != "binary"):
                 Exp.run(init_type, grow_meth)
                 ## not necessarily gillespie, but the point is that the N, AB_conc and Time list have variable lengths
@@ -296,7 +296,7 @@ class droplets_R():
 
         # Check whether the specified path exists or not
 
-        folder_name = 'output/dropnr_{}_loading_{}_growth_{}_initialN_{}_abconc_{}_gr_{}_dt_{}_Nsat_{}'.format(variables.total_drop_nr, variables.loading, variables.growth, variables.initialN, AB_conc, variables.growthrate, self.dt,variables.Nsat)
+        folder_name = 'output/dropnr_{}_loading_{}_growth_{}_initialN_{}_abconc_{}_gr_{}_dt_{}_Nsat_{}'.format(variables.droplet_list[-1], variables.loading, variables.growth, variables.initialN, AB_conc, variables.growthrate, self.dt,variables.Nsat)
         path = os.path.join(curr_path, folder_name)
         isExist = os.path.exists(path)
 

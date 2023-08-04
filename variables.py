@@ -24,7 +24,7 @@ droplet_list[0] = 1
 
 t_start = 0
 t_end = 300
-dt = 0.1
+dt = 1
 spec_time = 299
 total_sim = 1000
 
@@ -48,7 +48,7 @@ deathrate  = 0.045  # per minute from Gore 2013
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
-AB_conc = 35 #ug per mL
+AB_conc = 15 #ug per mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL
@@ -64,10 +64,9 @@ step = 1
 epsilon = 0.03
 
 ##type of loading and growth
-loading = "rand"  # rand #det
-#growth = "midpoint_tau_binary" # for troubleshooting -- needs updating
-growth = "binary"
-#growth = 'gillespie_binary'
+loading = "det"  # rand #det
+#growth = "binary"
+growth = 'gillespie_binary'
 degradation = 'MM_exponential'
 
 
