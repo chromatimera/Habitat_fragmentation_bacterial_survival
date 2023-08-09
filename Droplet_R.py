@@ -55,7 +55,7 @@ class droplets_R():
         #run identical experiments in each droplet
         Exp = Experiment_R(self.strain_r, self.AB_conc, self.nr_drops_total_mass)
         for k in range(0, self.total_drop_number):
-            print('drop. nr:', k)
+           # print('drop. nr:', k)
             if (grow_meth != "binary"):
                 Exp.run(init_type, grow_meth)
                 ## not necessarily gillespie, but the point is that the N, AB_conc and Time list have variable lengths
@@ -138,7 +138,7 @@ class droplets_R():
 
             fig, ax= plt.subplots(figsize=(8,6.2))
             plt.plot (XX.T, self.N_r_array.T)
-            print('N_R.T', self.N_r_array.T)
+           # print('N_R.T', self.N_r_array.T)
             plt.grid(False)
             #plt.title('Growth of resistant strain')
             #plt.title ('{}_growth'.format(growth))
@@ -278,7 +278,7 @@ class droplets_R():
         #rho_bulk = variables.initialN * variables.total_drop_nr/variables.volume * variables.total_drop_nr
         rho_bulk = variables.initialN / variables.volume # constant in det
         #print('rho bulk', rho_bulk)
-        print('vol',self.volume)
+        #print('vol',self.volume)
 
         exp_fact = math.exp(-rho_bulk*self.volume)
         ps = exp_fact * nsum(lambda n: (rho_bulk*self.volume)**n/fac(n), [N_T+1, inf])

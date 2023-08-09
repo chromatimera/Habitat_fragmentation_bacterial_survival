@@ -53,7 +53,7 @@ class Experiment_R(object):
             self.N_array[0] = self.strain_r.N
         else:
             print("Error in initialisation; type 'det' or 'rand' in run()")
-        print('initial N', self.N_array[0])
+        #print('initial N', self.N_array[0])
 
 
     def degrade_ab_1_step_det(self, AB_conc, N_t, delta_t, volume, nr_drops_total_mass):

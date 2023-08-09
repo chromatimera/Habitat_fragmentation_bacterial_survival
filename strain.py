@@ -153,8 +153,9 @@ class strain(object):
                 self.t_array, self.AB_conc_array, self.N = self.evolve_gillespie_one_step(a, a0, self.t_array, self.AB_conc_array, self.N, stoichiometry, self.nr_drops_total_mass, self.volume)
                 # keep counters for timesteps and AB_conc
                 s += 1
-            print('final N', self.N)
+           # print('final N', self.N)
             return self.t_array, self.N, self.AB_conc_array
+
 
 
 
