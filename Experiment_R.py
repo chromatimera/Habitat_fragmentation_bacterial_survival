@@ -86,26 +86,24 @@ class Experiment_R(object):
     def run(self, init_type, grow_meth):  #CHOOSE INITIALIZATION AND GROWTH METHODS
 
         self.initialise(init_type) #det or random?
-
-        for i in range(0, self.timesteps-1):
-
-            # Grow strain for dt: ###tau_grow VS grow
-            if grow_meth == 'binary':
-                self.AB_conc_array[i+1] = self.degrade_ab_1_step_det(self.AB_conc_array[i], self.strain_r.N, self.dt,
-                                                                self.volume, self.nr_drops_total_mass) #self.deg_list[i+1],
-                self.strain_r.binary_grow(self.AB_conc_array[i+1])
-                self.N_array[i+1] = self.strain_r.N
-
-            # Check if growth has saturated:
-            if (self.strain_r.N > strain.Nsat):
-                # Set rest of list to Nsat:
-                self.N_array[i+1:self.timesteps] = self.strain_r.N
-                self.AB_conc_array[i+1:self.timesteps] = self.AB_conc_array[i+1]
-                break
         self.ts = np.arange(variables.t_start, self.t_end, self.dt)
 
         if grow_meth == "gillespie_binary":
             self.ts, self.N_array, self.AB_conc_array = self.strain_r.gillespie_binary_grow(self.AB_conc)
+        elif  grow_meth == 'binary':
+         for i in range(0, self.timesteps-1):
+            # Grow strain for dt: ###tau_grow VS grow
+                self.AB_conc_array[i+1] = self.degrade_ab_1_step_det(self.AB_conc_array[i], self.strain_r.N, self.dt,
+                                           self.volume, self.nr_drops_total_mass) #self.deg_list[i+1],
+                self.strain_r.binary_grow(self.AB_conc_array[i+1])
+                self.N_array[i+1] = self.strain_r.N
+            # Check if growth has saturated:
+            #if (self.strain_r.N > strain.Nsat):
+                # Set rest of list to Nsat:
+             #   self.N_array[i+1:self.timesteps] = self.strain_r.N
+              #  self.AB_conc_array[i+1:self.timesteps] = self.AB_conc_array[i+1]
+            #break
+
 
 experiment_script_path = __file__
 experiment_script_name = os.path.basename(__file__)

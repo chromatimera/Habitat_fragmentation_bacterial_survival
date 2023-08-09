@@ -120,7 +120,7 @@ class strain(object):
 
         time_array = np.append(time_array, time_array[-1] + tau)
         AB_conc_array = strain.degrade_ab_1_step(AB_conc_array, N_population_array, tau, nr_drops_total_mass, volume)
-        N_population_array = np.append(N_population_array, N_population_array[-1] + stoichiometry[chosen_reaction])
+        N_population_array = np.append(N_population_array, N_population_array[-1] + stoichiometry[chosen_reaction])   ###stuck
 
         return time_array, AB_conc_array, N_population_array
 

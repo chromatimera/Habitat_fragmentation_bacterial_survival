@@ -19,7 +19,7 @@ start_time = time.time()
 
 class DropTest(object):
 
-       ## fct to calculate survival +  N(t) for a set nr of repeats
+       ## fct to RUN SIMULATION and calculate survival +  N(t) for a set number of repeats
     def calc_survival_prob_total_nr_bact_diff_part(self, step, spec_time, total_sim):
         ## create list with part fact as column names
         total_prob = pd.DataFrame()
@@ -45,9 +45,9 @@ class DropTest(object):
 
                     ## simulate growth with new params
                     strain_R = strain(m_fact)
-                    Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc, new_volume, m_fact)  # 0.5, 300
+                    Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc, new_volume, m_fact)
                     Droplet_exp.run(loading, growth)
-
+                    #print(i)
                     ## calculate the total nr of bacteria in all droplets, if any survived, prob survival = 1
                     Droplet_exp.countTotalMass(growth)
                     #Droplet_exp.plots(growth)
@@ -68,6 +68,7 @@ class DropTest(object):
                 ## append row at the end of each simulation for each partition factor
             prob_part_per_iteration = pd.DataFrame(data=[prob_diff_part])
             total_prob = pd.concat([total_prob, prob_part_per_iteration])
+
 
         total_prob.columns = part_fact
         columns = list(df_total_mass.columns)

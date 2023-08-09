@@ -21,7 +21,7 @@ plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
 plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsize
 
 #rootdir = './output/'
-ab = [15,35,75]
+ab = [15]
 
 zz=np.load('prob_line.npy')
 #os.chdir(rootdir)
