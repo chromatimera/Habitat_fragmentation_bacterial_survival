@@ -13,15 +13,15 @@ from ps_theory import vol_fac
 
 BIGGER_SIZE = 16
 
-plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
-plt.rc('text', usetex=True)
+#plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
+#plt.rc('text', usetex=True)
 plt.rc('xtick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
 plt.rc('ytick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
 plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
 plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsize
 
 #rootdir = './output/'
-ab = [15]
+ab = [1, 5, 15]
 
 zz=np.load('prob_line.npy')
 #os.chdir(rootdir)
@@ -43,7 +43,7 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
 
     if ind == 2:
         c = next(color)
-    os.chdir('dropnr_1000_loading_det_growth_{}_initialN_5_abconc_{}'.format(growth, antib))
+    os.chdir('dropnr_1000_loading_rand_growth_{}_initialN_5_abconc_{}'.format(growth, antib))
     path = os.getcwd()
 
     onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
