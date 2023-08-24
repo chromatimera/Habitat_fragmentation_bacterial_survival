@@ -90,6 +90,13 @@ class Experiment_R(object):
 
         if grow_meth == "gillespie_binary":
             self.ts, self.N_array, self.AB_conc_array = self.strain_r.gillespie_binary_grow(self.AB_conc)
+        elif grow_meth == 'resource':
+            for i in range(0, self.timesteps - 1):
+            # Grow strain for dt:
+                self.AB_conc_array[i+1] = self.degrade_ab_1_step_det(self.AB_conc_array[i], self.strain_r.N, self.dt,
+                                           self.volume, self.nr_drops_total_mass) #self.deg_list[i+1],
+                self.strain_r.resource_growth(self.AB_conc_array[i+1])
+                self.N_array[i+1] = self.strain_r.N
         elif  grow_meth == 'binary':
          for i in range(0, self.timesteps-1):
             # Grow strain for dt: ###tau_grow VS grow

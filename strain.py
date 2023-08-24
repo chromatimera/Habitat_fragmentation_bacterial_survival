@@ -20,6 +20,7 @@ class strain(object):
         self.initialN = variables.initialN * nr_drops_total_mass
         self.N = self.initialN
         self.growthrate = variables.growthrate
+        self.slowrate = variables.slowrate
         self.deathrate = variables.deathrate
         self.MIC = variables.MIC
         self.clock = 1
@@ -124,7 +125,7 @@ class strain(object):
 
         return time_array, AB_conc_array, N_population_array
 
-    def binary_grow(self, AB_conc):
+    def binary_grow(self, AB_conc): #DET growth
         if self.MIC > AB_conc:
             self.N = self.N + self.N * self.growthrate * self.dt  ## N grows uninhibited, normalized by dt
         else:
@@ -132,7 +133,16 @@ class strain(object):
         if self.N < 1.0:  #### #can't have less than 1 bacteria ??
            self.N = 0
 
-    def gillespie_binary_grow(self, AB_conc):
+    def resource_growth(self, AB_conc): #DET growth
+        if self.MIC > AB_conc:
+            self.N = self.N + self.N * self.growthrate * self.dt  ## N grows uninhibited, normalized by dt
+        else:
+            self.N = self.N + self.N * self.slowrate * self.dt   ## N grows slowly until resource is released to threshold density
+        if self.N < 1.0:  #### #can't have less than 1 bacteria ??
+           self.N = 0
+
+
+    def gillespie_binary_grow(self, AB_conc):   #??
         #print('initialN', self.initialN)
         #print('Nsat', self.Nsat)
         if self.initialN != 0:

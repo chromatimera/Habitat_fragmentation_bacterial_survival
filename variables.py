@@ -45,10 +45,11 @@ Nsat = 1e8
 initialN = 5
 growthrate = 0.01 # per minute from experimental data Nia thesis
 deathrate  = 0.045  # per minute from Gore 2013
+slowrate =0.001 #per min; for resource model
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
-AB_conc = 1 #ug per mL
+AB_conc = 75 #ug per mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL
@@ -65,7 +66,8 @@ epsilon = 0.03
 
 ##type of loading and growth
 loading = "rand"  # rand #det
-growth = "binary"
+growth= "resource"
+#growth = "binary"
 #growth = 'gillespie_binary'
 degradation = 'MM_exponential'
 

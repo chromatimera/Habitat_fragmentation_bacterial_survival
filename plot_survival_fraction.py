@@ -63,8 +63,10 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     theory_line_df.index.name = 'Vol_fac'
     theory_line_df = theory_line_df.sort_values(by="Vol_fac", ascending=True)
 
+    plt.figure(1)
+    plt.plot(1 / vol_fac ** 2, np.log(1 - zzz[:,ind]))
+    # log [1 − Ps] vs 1/m2--straight??
 
-    #print('THEORY DF', theory_line_df)
 
 
     ### transpose of dataframe
@@ -77,7 +79,7 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     surv_fraction_transpose['Error99'] = surv_fraction_transpose.apply(lambda x: 2.6 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(variables.total_sim), axis=1)
     #print(surv_fraction_transpose)
 
-    plt.figure(1)
+    plt.figure(2)
     surv_fraction_errors = surv_fraction_transpose.Error95.to_frame('Surv frac')
     surv_fraction_errors.index = surv_fraction_errors.index.map(int)
     #surv_fraction_errors = surv_fraction_errors.sort_index(ascending=True)
@@ -99,4 +101,7 @@ plt.xlabel(r'\bf{m (number of subvolumes)}')
 
 plt.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.17), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE)
 plt.savefig('Survival fraction {} + errors diff ab+ legend _ det case.png'.format(growth))
+
+
+
 plt.show()
