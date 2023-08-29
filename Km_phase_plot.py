@@ -3,10 +3,12 @@ import matplotlib.pyplot as plt
 from variables import *
 from matplotlib import rc
 import matplotlib.pyplot as plt
+#pylatex
 BIGGER_SIZE = 20
 
-plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
-plt.rc('text', usetex=True)
+#plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
+#plt.rc('text', usetex=True) ## https://matplotlib.org/stable/tutorials/text/usetex.html
+#sudo apt-get install latexmk  ??
 plt.rc('xtick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
 plt.rc('ytick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
 plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
@@ -43,8 +45,10 @@ x=AB_x
 plt.plot(x,rhoT_high,'--', linewidth=4, label="Large KM", color='black')
 plt.plot(x,rhoT_low,'.', linewidth=4,label="Small KM", color='black')
 plt.plot(x,rhoT, linewidth=4,label="Small KM", color='black')
-ax2.fill_between(x, y, facecolor='red', alpha=0.2)
-ax2.fill_between(x, y, plt.ylim()[1], facecolor='green', alpha=0.2)
+
+plt.rcParams['hatch.color'] = 'r'
+ax2.fill_between(x, y, facecolor='red', alpha=0.2, hatch="//")
+ax2.fill_between(x, y, plt.ylim()[1], facecolor='green', alpha=0.2 ) #hatch="."  //,hatch="o" +
 
 
 xcoord = x[int((x.size/2.5)*2)]
