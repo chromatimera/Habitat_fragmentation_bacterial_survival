@@ -45,6 +45,7 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
         c = next(color)
     os.chdir('dropnr_1000_loading_rand_growth_{}_initialN_5_abconc_{}'.format(growth, antib))
     path = os.getcwd()
+    print(path)
 
     onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
     onlyfiles = sorted(onlyfiles)
@@ -100,18 +101,18 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     surv_fraction_transpose.index = surv_fraction_transpose.index.map(int)
     #surv_fraction_transpose = surv_fraction_transpose.sort_index(ascending=True)
     #print('trp', surv_fraction_transpose)
-    theory_line_df["big_Ps"].plot.line(c=c, linestyle='dashed', label='_nolegend_', logy=True)#, color = 'orange')
-    surv_fraction_transpose["Surv frac"].plot.line(yerr=surv_fraction_errors, c=c, logy=True), #, color = 'orange')
+    #theory_line_df["big_Ps"].plot.line(c=c, linestyle='dashed', label='_nolegend_')#, color = 'orange')
+    #surv_fraction_transpose["Surv frac"].plot.line(yerr=surv_fraction_errors, c=c), #, color = 'orange')
     label_list.append('{}'.format(antib))
 
     ## plot 1-Ps versus 1/m2
-    #plt.plot(one_minus_Ps['m2'], one_minus_Ps['log'])
+    plt.plot(one_minus_Ps['m2'], one_minus_Ps['log'])
     os.chdir('..')
     #print(os.getcwd())
 
-plt.ylabel(r'\bf{Probability of survival}')
-plt.xlabel(r'\bf{m (number of subvolumes)}')
+plt.ylabel(r'\bf{log(1- Probability of survival)}')
+plt.xlabel(r'\bf{1/m2}')
 
 plt.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.17), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE)
-plt.savefig('plotted theory+sim with logy true '.format(growth))
+plt.savefig('plotted '.format(growth))
 plt.show()
