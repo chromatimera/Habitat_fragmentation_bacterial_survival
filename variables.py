@@ -26,7 +26,7 @@ t_start = 0
 t_end = 300
 dt = 1
 spec_time = 299
-total_sim = 1
+total_sim = 1000
 
 ### nr timesteps for dt test; ignore dt for this test
 nr_timesteps = int(3e6)
@@ -66,7 +66,7 @@ epsilon = 0.03
 
 ##type of loading and growth
 loading = "rand"  # rand #det
-growth= "resource"
+growth= "binary"
 #growth = "binary"
 #growth = 'gillespie_binary'
 degradation = 'MM_exponential'
