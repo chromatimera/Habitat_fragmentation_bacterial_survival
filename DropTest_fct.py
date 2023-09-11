@@ -50,7 +50,7 @@ class DropTest(object):
                     #print(i)
                     ## calculate the total nr of bacteria in all droplets, if any survived, prob survival = 1
                     Droplet_exp.countTotalMass(growth)
-                    #Droplet_exp.plots(growth)
+                    Droplet_exp.plots(growth)
 
                     nr_bact_each_ts = Droplet_exp.total_mass
                     ## append the nr of bacteria to dataframe with N(t) vs part factor

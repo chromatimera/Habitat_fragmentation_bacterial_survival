@@ -27,7 +27,7 @@ for l in lambda_list:
         df = pd.read_csv('Prob_survival.csv')
         print(df)
 
-        df_heatmap_survival['ab {}'.format(ab)]=df.at[df.index[3],'Duration']
+        df_heatmap_survival['ab {}'.format(ab)]=df.at[df.index[3],'Surv frac']
         os.chdir('..')
 
 print(df_heatmap_survival)

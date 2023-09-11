@@ -55,7 +55,7 @@ class droplets_R():
         #run identical experiments in each droplet
         Exp = Experiment_R(self.strain_r, self.AB_conc, self.nr_drops_total_mass)
         for k in range(0, self.total_drop_number):
-           # print('drop. nr:', k)
+            print('drop. nr:', k)
             if (grow_meth != "binary"):
                 Exp.run(init_type, grow_meth)
                 ## not necessarily gillespie, but the point is that the N, AB_conc and Time list have variable lengths
@@ -113,8 +113,8 @@ class droplets_R():
                 plt.plot(self.time_list_gillespie[i], self.AB_conc_array_gillespie[i])
             plt.grid(False)
             # plt.title('Concentration of antibiotic over time in each droplet.')
-            plt.ylabel('Antibiotic (ug/ml)')
-            plt.xlabel('Time (min)')
+            plt.ylabel(r'\bf{N(t)}')
+            plt.xlabel(r'\bf{Time (min)}')
             plt.xlim(0, self.t_end)
             plt.ylim(bottom=0)
             plt.title('{}_growth'.format(growth))
@@ -138,35 +138,40 @@ class droplets_R():
 
             fig, ax= plt.subplots(figsize=(8,6.2))
             plt.plot (XX.T, self.N_r_array.T)
-           # print('N_R.T', self.N_r_array.T)
+            print('N_R.T', self.N_r_array.T)
             plt.grid(False)
-            #plt.title('Growth of resistant strain')
-            #plt.title ('{}_growth'.format(growth))
             plt.ylabel(r'\bf{N(t)}')
             plt.xlabel(r'\bf{Time (min)}')
             plt.xlim(0,self.t_end)
             plt.xlim(0,self.t_end)
             #ax.yaxis.set_major_locator(ticker.MultipleLocator(tick_spacing))
             plt.ylim(bottom=0)
-            #plt.axhline(threshold, color='green', lw=2, alpha=0.7)
+            ## find position in N_array at which the pop survives/dies, for each ab concentration there should be a diff pair of initial N (in case of ab = 15 ; N init = 6 - survival, N init = 5 death)
             y_survival=np.argwhere(np.array(self.N_r_array.T[0,:])==6)
-            print(y_survival)
+            print('y survival', y_survival)
+
             y_death = np.argwhere(np.array(self.N_r_array.T[0,:])==5)
-            print(y_death)
+            print('y_death', y_death)
+
             col_ind_y_survival = int(y_survival[0].item())
             y_surv = list(self.N_r_array.T[:, col_ind_y_survival])
 
-            col_ind_y_death = int(y_death[0].item())
-            y_deth = list(self.N_r_array.T[:, col_ind_y_death])
+            if len(y_death) == 0:
+                col_ind_y_survival = None
+            else:
+                col_ind_y_death = int(y_death[0].item())
+                y_deth = list(self.N_r_array.T[:, col_ind_y_death])
 
 
             print('y_surv', y_surv)
+            print('y_deth', y_deth)
             print('XX.T', XX.T[:,1])
-            plt.fill_between(list(XX.T[:,0]), y_surv, 100, color='g', alpha=0.1, interpolate=True)
-            plt.fill_between(list(XX.T[:,0]), 0, y_deth, color='r', alpha=0.1, interpolate=True)
+            plt.rcParams['hatch.color'] = 'g'
+            plt.fill_between(list(XX.T[:,0]), y_surv, 100, color='green', alpha=0.2, hatch = '.', interpolate=True)
+            plt.fill_between(list(XX.T[:,0]), 0, y_deth, color='red', alpha=0.2, interpolate=True)
             plt.xticks(np.arange(0,self.t_end + 1, 25))
-            plt.tight_layout()
-            plt.savefig('plot_Nbact_loading_{}_growth_{}ab_conc_{}'.format(loading, growth, AB_conc))
+            #plt.tight_layout()
+            plt.savefig('plot_Nbact_loading_{}_growth_{}ab_conc_{}'.format(loading, growth, AB_conc), dpi=600)
             plt.show()
 
 
@@ -178,18 +183,19 @@ class droplets_R():
             plt.xlabel(r'\bf{Time (min)}')
             plt.xlim(0, self.t_end)
             plt.ylim(bottom=0)
-            # plt.axhline(threshold, color='green', lw=2, alpha=0.7)
             y_surv = list(self.AB_conc_array.T[:, col_ind_y_survival])
             y_deth = list(self.AB_conc_array.T[:, col_ind_y_death])
 
             print('y_surv', y_surv)
             print('XX.T', XX.T[:, 1])
-            plt.fill_between(list(XX.T[:, 0]), y_deth, 100, color='red', alpha=0.1, interpolate=True)
-            plt.fill_between(list(XX.T[:, 0]), 0, y_surv, color='g', alpha=0.1, interpolate=True)
+            plt.rcParams['hatch.color'] = 'g'
+            plt.fill_between(list(XX.T[:, 0]), y_deth, 100, color='red', alpha=0.2, interpolate=True)
+            plt.fill_between(list(XX.T[:, 0]), 0, y_surv, color='green', alpha=0.2, hatch='.', interpolate=True)
             plt.xticks(np.arange(0, self.t_end + 1, 25))
-            plt.tight_layout()
-            plt.savefig('plot_ABconc_{}_loading_{}_growth_{}'.format(self.AB_conc, loading, growth))
+            #plt.tight_layout()
+            plt.savefig('plot_ABconc_{}_loading_{}_growth_{}'.format(self.AB_conc, loading, growth), dpi=600)
             plt.show()
+
 
             plt.figure(3, figsize=(8,6))
             plt.plot(XX.T, self.N_r_array.T / self.volume)

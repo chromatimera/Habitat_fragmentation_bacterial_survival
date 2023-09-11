@@ -17,16 +17,16 @@ getcontext().prec = 50
 
 ### nr of droplets and the power of i and j in the partitioning loop are related i.e. for 100 droplets, the loop goes from 0 to 3.
 #droplet_list = [1000]
-droplet_list = np.arange(0, 1001, 50)
-droplet_list[0] = 1
+#droplet_list = np.arange(0, 1001, 50)
+droplet_list = [100]
 #print(droplet_list)
 
 
 t_start = 0
-t_end = 300
+t_end = 100
 dt = 1
-spec_time = 299
-total_sim = 1000
+spec_time = 99
+total_sim = 1
 
 ### nr timesteps for dt test; ignore dt for this test
 nr_timesteps = int(3e6)
@@ -49,7 +49,7 @@ slowrate =0.001 #per min; for resource model
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
-AB_conc = 75 #ug per mL
+AB_conc = 15 #ug per mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL
