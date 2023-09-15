@@ -37,14 +37,14 @@ n_crit = 2
 volume = 1e-7   # volume of droplets from experiments ~100pL; 1pL is 1e-6 ul; 100pL - 1e-4 ul UNITS: mL
 
 Nsat = 1e8
-initialN = 40
+initialN = 105
 growthrate = 0.01 # per minute from experimental data Nia thesis
 deathrate  = 0.045  # per minute from Gore 2013
 slowrate =0.001 #per min; for resource model
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
-AB_conc = 35 #ug per mL
+AB_conc = 15 #ug per mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL
