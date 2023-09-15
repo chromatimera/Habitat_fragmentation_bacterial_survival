@@ -50,7 +50,7 @@ class DropTest(object):
                     #print(i)
                     ## calculate the total nr of bacteria in all droplets, if any survived, prob survival = 1
                     Droplet_exp.countTotalMass(growth)
-                    Droplet_exp.plots(growth)
+                    #Droplet_exp.plots(growth)
 
                     nr_bact_each_ts = Droplet_exp.total_mass
                     ## append the nr of bacteria to dataframe with N(t) vs part factor
@@ -135,7 +135,6 @@ class DropTest(object):
         np.savetxt('part_fact.txt', part_fact, delimiter=',')  # X is an array
 
         # print("--- %s seconds ---" % (time.time() - start_time))
-
 
 simulate = DropTest()
 simulate.calc_survival_prob_total_nr_bact_diff_part(step, spec_time, total_sim)

@@ -18,15 +18,16 @@ getcontext().prec = 50
 ### nr of droplets and the power of i and j in the partitioning loop are related i.e. for 100 droplets, the loop goes from 0 to 3.
 #droplet_list = [1000]
 #droplet_list = np.arange(0, 1001, 50)
-droplet_list = [100]
+droplet_list = [1000]
 #print(droplet_list)
 
 
 t_start = 0
-t_end = 100
+t_end = 300
 dt = 1
-spec_time = 99
-total_sim = 1
+spec_time = 299
+total_sim = 1000
+
 
 ### nr timesteps for dt test; ignore dt for this test
 nr_timesteps = int(3e6)
@@ -35,14 +36,8 @@ nr_timesteps = int(3e6)
 n_crit = 2
 volume = 1e-7   # volume of droplets from experiments ~100pL; 1pL is 1e-6 ul; 100pL - 1e-4 ul UNITS: mL
 
-
-##simulating multiple fake droplets (this a factor ie. 2 means 2 * initial N, but total_droplet_nr/2)
-nr_drop_min = 1
-nr_drop_max = 10
-step_drop = 5
-
 Nsat = 1e8
-initialN = 5
+initialN = 10
 growthrate = 0.01 # per minute from experimental data Nia thesis
 deathrate  = 0.045  # per minute from Gore 2013
 slowrate =0.001 #per min; for resource model
