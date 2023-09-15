@@ -2,30 +2,36 @@ import pandas as pd
 import os
 import seaborn as sns
 import matplotlib.pyplot as plt
+import numpy as np
+
+growth = 'binary'
+total_sim = 50
+
+Ni = [5,10,15]
+antib = np.arange(5, 101, 5).tolist()
+print(antib)
 
 
-growth = 'gillespie_binary'
-antib = 35
-total_sim = 100
-antib = [35,55,75]
 os.chdir('./output/')
 print(os.getcwd())
 #for ab in antib:
-os.chdir('./changing lamda for gillespie_binary/')
-print(os.getcwd())
-lambda_list = list(pd.read_csv('Lambda.txt', header=None))
-print(lambda_list)
+#os.chdir('./changing lamda for gillespie_binary/')
+##print(os.getcwd())
+
 colnames=['lambda']
-df_heatmap_survival=pd.read_csv('Lambda.txt', header=None, names=colnames)
+df_heatmap_survival=pd.DataFrame(Ni)
+df_heatmap_survival.columns=colnames
 print(df_heatmap_survival)
+
 df_heatmap_survival.set_index('lambda', inplace=True)
-for l in lambda_list:
+for l in Ni:
     for ab in antib:
         print(os.getcwd())
 
-        os.chdir('./dropnr_1000_loading_rand_growth_gillespie_binary_initialN_5_abconc_35/')
-        df = pd.read_csv('Prob_survival.csv')
-        print(df)
+        os.chdir('./dropnr_1000_loading_rand_growth_binary_initialN_{}_abconc_{}/'.format(l, ab))
+        ### calculate probability of survival
+        #df = pd.read_csv('Prob_survival.csv')
+        #print(df)
 
         df_heatmap_survival['ab {}'.format(ab)]=df.at[df.index[3],'Surv frac']
         os.chdir('..')
