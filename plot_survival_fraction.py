@@ -21,7 +21,7 @@ plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
 plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsize
 
 #rootdir = './output/'
-ab = [1, 5, 15]
+ab = [75]
 
 zz=np.load('prob_line.npy')
 #os.chdir(rootdir)
@@ -44,6 +44,7 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     if ind == 2:
         c = next(color)
     os.chdir('dropnr_1000_loading_rand_growth_{}_initialN_5_abconc_{}'.format(growth, antib))
+    #os.chdir('dropnr_1000_loading_rand_growth_binary_initialN_5_abconc_75'.format(growth, antib))
     path = os.getcwd()
 
     onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
@@ -64,7 +65,7 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     theory_line_df = theory_line_df.sort_values(by="Vol_fac", ascending=True)
 
     plt.figure(1)
-    plt.plot(1 / vol_fac ** 2, np.log(1 - zzz[:,ind]))
+   # plt.plot(1 / vol_fac ** 2, np.log(1 - zzz[:,ind]))
     # log [1 − Ps] vs 1/m2--straight??
 
 

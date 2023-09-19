@@ -21,7 +21,7 @@ start_time = time.time()
 
 class DropTest_resource_release(object):
 
-       ## fct to RUN SIMULATION and calculate survival +  N(t) for a set number of repeats
+       ## function to RUN SIMULATION and calculate survival +  N(t) for a set number of repeats
     def run(self, step, spec_time, total_sim):
         ## create list with part fact as column names
         total_prob = pd.DataFrame()
