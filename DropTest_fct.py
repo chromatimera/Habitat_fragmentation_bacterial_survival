@@ -136,7 +136,6 @@ class DropTest(object):
 
         # print("--- %s seconds ---" % (time.time() - start_time))
 
-
 simulate = DropTest()
 simulate.calc_survival_prob_total_nr_bact_diff_part(step, spec_time, total_sim)
 
