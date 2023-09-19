@@ -147,29 +147,27 @@ class droplets_R():
             #ax.yaxis.set_major_locator(ticker.MultipleLocator(tick_spacing))
             plt.ylim(bottom=0)
             ## find position in N_array at which the pop survives/dies, for each ab concentration there should be a diff pair of initial N (in case of ab = 15 ; N init = 6 - survival, N init = 5 death)
+
             y_survival=np.argwhere(np.array(self.N_r_array.T[0,:])==6)
-            print('y survival', y_survival)
+            #print('y survival', y_survival)
 
             y_death = np.argwhere(np.array(self.N_r_array.T[0,:])==5)
-            print('y_death', y_death)
+            #print('y_death', y_death)
 
-            col_ind_y_survival = int(y_survival[0].item())
-            y_surv = list(self.N_r_array.T[:, col_ind_y_survival])
-
-            if len(y_death) == 0:
-                col_ind_y_survival = None
+            if len(y_survival) == 0 or len(y_death) == 0:
+                pass
             else:
+
+                col_ind_y_survival = int(y_survival[0].item())
+                y_surv = list(self.N_r_array.T[:, col_ind_y_survival])
+
                 col_ind_y_death = int(y_death[0].item())
                 y_deth = list(self.N_r_array.T[:, col_ind_y_death])
 
-
-            print('y_surv', y_surv)
-            print('y_deth', y_deth)
-            print('XX.T', XX.T[:,1])
-            plt.rcParams['hatch.color'] = 'g'
-            plt.fill_between(list(XX.T[:,0]), y_surv, 100, color='green', alpha=0.2, hatch = '.', interpolate=True)
-            plt.fill_between(list(XX.T[:,0]), 0, y_deth, color='red', alpha=0.2, interpolate=True)
-            plt.xticks(np.arange(0,self.t_end + 1, 25))
+                plt.rcParams['hatch.color'] = 'g'
+                plt.fill_between(list(XX.T[:,0]), y_surv, 100, color='green', alpha=0.2, hatch = '.', interpolate=True)
+                plt.fill_between(list(XX.T[:,0]), 0, y_deth, color='red', alpha=0.2, interpolate=True)
+                plt.xticks(np.arange(0,self.t_end + 1, 25))
             #plt.tight_layout()
             plt.savefig('plot_Nbact_loading_{}_growth_{}ab_conc_{}'.format(loading, growth, AB_conc), dpi=600)
             plt.show()
@@ -183,15 +181,18 @@ class droplets_R():
             plt.xlabel(r'\bf{Time (min)}')
             plt.xlim(0, self.t_end)
             plt.ylim(bottom=0)
-            y_surv = list(self.AB_conc_array.T[:, col_ind_y_survival])
-            y_deth = list(self.AB_conc_array.T[:, col_ind_y_death])
 
-            print('y_surv', y_surv)
-            print('XX.T', XX.T[:, 1])
-            plt.rcParams['hatch.color'] = 'g'
-            plt.fill_between(list(XX.T[:, 0]), y_deth, 100, color='red', alpha=0.2, interpolate=True)
-            plt.fill_between(list(XX.T[:, 0]), 0, y_surv, color='green', alpha=0.2, hatch='.', interpolate=True)
-            plt.xticks(np.arange(0, self.t_end + 1, 25))
+
+            if len(y_survival) == 0 or len(y_death) == 0:
+                pass
+            else:
+                y_surv = list(self.AB_conc_array.T[:, col_ind_y_survival])
+                y_deth = list(self.AB_conc_array.T[:, col_ind_y_death])
+
+                plt.rcParams['hatch.color'] = 'g'
+                plt.fill_between(list(XX.T[:, 0]), y_deth, 100, color='red', alpha=0.2, interpolate=True)
+                plt.fill_between(list(XX.T[:, 0]), 0, y_surv, color='green', alpha=0.2, hatch='.', interpolate=True)
+                plt.xticks(np.arange(0, self.t_end + 1, 25))
             #plt.tight_layout()
             plt.savefig('plot_ABconc_{}_loading_{}_growth_{}'.format(self.AB_conc, loading, growth), dpi=600)
             plt.show()
