@@ -35,14 +35,36 @@ for antib, c in zip(ab, color):
 
 
     #TIME== x  axis
+    plt.figure(1)
+    timee = np.arange(0, 300, .1)
+    plt.plot(timee, df_bact_count['0 1'], label='m=1')
+    plt.plot(timee,df_bact_count['0 1000'], label='m=1000')
 
-    plt.plot(df_bact_count['0 1'], label='m=1')
-    plt.plot(df_bact_count['0 1000'], label='m=1000')
+    for k in range (0,10):  #for each sim repeat
+     kk1=str(k)+' 1'
+     kk1000=str(k)+' 1000'
+     plt.figure(2)
+     timee_cut=np.arange(0, 100, .1)
+     first_100= df_bact_count.iloc[0:1000]/df_bact_count.iloc[0]
+     plt.plot( timee_cut,first_100[ kk1], label='m=1', color='g')
+     plt.plot(timee_cut,first_100[kk1000], label='m=1000', color='m')
+
+    os.chdir('..')
 
 
+###aveage plot;;
 
 
-    ## for each partition factor, calculate the sum over the simulation of N(t)
+plt.grid(False)
+plt.figure(2)
+plt.ylabel('N/N0', fontsize=text_size)
+plt.xlabel('Time (min)', fontsize=text_size)
+#plt.legend(title='Number of subvolumes', fontsize='large', loc='upper left')
+plt.show()
+
+plt.savefig('_ugml-resource.png', dpi=300)
+
+## for each partition factor, calculate the sum over the simulation of N(t)
   #  for i in range(0, len(part_fact), 1):
   #      for j in range(0, total_sim, 1):
   #          k = i * 5 + j  ##??
@@ -86,11 +108,3 @@ for antib, c in zip(ab, color):
     # ##IF PLOTTING FRACTIONAL INCREASE
     # (avg_nr_bact.iloc[-1, 0:(len(part_fact))]/avg_nr_bact.iloc[0, 0:len(part_fact)]).plot(yerr=error_nr_bact.iloc[-1, 0:len(part_fact)].tolist())  ### plot final nr of bacteria
     #
-
-    os.chdir('..')
-
-plt.grid(False)
-plt.ylabel('Number of bacteria', fontsize=text_size)
-plt.xlabel('Time (min)', fontsize=text_size)
-plt.legend( title='Number of subvolumes', fontsize='large', loc='upper right')
-plt.show()
