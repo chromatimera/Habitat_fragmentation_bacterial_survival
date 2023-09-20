@@ -26,8 +26,8 @@ droplet_list[0] = 1
 t_start = 0
 t_end = 300
 dt = 0.1
-spec_time = 299  #??
-total_sim = 10               ### number of simulation repeats?? ?
+spec_time = 299  # this is a specific time at which we calculate the number of bacteria left alive; it is set to 299 as it is the last timepoint in the for loop
+total_sim = 10   # number of simulation repeats
 
 ### nr timesteps for dt test; ignore dt for this test
 nr_timesteps = int(3e6)
@@ -50,24 +50,19 @@ slowrate =0.0 #per min; for resource model
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
-AB_conc = 75 #ug per mL
+AB_conc = 55 #ug per mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL
 Vmax = 3.5e-8 #ug/cell/min
 
 
-##ab conc values range for testing ab
-abmin = 0
-abmax = 50
-step = 1
-
 ## epsilon parameter for tau precheck
 epsilon = 0.03
 
 ##type of loading and growth
 loading = "rand"  # rand #det
-growth= "resource"
+growth= "binary"
 #growth = "binary"
 #growth = 'gillespie_binary'
 degradation = 'MM_exponential'
