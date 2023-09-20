@@ -1,33 +1,21 @@
-### To do list:
-
-## 3. sort out tau - get a tau for each droplet (based on N0) and store taus in a list // for gillespie
-## 4. sort out b factor
-
-##To ask Rosalind:
-## why changing Nsat changes results??? -
-
 ## set all variables here and settings
 import os.path
 from decimal import *
-import math
-
 import numpy as np
 
 getcontext().prec = 50
 
 ### nr of droplets and the power of i and j in the partitioning loop are related i.e. for 100 droplets, the loop goes from 0 to 3.
-#droplet_list = [1000]
-#droplet_list = np.arange(0, 1001, 50)
+droplet_list = [1000]
 droplet_list = np.arange(0, 1001, 500)
-droplet_list[0] = 1
-#print(droplet_list)
+#droplet_list[0] = 1
 
-
+# setting up time values
 t_start = 0
 t_end = 300
-dt = 0.1
+dt = 1
 spec_time = 299  # this is a specific time at which we calculate the number of bacteria left alive; it is set to 299 as it is the last timepoint in the for loop
-total_sim = 10   # number of simulation repeats
+total_sim = 1000   # number of simulation repeats
 
 ### nr timesteps for dt test; ignore dt for this test
 nr_timesteps = int(3e6)
