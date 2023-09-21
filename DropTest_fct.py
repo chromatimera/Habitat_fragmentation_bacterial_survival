@@ -45,7 +45,7 @@ class DropTest(object):
 
                     ## simulate growth with new params
                     strain_R = strain(m_fact)
-                    Droplet_exp = droplets_R(total_drop_nr, strain_R, AB_conc, new_volume, m_fact)
+                    Droplet_exp = droplets_R(total_drop_nr, strain_R, variables.AB_conc, new_volume, m_fact)
                     Droplet_exp.run(loading, growth)
                     #print(i)
                     ## calculate the total nr of bacteria in all droplets, if any survived, prob survival = 1
@@ -118,7 +118,7 @@ class DropTest(object):
 
         # Check whether the specified path exists or not
 
-        folder_name = 'output/dropnr_{}_loading_{}_growth_{}_initialN_{}_abconc_{}'.format(variables.droplet_list[-1], variables.loading, variables.growth, variables.initialN, AB_conc)
+        folder_name = 'output/dropnr_{}_loading_{}_growth_{}_initialN_{}_abconc_{}'.format(variables.droplet_list[-1], variables.loading, variables.growth, variables.initialN, variables.AB_conc)
         path = os.path.join(curr_path, folder_name)
         isExist = os.path.exists(path)
 
@@ -129,13 +129,13 @@ class DropTest(object):
 
         os.chdir(path)
 
-        pd.DataFrame(surv_df).to_csv('survival_fraction_growth_{}_loading_{}_ABconc{}.csv'.format(growth, loading, AB_conc), index=None)
-        pd.DataFrame(avg_nr_bact).to_csv('average_df_growth_{}_loading_{}_ABconc{}.csv'.format(growth, loading, AB_conc), index=None)
-        pd.DataFrame(df_total_mass).to_csv('df_growth_{}_starting_nr_drops_{}_ABconc{}.csv'.format(growth, variables.droplet_list[-1], AB_conc), index=None)
+        pd.DataFrame(surv_df).to_csv('survival_fraction_growth_{}_loading_{}_ABconc{}.csv'.format(growth, loading, variables.AB_conc), index=None)
+        pd.DataFrame(avg_nr_bact).to_csv('average_df_growth_{}_loading_{}_ABconc{}.csv'.format(growth, loading, variables.AB_conc), index=None)
+        pd.DataFrame(df_total_mass).to_csv('df_growth_{}_starting_nr_drops_{}_ABconc{}.csv'.format(growth, variables.droplet_list[-1], variables.AB_conc), index=None)
         np.savetxt('part_fact.txt', part_fact, delimiter=',')  # X is an array
 
         # print("--- %s seconds ---" % (time.time() - start_time))
 
-simulate = DropTest()
-simulate.calc_survival_prob_total_nr_bact_diff_part(step, spec_time, total_sim)
+#simulate = DropTest()
+#simulate.calc_survival_prob_total_nr_bact_diff_part(step, spec_time, total_sim)
 
