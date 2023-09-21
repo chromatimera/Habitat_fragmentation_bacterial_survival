@@ -11,7 +11,7 @@ from collections import Counter
 
 from ps_theory import vol_fac
 
-BIGGER_SIZE = 22
+BIGGER_SIZE = 24
 
 plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 plt.rc('text', usetex=True)
@@ -32,8 +32,8 @@ zzz= zz.T
 print('current dir', os.getcwd())
 
 
-plt.figure(figsize=(12,9))
-ax = plt.subplot(111)
+fig = plt.figure(figsize=(18,16))
+ax1 = fig.add_subplot(111)
 color = iter(plt.cm.rainbow(np.linspace(0, 1, 5)))
 color_list = []
 label_list = []
@@ -67,8 +67,6 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     theory_line_df['M'] = theory_line_df.index.astype(int)
     theory_line_df['RhoV'] = theory_line_df.apply(lambda x: rho * 1e-4 / x['M'], axis=1)
 
-
-
     plt.figure(1)
 
     ### transpose of dataframe
@@ -82,8 +80,6 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
 
     surv_fraction_transpose['Error95'] = surv_fraction_transpose.apply(lambda x: 2 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(variables.total_sim), axis=1)
     surv_fraction_transpose['Error99'] = surv_fraction_transpose.apply(lambda x: 2.6 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(variables.total_sim), axis=1)
-
-
     surv_fraction_errors = surv_fraction_transpose.Error95.to_frame('Surv frac')
     surv_fraction_errors.index = surv_fraction_errors.index.map(int)
     #print('errors',surv_fraction_errors)
@@ -93,20 +89,32 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     surv_fraction_transpose = surv_fraction_transpose.set_index('RhoV', drop=True)
     theory_line_df = theory_line_df.set_index('RhoV', drop=True)
 
-    theory_line_df["big_Ps"].plot.line(c=c, linestyle='dashed', label='_nolegend_', logx=True)#, color = 'orange'
-    surv_fraction_transpose["Surv frac"].plot.line(yerr=surv_fraction_errors, c=c, logx=True)#, color = 'orange')
+    theory_line_df["big_Ps"].plot.line(ax=ax1, c=c, linestyle='dashed', label='_nolegend_', logx=True)#, color = 'orange'
+    surv_fraction_transpose["Surv frac"].plot.line(ax=ax1, yerr=surv_fraction_errors, c=c, logx=True)#, color = 'orange')
     label_list.append('{}'.format(antib))
-
 
     os.chdir('..')
 
-plt.ylabel(r'\bf{Probability of survival}')
-plt.xlabel(r'\bf{$\rho$v (number of cells in droplet)}')
+
 plt.xlim(10**(2.3), 10**(0.6))
+
 xticks = [200, 100, 50, 25, 10, 5]
-plt.xticks(xticks, xticks)
+xticks_label = [5000, 100, 50, 25, 10, 5]
+second_ticks = [1, 50, 100, 200, 500, 1000]
 
-plt.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.17), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE)
-plt.savefig('Survival fraction RhoV'.format(growth), dpi=600)
+ax1.set_xticks(xticks)
+ax1.set_xticklabels(xticks_label)
+
+ax2 = ax1.twiny()
+ax2.set_xticks(np.linspace(ax1.get_xticks()[0], ax1.get_xticks()[-1], len(ax1.get_xticks())))
+ax2.set_xticklabels(second_ticks[::-1])
+
+plt.xlabel(r'\bf{m (number of subvolumes)}')
+ax1.set_xlabel(r'\bf{$\rho$v (number of cells in droplet)}')
+ax1.set_ylabel(r'\bf{Probability of survival}')
+
+ax1.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.17), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE)
+plt.tight_layout()
+plt.savefig('Survival fraction RhoV_ double axes'.format(growth), dpi=600)
+
 plt.show()
-
