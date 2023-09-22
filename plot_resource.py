@@ -8,7 +8,9 @@ from variables import total_sim
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import cm
 
-ab = [75]
+ab = [100]
+sim_reps= 100
+dt=1
 growth = 'resource'
 rootdir = 'output/'
 
@@ -28,31 +30,43 @@ for antib, c in zip(ab, color):
     df_bact_count = pd.read_csv(onlyfiles[1])
     part_fact = np.loadtxt(onlyfiles[2]) #m
     m_list = [round(1/x) for x in part_fact]
-    ##start building the average N(t) and SD(t) over simulations
-    total_nr_bact = np.zeros((df_bact_count.shape[0], len(part_fact)))
-    error_nr_bact = np.zeros((df_bact_count.shape[0], len(part_fact)))
-    var_nr_bact = np.zeros((df_bact_count.shape[0], len(part_fact)))
+    df_average= pd.read_csv(onlyfiles[0])
+    error_sem = np.zeros((df_bact_count.shape[0], len(part_fact)))
+    ### standard deviation of the mean;
+ #   error_sem = np.divide(np.std(df_bact_count,1), np.sqrt(sim_reps))
+   #
+    j=0
+    k=0 #better way to do this; cant use col name in data frame..?
+    for i in range(0, len(part_fact), 1):
+            k = k+ sim_reps #end col
+            error_sem[:,i] = np.divide(np.std(df_bact_count.iloc[:,j:k],1), np.sqrt(sim_reps))
+            j = j + sim_reps #start col
 
-
+    error_sem = pd.DataFrame(error_sem, columns=part_fact)
     #TIME== x  axis
     plt.figure(1)
-    timee = np.arange(0, 300, .1)
+    timee = np.arange(0, 100, dt)
     plt.plot(timee, df_bact_count['0 1'], label='m=1')
     plt.plot(timee,df_bact_count['0 1000'], label='m=1000')
 
-    for k in range (0,10):  #for each sim repeat
+    for k in range (0,sim_reps):  #for each sim repeat
      kk1=str(k)+' 1'
+     kk500 = str(k) + ' 500'
      kk1000=str(k)+' 1000'
      plt.figure(2)
-     timee_cut=np.arange(0, 100, .1)
-     first_100= df_bact_count.iloc[0:1000]/df_bact_count.iloc[0]
+     timee_cut=np.arange(0, 100, dt)
+     indx=int(100/dt)
+     first_100= df_bact_count.iloc[0:indx]/df_bact_count.iloc[0]
      plt.plot( timee_cut,first_100[ kk1], label='m=1', color='g')
+     plt.plot( timee_cut,first_100[ kk500], label='m=500', color='b')
+
      plt.plot(timee_cut,first_100[kk1000], label='m=1000', color='m')
 
+     plt.figure(3)
+     plt.plot( timee,df_bact_count[ kk1], label='m=1', color='g')
+     plt.plot(timee,df_bact_count[kk1000], label='m=1000', color='m')
+
     os.chdir('..')
-
-
-###aveage plot;;
 
 
 plt.grid(False)
@@ -61,8 +75,22 @@ plt.ylabel('N/N0', fontsize=text_size)
 plt.xlabel('Time (min)', fontsize=text_size)
 #plt.legend(title='Number of subvolumes', fontsize='large', loc='upper left')
 plt.show()
+#plt.savefig('110_ugml-resource.png', dpi=300)
 
-plt.savefig('_ugml-resource.png', dpi=300)
+###Average;
+plt.figure(4)
+#plt.plot(timee, df_average['0 1'], label='m=1')
+#plt.plot(timee, df_average['1'], label='m=1000')
+plt.fill_between(timee, df_average['1'] - error_sem.iloc[:,0], df_average['1'] + error_sem.iloc[:,0],
+                 color='gray', alpha=0.2)
+plt.fill_between(timee, df_average['1000'] - error_sem.iloc[:,2], df_average['1000'] + error_sem.iloc[:,2],
+                 color='gray', alpha=0.2)
+plt.show()
+
+
+
+## range??
+
 
 ## for each partition factor, calculate the sum over the simulation of N(t)
   #  for i in range(0, len(part_fact), 1):
