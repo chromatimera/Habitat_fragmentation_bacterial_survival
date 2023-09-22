@@ -15,7 +15,7 @@ t_start = 0
 t_end = 300
 dt = 1
 spec_time = 299  # this is a specific time at which we calculate the number of bacteria left alive; it is set to 299 as it is the last timepoint in the for loop
-total_sim = 10   # number of simulation repeats
+total_sim = 1000   # number of simulation repeats
 step = 1
 
 
@@ -27,7 +27,7 @@ n_crit = 2
 volume = 1e-7   # volume of droplets from experiments ~100pL; 1pL is 1e-6 ul; 100pL - 1e-4 ul UNITS: mL
 
 Nsat = 1e8
-initialN = 30
+initialN = 5
 growthrate = 0.01 # per minute from experimental data Nia thesis
 deathrate  = 0.045  # per minute from Gore 2013
 slowrate =0.0 #per min; for resource model

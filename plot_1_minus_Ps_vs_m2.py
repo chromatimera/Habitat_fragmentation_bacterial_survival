@@ -1,14 +1,10 @@
 import math
 import variables
 from os import listdir
-import os
 from os.path import isfile, join
 import pandas as pd
-import numpy as np
 from variables import *
 import matplotlib.pyplot as plt
-from collections import Counter
-
 from ps_theory import vol_fac
 
 BIGGER_SIZE = 16
@@ -20,16 +16,12 @@ plt.rc('ytick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
 plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
 plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsize
 
-#rootdir = './output/'
-ab = [35, 55, 75]
+ab = [35, 55, 75 ]
 
 zz=np.load('prob_line.npy')
-#os.chdir(rootdir)
 zzz= zz.T
-#os.chdir(rootdir)
 
 print('current dir', os.getcwd())
-
 
 plt.figure(figsize=(7, 7))
 color = iter(plt.cm.rainbow(np.linspace(0, 1, 5)))
@@ -38,58 +30,50 @@ label_list = []
 print(color)
 
 for antib, c, ind in zip(ab, color, range(len(ab))):
-    print('ab conc', antib)
-    print(c)
 
     if ind == 2:
         c = next(color)
     os.chdir('dropnr_1000_loading_rand_growth_{}_initialN_5_abconc_{}'.format(growth, antib))
-    #os.chdir('dropnr_1000_loading_rand_growth_binary_initialN_5_abconc_75'.format(growth, antib))
     path = os.getcwd()
 
     onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
     onlyfiles = sorted(onlyfiles)
-    #print(onlyfiles)
 
     if '.DS_Store' in onlyfiles:
         onlyfiles.remove('.DS_Store')
     else:
         pass
 
-    surv_fraction = pd.read_csv(onlyfiles[3])
-    #print('surf fraction df', surv_fraction)
     part_fact = np.loadtxt(onlyfiles[2])
 
     theory_line_df = pd.DataFrame(zzz[:, ind], columns=['big_Ps'], index=vol_fac)
     theory_line_df.index.name = 'Vol_fac'
     theory_line_df = theory_line_df.sort_values(by="Vol_fac", ascending=True)
+    print(theory_line_df)
+
+    ## for plot of log (1-Ps) vs 1/m2
+
+    one_minus_Ps = 1 - theory_line_df
+    print('one minus ps first', one_minus_Ps)
+    one_minus_Ps['m2']=one_minus_Ps.index **2
+
+    one_minus_Ps['log']=np.log(one_minus_Ps['big_Ps'])
+    log_list = list(one_minus_Ps['log'])
+
+    for i in range(len(log_list)):
+        if str(log_list[i]) == '-inf':
+           log_list[i] = -100
+
+    one_minus_Ps['log']=log_list
+    print('1-Ps: ', one_minus_Ps)
 
     plt.figure(1)
 
-    ### transpose of dataframe
-    surv_fraction_transpose = surv_fraction.T
-    surv_fraction_transpose.index.name = 'Part_fact'
-    #print('transpose', surv_fraction_transpose)
-
-    surv_fraction_transpose.columns = ['Surv frac']
-    surv_fraction_transpose['Error95'] = surv_fraction_transpose.apply(lambda x: 2 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(variables.total_sim), axis=1)
-    surv_fraction_transpose['Error99'] = surv_fraction_transpose.apply(lambda x: 2.6 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(variables.total_sim), axis=1)
-    #print(surv_fraction_transpose)
-
-    #plt.figure(2)
-    surv_fraction_errors = surv_fraction_transpose.Error95.to_frame('Surv frac')
-    surv_fraction_errors.index = surv_fraction_errors.index.map(int)
-    #surv_fraction_errors = surv_fraction_errors.sort_index(ascending=True)
-    #print('errors',surv_fraction_errors)
-
-    surv_fraction_transpose.index = surv_fraction_transpose.index.map(int)
-    #surv_fraction_transpose = surv_fraction_transpose.sort_index(ascending=True)
-    #print('trp', surv_fraction_transpose)
     #theory_line_df["big_Ps"].plot.line(c=c, linestyle='dashed', label='_nolegend_')#, color = 'orange')
-    surv_fraction_transpose["Surv frac"].plot.line(yerr=surv_fraction_errors, c=c)#, color = 'orange')
     label_list.append('{}'.format(antib))
 
-
+    ## plot 1-Ps versus 1/m2
+    plt.plot(one_minus_Ps['m2'], one_minus_Ps['log'])
     os.chdir('..')
     #print(os.getcwd())
 
@@ -97,8 +81,5 @@ plt.ylabel(r'\bf{Probability of survival}')
 plt.xlabel(r'\bf{m (number of subvolumes)}')
 
 plt.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.17), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE)
-plt.savefig('Survival fraction {} + errors diff ab+ legend _ det case.png'.format(growth))
-
-
-
+plt.savefig('1-ps '.format(growth))
 plt.show()
