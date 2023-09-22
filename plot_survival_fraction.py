@@ -37,11 +37,9 @@ ax = plt.subplot(111)
 color = iter(plt.cm.rainbow(np.linspace(0, 1, 5)))
 color_list = []
 label_list = []
-print(color)
 
 for antib, c, ind in zip(ab, color, range(len(ab))):
-    print('ab conc', antib)
-    print(c)
+
 
     if ind == 2:
         c = next(color)
@@ -66,6 +64,7 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     theory_line_df = theory_line_df.sort_values(by="Vol_fac", ascending=True)
     theory_line_df['M'] = theory_line_df.index.astype(int)
     theory_line_df['RhoV'] = theory_line_df.apply(lambda x: rho * 1e-4 / x['M'], axis=1)
+    print(theory_line_df)
 
 
 

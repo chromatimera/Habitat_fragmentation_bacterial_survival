@@ -7,11 +7,22 @@ import os
 from os.path import isfile, join
 import math
 
-growth = 'binary'
-total_sim = 5
+BIGGER_SIZE = 22
 
-Ni = np.arange(5, 106, 5).tolist()
-antib = np.arange(5, 101, 5).tolist()
+plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
+plt.rc('text', usetex=True) ## https://matplotlib.org/stable/tutorials/text/usetex.html
+plt.rc('xtick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
+plt.rc('ytick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
+plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
+plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsize
+sns.set_theme(rc={'axes.formatter.limits': (-2, 2)})
+
+
+growth = 'binary'
+total_sim = 10
+
+Ni = np.arange(1, 10, 1).tolist()
+antib = np.arange(0, 56, 5).tolist()
 print(antib)
 
 
@@ -44,7 +55,7 @@ for l in Ni:
     for ab in antib:
         print(os.getcwd())
 
-        os.chdir('./dropnr_1000_loading_rand_growth_binary_initialN_{}_abconc_{}/'.format(l, ab))
+        os.chdir('./dropnr_1_loading_rand_growth_binary_initialN_{}_abconc_{}/'.format(l, ab))
         ### calculate probability of survival
 
         path = os.getcwd()
@@ -64,24 +75,26 @@ for l in Ni:
     df_heatmap_survival.iloc[s] = surv_diff_ab_same_Ni
     s = s + 1
 
+
+df_heatmap_survival['Rho'] = df_heatmap_survival.index * 1e7
+df_heatmap_survival['Rho'] = df_heatmap_survival['Rho'].astype(int)
+df_heatmap_survival.set_index('Rho', inplace=True, drop=True)
 print(df_heatmap_survival)
+rho_list = list(df_heatmap_survival.index)
 
 # Define the plot
 fig, ax = plt.subplots(figsize=(13,7))
 
 # Add title to the Heat map
-title = "Probability of survival with random loading, gillespie_binary"
 
-# Set the font size and the distance of the title from the plot
-plt.title(title,fontsize=18)
-ttl = ax.title
-ttl.set_position([0.5,1.05])
+os.chdir('..')
 
 # Use the heatmap function from the seaborn package
 sns.heatmap(df_heatmap_survival, annot=True)
-# Display the Pharma Sector Heatmap
-plt.xlabel('antib')
-plt.ylabel('initial N')
+ax.invert_yaxis()
+plt.xlabel(r'\bf{Initial antibiotic concentration ($\mu$g/ml)}')
+plt.ylabel(r'\bf{$\rho$ (initial cells/ml)}')
+plt.savefig('heatmap.png', dpi=600)
 plt.show()
 
 #for each simulation out of the total nr of simulations and for each
