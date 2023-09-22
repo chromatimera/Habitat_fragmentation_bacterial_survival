@@ -21,7 +21,7 @@ plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
 plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsize
 
 #rootdir = './output/'
-ab = [75]
+ab = [35, 55, 75]
 
 zz=np.load('prob_line.npy')
 #os.chdir(rootdir)
@@ -65,10 +65,6 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     theory_line_df = theory_line_df.sort_values(by="Vol_fac", ascending=True)
 
     plt.figure(1)
-   # plt.plot(1 / vol_fac ** 2, np.log(1 - zzz[:,ind]))
-    # log [1 − Ps] vs 1/m2--straight??
-
-
 
     ### transpose of dataframe
     surv_fraction_transpose = surv_fraction.T

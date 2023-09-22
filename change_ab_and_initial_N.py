@@ -5,21 +5,21 @@ import numpy as np
 import importlib
 variables.initialN = 3000
 
-START_AB=5
-END_AB=105
-STEP_AB=10
+START_AB=0
+END_AB= 61
+STEP_AB=5
 
-START_N=10
-END_N=110
-STEP_N=20
+START_N=1
+END_N=10
+STEP_N=1
 
 path = os.getcwd()
 results_path = path + '/output/'
 print(results_path)
-ab_list=np.arange(START_AB, END_AB, STEP_AB)
-print(ab_list)
 
-init_N_list=np.arange(START_N, END_N, START_N)
+ab_list=np.arange(START_AB, END_AB+1, STEP_AB)
+print(ab_list)
+init_N_list=np.arange(START_N, END_N+1, START_N)
 print(init_N_list)
 
 
@@ -35,10 +35,6 @@ for Ni in init_N_list:
         os.chdir('..')
         os.chdir('..')
         print(os.getcwd())
-
-
-
-        print(variables.initialN, variables.AB_conc)
 
 print('All processes complete')
 variables.AB_conc = 15
