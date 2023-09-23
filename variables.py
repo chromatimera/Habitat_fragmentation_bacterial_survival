@@ -15,7 +15,7 @@ t_start = 0
 t_end = 300
 dt = 1
 spec_time = 299  # this is a specific time at which we calculate the number of bacteria left alive; it is set to 299 as it is the last timepoint in the for loop
-total_sim = 1000   # number of simulation repeats
+total_sim = 15   # number of simulation repeats
 step = 1
 
 

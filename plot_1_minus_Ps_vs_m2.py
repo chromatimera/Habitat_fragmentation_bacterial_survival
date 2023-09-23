@@ -62,7 +62,7 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
 
     for i in range(len(log_list)):
         if str(log_list[i]) == '-inf':
-           log_list[i] = -100
+           log_list[i] = -50
 
     one_minus_Ps['log']=log_list
     print('1-Ps: ', one_minus_Ps)

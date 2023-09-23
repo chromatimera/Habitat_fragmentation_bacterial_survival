@@ -15,11 +15,11 @@ plt.rc('xtick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
 plt.rc('ytick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
 plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
 plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsize
-sns.set_theme(rc={'axes.formatter.limits': (-2, 2)})
 
 
 growth = 'binary'
 total_sim = 10
+m=1
 
 Ni = np.arange(1, 10, 1).tolist()
 antib = np.arange(0, 56, 5).tolist()
@@ -55,7 +55,7 @@ for l in Ni:
     for ab in antib:
         print(os.getcwd())
 
-        os.chdir('./dropnr_1_loading_rand_growth_binary_initialN_{}_abconc_{}/'.format(l, ab))
+        os.chdir('./dropnr_1000_loading_rand_growth_binary_initialN_{}_abconc_{}/'.format(l, ab))
         ### calculate probability of survival
 
         path = os.getcwd()
@@ -83,7 +83,7 @@ print(df_heatmap_survival)
 rho_list = list(df_heatmap_survival.index)
 
 # Define the plot
-fig, ax = plt.subplots(figsize=(13,7))
+fig, ax = plt.subplots(figsize=(8,5))
 
 # Add title to the Heat map
 
@@ -94,7 +94,8 @@ sns.heatmap(df_heatmap_survival, annot=True)
 ax.invert_yaxis()
 plt.xlabel(r'\bf{Initial antibiotic concentration ($\mu$g/ml)}')
 plt.ylabel(r'\bf{$\rho$ (initial cells/ml)}')
-plt.savefig('heatmap.png', dpi=600)
+plt.tight_layout()
+plt.savefig('heatmap {}.png'.format(m), dpi=600)
 plt.show()
 
 #for each simulation out of the total nr of simulations and for each

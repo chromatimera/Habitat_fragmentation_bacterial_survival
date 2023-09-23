@@ -92,7 +92,7 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     surv_fraction_transpose = surv_fraction_transpose.set_index('RhoV', drop=True)
     theory_line_df = theory_line_df.set_index('RhoV', drop=True)
 
-    theory_line_df["big_Ps"].plot.line(c=c, linestyle='dashed', label='_nolegend_', logx=True)#, color = 'orange'
+    #theory_line_df["big_Ps"].plot.line(c=c, linestyle='dashed', label='_nolegend_', logx=True)#, color = 'orange'
     surv_fraction_transpose["Surv frac"].plot.line(yerr=surv_fraction_errors, c=c, logx=True)#, color = 'orange')
     label_list.append('{}'.format(antib))
 
