@@ -7,7 +7,7 @@ from variables import *
 import matplotlib.pyplot as plt
 from ps_theory import vol_fac
 
-BIGGER_SIZE = 16
+BIGGER_SIZE = 22
 
 plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 plt.rc('text', usetex=True)
@@ -23,7 +23,7 @@ zzz= zz.T
 
 print('current dir', os.getcwd())
 
-plt.figure(figsize=(7, 7))
+plt.figure(figsize=(11, 9))
 color = iter(plt.cm.rainbow(np.linspace(0, 1, 5)))
 color_list = []
 label_list = []
@@ -33,18 +33,6 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
 
     if ind == 2:
         c = next(color)
-    os.chdir('dropnr_1000_loading_rand_growth_{}_initialN_5_abconc_{}'.format(growth, antib))
-    path = os.getcwd()
-
-    onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
-    onlyfiles = sorted(onlyfiles)
-
-    if '.DS_Store' in onlyfiles:
-        onlyfiles.remove('.DS_Store')
-    else:
-        pass
-
-    part_fact = np.loadtxt(onlyfiles[2])
 
     theory_line_df = pd.DataFrame(zzz[:, ind], columns=['big_Ps'], index=vol_fac)
     theory_line_df.index.name = 'Vol_fac'
@@ -78,8 +66,8 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     #print(os.getcwd())
 
 plt.ylabel(r'\bf{Probability of survival}')
-plt.xlabel(r'\bf{m (number of subvolumes)}')
+plt.xlabel(r'\bf{$m^{2}$ (number of subvolumes)}')
 
 plt.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.17), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE)
-plt.savefig('1-ps '.format(growth))
+plt.savefig('1-ps'.format(growth), dpi=600)
 plt.show()
