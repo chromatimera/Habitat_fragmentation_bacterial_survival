@@ -23,7 +23,7 @@ zzz= zz.T
 
 print('current dir', os.getcwd())
 
-plt.figure(figsize=(11, 9))
+plt.figure(figsize=(9, 9))
 color = iter(plt.cm.rainbow(np.linspace(0, 1, 5)))
 color_list = []
 label_list = []
@@ -62,12 +62,12 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
 
     ## plot 1-Ps versus 1/m2
     plt.plot(one_minus_Ps['m2'], one_minus_Ps['log'])
-    os.chdir('..')
     #print(os.getcwd())
 
-plt.ylabel(r'\bf{Probability of survival}')
+plt.ylabel(r'\bf{log(1-$P_{s}$)}')
 plt.xlabel(r'\bf{$m^{2}$ (number of subvolumes)}')
 
 plt.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.17), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE)
-plt.savefig('1-ps'.format(growth), dpi=600)
+plt.tight_layout()
+plt.savefig('1-ps_{}'.format(growth), dpi=600)
 plt.show()

@@ -11,7 +11,7 @@ from collections import Counter
 
 from ps_theory import vol_fac
 
-BIGGER_SIZE = 24
+BIGGER_SIZE = 32
 
 plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 plt.rc('text', usetex=True)
@@ -21,7 +21,7 @@ plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
 plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsize
 
 #rootdir = './output/'
-ab = [35, 55, 75]
+ab = [5, 10, 15, 20, 25]
 rho = 5e7 ## this is the initial density of cells/mL; for sim starting with lamda = 5; change accordingly
 
 zz=np.load('prob_line.npy')
@@ -32,7 +32,7 @@ zzz= zz.T
 print('current dir', os.getcwd())
 
 
-fig = plt.figure(figsize=(18,16))
+fig = plt.figure(figsize=(11,11))
 ax1 = fig.add_subplot(111)
 color = iter(plt.cm.rainbow(np.linspace(0, 1, 5)))
 color_list = []
@@ -82,6 +82,7 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     surv_fraction_transpose['Error99'] = surv_fraction_transpose.apply(lambda x: 2.6 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(variables.total_sim), axis=1)
     surv_fraction_errors = surv_fraction_transpose.Error95.to_frame('Surv frac')
     surv_fraction_errors.index = surv_fraction_errors.index.map(int)
+    surv_fraction_errors.index = surv_fraction_transpose['RhoV']
     #print('errors',surv_fraction_errors)
 
     surv_fraction_transpose.index = surv_fraction_transpose.index.map(int)
@@ -113,7 +114,7 @@ plt.xlabel(r'\bf{m (number of subvolumes)}')
 ax1.set_xlabel(r'\bf{$\rho$v (number of cells in droplet)}')
 ax1.set_ylabel(r'\bf{Probability of survival}')
 
-ax1.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.17), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE)
+ax1.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.45), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE)
 plt.tight_layout()
 plt.savefig('Survival fraction RhoV_ double axes'.format(growth), dpi=600)
 

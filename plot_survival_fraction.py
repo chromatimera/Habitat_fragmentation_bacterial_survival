@@ -33,7 +33,7 @@ print('current dir', os.getcwd())
 
 
 plt.figure(figsize=(12,9))
-ax = plt.subplot(111)
+ax1 = plt.subplot(111)
 color = iter(plt.cm.rainbow(np.linspace(0, 1, 5)))
 color_list = []
 label_list = []
@@ -84,16 +84,20 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
 
 
     surv_fraction_errors = surv_fraction_transpose.Error95.to_frame('Surv frac')
+
     surv_fraction_errors.index = surv_fraction_errors.index.map(int)
-    #print('errors',surv_fraction_errors)
+    surv_fraction_errors.index = surv_fraction_transpose['RhoV']
+
+    print('errors',surv_fraction_errors)
 
     surv_fraction_transpose.index = surv_fraction_transpose.index.map(int)
 
     surv_fraction_transpose = surv_fraction_transpose.set_index('RhoV', drop=True)
+
     theory_line_df = theory_line_df.set_index('RhoV', drop=True)
 
-    #theory_line_df["big_Ps"].plot.line(c=c, linestyle='dashed', label='_nolegend_', logx=True)#, color = 'orange'
-    surv_fraction_transpose["Surv frac"].plot.line(yerr=surv_fraction_errors, c=c, logx=True)#, color = 'orange')
+    theory_line_df["big_Ps"].plot.line(c=c, linestyle='dashed', label='_nolegend_', logx= True)#, color = 'orange'
+    surv_fraction_transpose["Surv frac"].plot.line(yerr=surv_fraction_errors, c=c, logx= True)#, color = 'orange')
     label_list.append('{}'.format(antib))
 
 
