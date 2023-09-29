@@ -12,7 +12,7 @@ from matplotlib.lines import Line2D
 from collections import Counter
 from matplotlib import rc
 
-BIGGER_SIZE = 16
+BIGGER_SIZE = 22
 
 rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 rc('text', usetex=True)
@@ -24,7 +24,7 @@ plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsiz
 growth1 = 'binary'
 growth2 = 'gillespie_binary'
 rootdir = 'output/'
-ab = [35, 55, 75]
+ab = [15, 15]
 
 os.chdir(rootdir)
 print('current dir', os.getcwd())
@@ -34,7 +34,7 @@ color_list = []
 label_list = []
 
 print(colors)
-plt.figure(figsize=(7, 9))
+plt.figure(figsize=(9, 10))
 plt.subplots_adjust(hspace=0.5)
 
 # loop through two types of plots
@@ -185,6 +185,6 @@ for n in range(0, 2, 1):
     else:
         plt.ylim(-0.1, 1.1)
         plt.ylabel(r'\bf{P(S)}')
-    #ax.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.25), ncol=4, fancybox=True, shadow=True, fontsize= 'large')
-plt.savefig('Survival fraction and Nf_vs_part_fact side by side.png')
+    ax.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.25), ncol=4, fancybox=True, shadow=True, fontsize= 'large')
+plt.savefig('Survival fraction and Nf_vs_part_fact side by side.png', dpi=600)
 plt.show()

@@ -33,7 +33,7 @@ class DropTest(object):
             ## simulate droplets for different partitioning factors
             for i in range(len(droplet_list)):
                 total_drop_nr = droplet_list[i]
-               # print('total droplets', total_drop_nr)
+                print('total droplets', total_drop_nr)
                 m_fact = droplet_list[-1]/total_drop_nr
                 ## volume for one small droplet is 1e-7, but we're starting the simulation from the one big droplet and further getting to smaller droplets
                 new_volume = variables.volume * droplet_list[-1]/ droplet_list[i]
@@ -51,6 +51,9 @@ class DropTest(object):
                     ## calculate the total nr of bacteria in all droplets, if any survived, prob survival = 1
                     Droplet_exp.countTotalMass(growth)
                     #Droplet_exp.plots(growth)
+                    Droplet_exp.save('initialN{}_growthrate{}_MIC{}_totaldropnr{}_ABconc{}_'
+                                     'dt{}_loading{}_growth{}.csv'.format(initialN, growthrate, MIC, total_drop_nr,AB_conc, dt, loading, growth),
+                                     'ABconc{}_loading{}_growth{}.csv'.format(AB_conc, loading, growth), 'Time.csv',  AB_conc)
 
                     nr_bact_each_ts = Droplet_exp.total_mass
                     ## append the nr of bacteria to dataframe with N(t) vs part factor
@@ -136,6 +139,6 @@ class DropTest(object):
 
         # print("--- %s seconds ---" % (time.time() - start_time))
 
-#simulate = DropTest()
-#simulate.calc_survival_prob_total_nr_bact_diff_part(step, spec_time, total_sim)
+simulate = DropTest()
+simulate.calc_survival_prob_total_nr_bact_diff_part(step, spec_time, total_sim)
 

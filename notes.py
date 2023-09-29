@@ -35,7 +35,7 @@ label_list = []
 
 rho = 5e7
 
-fig = plt.figure(figsize=(11,13))
+fig = plt.figure(figsize=(9,11))
 ax1 = fig.add_subplot(211)
 ax2 = fig.add_subplot(212)
 plt.subplots_adjust(hspace=0.5)
@@ -88,29 +88,29 @@ for n in range(0, 2, 1):
         surv_fraction_transpose1['RhoV'] = surv_fraction_transpose1.apply(lambda x: rho * 1e-4 / x['M'], axis=1)
         surv_fraction_transpose1['Error95'] = surv_fraction_transpose1.apply(lambda x: 2 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac'])) / math.sqrt(variables.total_sim), axis=1)
         surv_fraction_transpose1['Error99'] = surv_fraction_transpose1.apply(lambda x: 2.6 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac'])) / math.sqrt(variables.total_sim), axis=1)
+        surv_fraction_transpose1 = surv_fraction_transpose1.set_index('RhoV')
 
         surv_fraction_transpose2.columns = ['Surv frac']
         surv_fraction_transpose2['M'] = surv_fraction_transpose2.index.astype(int)
         surv_fraction_transpose2['Error95'] = surv_fraction_transpose2.apply(lambda x: 2 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac'])) / math.sqrt(variables.total_sim), axis=1)
         surv_fraction_transpose2['Error99'] = surv_fraction_transpose2.apply(lambda x: 2.6 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac'])) / math.sqrt(variables.total_sim), axis=1)
         surv_fraction_transpose2['RhoV'] = surv_fraction_transpose2.apply(lambda x: rho * 1e-4 / x['M'], axis=1)
+        surv_fraction_transpose2 = surv_fraction_transpose2.set_index('RhoV')
 
-        # plt.grid(True)
+        print('surv_fraction_transpose1', surv_fraction_transpose1)
+        print('surv_fraction_transpose2', surv_fraction_transpose2)
+
         surv_fraction_errors1 = surv_fraction_transpose1.Error95.to_frame('Surv frac')
-        surv_fraction_errors1.index = surv_fraction_errors1.index.map(int)
-        surv_fraction_errors1.index = surv_fraction_transpose1['RhoV']
+        surv_fraction_errors1.index = surv_fraction_errors1.index.map(float)
         #label_list.append('{} deterministic'.format(antib))
 
-        # plt.grid(True)
         surv_fraction_errors2 = surv_fraction_transpose2.Error95.to_frame('Surv frac')
-        surv_fraction_errors2.index = surv_fraction_errors2.index.map(int)
-        surv_fraction_errors2.index = surv_fraction_transpose2['RhoV']
+        surv_fraction_errors2.index = surv_fraction_errors2.index.map(float)
         print('antib', antib)
-        #print('surv frac errors 1', surv_fraction_errors1)
-        #print('surv frac errors 2', surv_fraction_errors2)
+        print('surv frac errors 1', surv_fraction_errors1)
+        print('surv frac errors 2', surv_fraction_errors2)
 
-        surv_fraction_transpose2.index = surv_fraction_transpose2.index.map(int)
-        surv_fraction_transpose2 = surv_fraction_transpose2.sort_index(ascending=True)
+
 
         ## DO THE N(T) DFS
 
@@ -175,8 +175,8 @@ for n in range(0, 2, 1):
         else:
             ind = ab.index(antib)
             ## plot survival fraction
-            surv_fraction_transpose1["Surv frac"].plot.line(yerr=surv_fraction_errors1, c=color_list[ind], ax=ax1, logx = True)  # , color = 'orange')
-            surv_fraction_transpose2["Surv frac"].plot.line(yerr=surv_fraction_errors2, linestyle='dashed',  c=color_list[ind], ax=ax1, logx = True)  # color = 'orange')
+            surv_fraction_transpose1["Surv frac"].plot.line(yerr=surv_fraction_errors1, c=color_list[ind], ax=ax1)  # , color = 'orange')
+            surv_fraction_transpose2["Surv frac"].plot.line(yerr=surv_fraction_errors2, linestyle='dashed',  c=color_list[ind], ax=ax1)  # color = 'orange')
         label_list.append('{}'.format(antib))
     # chart formatting
     ax2.set_xlabel(r'\bf{m (number of subvolumes)}')
@@ -185,13 +185,13 @@ for n in range(0, 2, 1):
 
     else:
 
-        plt.xlim(10 ** (2.3), 10 ** (0.6))
+        ax1.set_xlim(10 ** (2.3), 10 ** (0.6))
 
         xticks = [200, 100, 50, 25, 10, 5]
         xticks_label = [5000, 100, 50, 25, 10, 5]
         second_ticks = [1, 50, 100, 200, 500, 1000]
 
-        ax1.set_xticks(xticks)
+        ax1.set_xticks(np.linspace(xticks[0], xticks[-1], len(xticks)))
         ax1.set_xticklabels(xticks_label)
 
         ax3 = ax1.twiny()
@@ -205,6 +205,5 @@ for n in range(0, 2, 1):
         ax1.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center',
                    bbox_to_anchor=(0.5, 1.45), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE)
 
-    #ax.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.25), ncol=4, fancybox=True, shadow=True, fontsize= 'large')
 plt.savefig('Survival fraction and Nf_vs_part_fact side by side.png')
 plt.show()
