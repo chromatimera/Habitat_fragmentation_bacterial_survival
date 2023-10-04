@@ -24,7 +24,7 @@ plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsiz
 growth1 = 'binary'
 growth2 = 'gillespie_binary'
 rootdir = 'output/'
-ab = [15, 15]
+ab = [35,55,75]
 
 os.chdir(rootdir)
 print('current dir', os.getcwd())

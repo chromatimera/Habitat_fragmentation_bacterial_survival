@@ -18,23 +18,21 @@ plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsize
 
 
 growth = 'binary'
-total_sim = 10
-m=1
+total_sim = 1
+m = 1000
 
-Ni = np.arange(1, 10, 1).tolist()
-antib = np.arange(0, 56, 5).tolist()
-print(antib)
+Ni = np.arange(1, 2, 1).tolist()
+antib = np.arange(0, 3, 5).tolist()
 
 
 
 os.chdir('./output/')
 print(os.getcwd())
 #for ab in antib:
-os.chdir('./changing lamda for binary/')
+os.chdir('./survival_Fraction_heatmap_1000/')
 print(os.getcwd())
 
 colnames=['lambda']
-
 df_heatmap_survival=pd.DataFrame(Ni)
 df_heatmap_survival.columns=colnames
 print(df_heatmap_survival)
@@ -55,13 +53,18 @@ for l in Ni:
     for ab in antib:
         print(os.getcwd())
 
-        os.chdir('./dropnr_1000_loading_rand_growth_binary_initialN_{}_abconc_{}/'.format(l, ab))
+        os.chdir('./dropnr_1000_loading_rand_growth_binary_initialN_{}_abconc_{}_gr_0.01/'.format(l, ab))
         ### calculate probability of survival
 
         path = os.getcwd()
 
         onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
         onlyfiles = sorted(onlyfiles)
+
+        if '.DS_Store' in onlyfiles:
+            onlyfiles.remove('.DS_Store')
+        else:
+            pass
 
         surv_fraction = pd.read_csv(onlyfiles[3])
         part_fact = np.loadtxt(onlyfiles[2])

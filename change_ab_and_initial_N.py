@@ -6,7 +6,7 @@ import importlib
 variables.initialN = 3000
 
 START_AB=0
-END_AB= 65
+END_AB= 61
 STEP_AB=1
 
 START_N=1

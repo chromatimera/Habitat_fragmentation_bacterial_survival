@@ -52,8 +52,8 @@ class DropTest(object):
                     Droplet_exp.countTotalMass(growth)
                     #Droplet_exp.plots(growth)
                     Droplet_exp.save('initialN{}_growthrate{}_MIC{}_totaldropnr{}_ABconc{}_'
-                                     'dt{}_loading{}_growth{}.csv'.format(initialN, growthrate, MIC, total_drop_nr,AB_conc, dt, loading, growth),
-                                     'ABconc{}_loading{}_growth{}.csv'.format(AB_conc, loading, growth), 'Time.csv',  AB_conc)
+                                     'dt{}_loading{}_growth{}.csv'.format(initialN, growthrate, MIC, total_drop_nr,variables.AB_conc, dt, loading, growth),
+                                     'ABconc{}_loading{}_growth{}.csv'.format(variables.AB_conc, loading, growth), 'Time.csv',  variables.AB_conc)
 
                     nr_bact_each_ts = Droplet_exp.total_mass
                     ## append the nr of bacteria to dataframe with N(t) vs part factor
@@ -139,6 +139,6 @@ class DropTest(object):
 
         # print("--- %s seconds ---" % (time.time() - start_time))
 
-simulate = DropTest()
-simulate.calc_survival_prob_total_nr_bact_diff_part(step, spec_time, total_sim)
+#simulate = DropTest()
+#simulate.calc_survival_prob_total_nr_bact_diff_part(step, spec_time, total_sim)
 
