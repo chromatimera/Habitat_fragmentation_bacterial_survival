@@ -303,7 +303,7 @@ class droplets_R():
 
         # Check whether the specified path exists or not
 
-        folder_name = 'output/dropnr_{}_loading_{}_growth_{}_initialN_{}_abconc_{}_gr_{}_dt_{}_Nsat_{}'.format(variables.droplet_list[-1], variables.loading, variables.growth, variables.initialN, AB_conc, variables.growthrate, self.dt,variables.Nsat)
+        folder_name = 'output/dropnr_{}_loading_{}_growth_{}_initialN_{}_abconc_{}'.format(variables.droplet_list[-1], variables.loading, variables.growth, variables.initialN, AB_conc)
         path = os.path.join(curr_path, folder_name)
         isExist = os.path.exists(path)
 

@@ -10,7 +10,7 @@ from matplotlib.pyplot import cm
 
 ### FIGURE 4 in paper
 growth1 = 'binary'
-growth2 = 'gillespie_binary'
+growth2 = 'binary'
 rootdir = 'output/'
 ab = []
 label_list = []

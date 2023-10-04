@@ -97,11 +97,11 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     os.chdir('..')
 
 
-plt.xlim(10**(2.3), 10**(0.6))
+plt.xlim(10**(0.6), 10**(2.3))
 
-xticks = [200, 100, 50, 25, 10, 5]
-xticks_label = [5000, 100, 50, 25, 10, 5]
-second_ticks = [1, 50, 100, 200, 500, 1000]
+xticks = [5, 10, 25, 50, 100, 200]
+xticks_label = [5, 10, 25, 50, 100, 5000]
+second_ticks = [1000, 500, 200, 100, 50, 1]
 
 ax1.set_xticks(xticks)
 ax1.set_xticklabels(xticks_label)
