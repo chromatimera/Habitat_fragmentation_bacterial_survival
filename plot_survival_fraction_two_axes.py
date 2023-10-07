@@ -21,13 +21,14 @@ plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
 plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsize
 
 #rootdir = './output/'
-ab = [15, 35, 55, 75]
+ab = [15, 35,55, 75]
 rho = 5e7 ## this is the initial density of cells/mL; for sim starting with lamda = 5; change accordingly
 
 zz=np.load('prob_line.npy')
 #os.chdir(rootdir)
 zzz= zz.T
 #os.chdir(rootdir)
+
 
 print('current dir', os.getcwd())
 
@@ -94,21 +95,20 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     surv_fraction_transpose["Surv frac"].plot.line(ax=ax1, yerr=surv_fraction_errors, c=c, logx=True)#, color = 'orange')
     label_list.append('{}'.format(antib))
 
+    surv_fraction_transpose.to_csv('../Survival_fraction_transpose_{}'.format(antib))
     os.chdir('..')
 
-
-plt.xlim(10**(2.3), 10**(0.6))
-
+ax1.set_xlim(10**(2.3), 10**(0.6))
+#plt.grid(True)
 xticks = [200, 100, 50, 25, 10, 5]
 xticks_label = [5000, 100, 50, 25, 10, 5]
 second_ticks = [1, 50, 100, 200, 500, 1000]
-
 ax1.set_xticks(xticks)
 ax1.set_xticklabels(xticks_label)
 
-ax2 = ax1.twiny()
-ax2.set_xticks(np.linspace(ax1.get_xticks()[0], ax1.get_xticks()[-1], len(ax1.get_xticks())))
-ax2.set_xticklabels(second_ticks[::-1])
+ax2 = ax1.secondary_xaxis("top")
+ax2.xaxis.set_ticks(xticks[::-1], labels=second_ticks[::-1])
+
 
 plt.xlabel(r'\bf{m (number of subvolumes)}')
 ax1.set_xlabel(r'\bf{$\rho$v (number of cells in droplet)}')
