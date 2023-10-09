@@ -53,13 +53,13 @@ for antib, c in zip(ab, color):
      kk1=str(k)+' 1'
      kk500 = str(k) + ' 500'
      kk1000=str(k)+' 1000'
+
      plt.figure(2)
      timee_cut=np.arange(0, 100, dt)
      indx=int(100/dt)
      first_100= df_bact_count.iloc[0:indx]/df_bact_count.iloc[0]
      plt.plot( timee_cut,first_100[ kk1], label='m=1', color='g')
      plt.plot( timee_cut,first_100[ kk500], label='m=500', color='b')
-
      plt.plot(timee_cut,first_100[kk1000], label='m=1000', color='m')
 
      plt.figure(3)
@@ -73,10 +73,10 @@ plt.grid(False)
 plt.figure(2)
 plt.ylabel('N/N0', fontsize=text_size)
 plt.xlabel('Time (min)', fontsize=text_size)
-#plt.legend(title='Number of subvolumes', fontsize='large', loc='upper left')
-plt.show()
-#plt.savefig('110_ugml-resource.png', dpi=300)
+plt.legend(['m=1', 'm=500', 'm=1000'], title='Number of subvolumes:', fontsize='large', loc='upper left')
 
+plt.savefig('100_ugml-resource.png', dpi=300)
+plt.show()
 ###Average;
 plt.figure(4)
 #plt.plot(timee, df_average['0 1'], label='m=1')
