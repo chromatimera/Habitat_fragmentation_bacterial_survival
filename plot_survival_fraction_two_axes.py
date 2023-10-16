@@ -33,7 +33,7 @@ zzz= zz.T
 print('current dir', os.getcwd())
 
 
-fig = plt.figure(figsize=(11,11))
+fig = plt.figure(figsize=(11,11.5))
 ax1 = fig.add_subplot(111)
 color = iter(plt.cm.rainbow(np.linspace(0, 1, 5)))
 color_list = []
@@ -113,6 +113,7 @@ ax2.xaxis.set_ticks(xticks[::-1], labels=second_ticks[::-1])
 plt.xlabel(r'\bf{m (number of subvolumes)}')
 ax1.set_xlabel(r'\bf{$\rho$v (number of cells in droplet)}')
 ax1.set_ylabel(r'\bf{Probability of survival}')
+ax2.set_xlabel(r'\bf{m (number of subvolumes)}')
 
 ax1.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.45), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE)
 plt.tight_layout()

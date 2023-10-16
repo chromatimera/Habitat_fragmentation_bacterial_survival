@@ -34,7 +34,7 @@ slowrate =0.0 #per min; for resource model
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
-AB_conc = 15 #ug per mL
+AB_conc = 16 #ug per mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL
@@ -46,8 +46,8 @@ epsilon = 0.03
 
 ##type of loading and growth
 loading = "rand"  # rand #det
-growth = "binary"
-#growth = 'gillespie_binary'
+#growth = "binary"
+growth = 'binary'
 degradation = 'MM_exponential'
 
 

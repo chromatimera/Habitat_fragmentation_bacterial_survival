@@ -32,7 +32,7 @@ zzz= zz.T
 print('current dir', os.getcwd())
 
 
-plt.figure(figsize=(12,9))
+plt.figure(figsize=(9,9))
 ax1 = plt.subplot(111)
 color = iter(plt.cm.rainbow(np.linspace(0, 1, 5)))
 color_list = []
