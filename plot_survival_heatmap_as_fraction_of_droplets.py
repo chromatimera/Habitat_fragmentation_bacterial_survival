@@ -12,7 +12,6 @@ import math
 BIGGER_SIZE = 32
 
 plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
-plt.rcParams["font.family"] = "Times New Roman"
 plt.rc('text', usetex=True)  ## https://matplotlib.org/stable/tutorials/text/usetex.html
 plt.rc('xtick', labelsize=BIGGER_SIZE)  # fontsize of the tick labels
 plt.rc('ytick', labelsize=BIGGER_SIZE)  # fontsize of the tick labels
@@ -95,7 +94,7 @@ df_heatmap_survival['Rho'] = df_heatmap_survival.index#* 1e7
 df_heatmap_survival.set_index('Rho', inplace=True, drop=True)
 print(df_heatmap_survival)
 rho_list = np.array(df_heatmap_survival.index)
-rho_list=rho_list *1e7  ## do we just get rid ??
+rho_list=rho_list  *1e7  ## do we just get rid ??
 
 # Define the plot
 fig, ax = plt.subplots(figsize=(15, 8))
