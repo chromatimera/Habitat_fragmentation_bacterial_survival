@@ -5,17 +5,23 @@ import numpy as np
 from os import listdir
 import os
 from os.path import isfile, join
+
 import matplotlib.ticker as tkr
 import math
 
 BIGGER_SIZE = 32
 
-plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
-plt.rc('text', usetex=True)  ## https://matplotlib.org/stable/tutorials/text/usetex.html
+#plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
+plt.rcParams["font.family"] = "Times New Roman"
+#plt.rc('text', usetex=True)  ## https://matplotlib.org/stable/tutorials/text/usetex.html
 plt.rc('xtick', labelsize=BIGGER_SIZE)  # fontsize of the tick labels
 plt.rc('ytick', labelsize=BIGGER_SIZE)  # fontsize of the tick labels
 plt.rc('axes', labelsize=BIGGER_SIZE)  # fontsize of the x and y labels
 plt.rc('legend', fontsize=BIGGER_SIZE)  # legend fontsize
+#plt.gca().ticklabel_format(useMathText=True)
+
+#ax.yaxis.major.formatter._useMathText = True
+
 
 growth = 'binary'
 total_sim = 1
@@ -29,20 +35,20 @@ print(antib)
 os.chdir('./output/')
 print(os.getcwd())
 # for ab in antib:
-os.chdir('./survival_fraction_heatmap_{}/'.format(m))
+#os.chdir('./survival_fraction_heatmap_{}/'.format(m))
 print(os.getcwd())
 
 colnames = ['lambda']
 df_heatmap_survival = pd.DataFrame(Ni)
 df_heatmap_survival.columns = colnames
-print(df_heatmap_survival)
+#print(df_heatmap_survival)
 
 df_heatmap_survival.set_index('lambda', inplace=True)
 
 colnames = [str(x) for x in antib]
 df_heatmap_survival[colnames] = np.random.randint(10, size=(len(Ni), len(antib)))
 
-print(df_heatmap_survival)
+#print(df_heatmap_survival)
 
 df_heatmap_survival.insert = antib
 s = 0
@@ -84,21 +90,28 @@ for l in Ni:
 
 print(df_heatmap_survival)
 
-df_heatmap_survival['Rho'] = df_heatmap_survival.index * 1e7
-df_heatmap_survival['Rho'] = df_heatmap_survival['Rho'].astype(int)
+df_heatmap_survival['Rho'] = df_heatmap_survival.index#* 1e7
+#df_heatmap_survival['Rho'] = df_heatmap_survival['Rho'].astype(int)
 df_heatmap_survival.set_index('Rho', inplace=True, drop=True)
 print(df_heatmap_survival)
-rho_list = list(df_heatmap_survival.index)
+rho_list = np.array(df_heatmap_survival.index)
+rho_list=rho_list *1e7  ## do we just get rid ??
 
 # Define the plot
 fig, ax = plt.subplots(figsize=(15, 8))
-formatter = tkr.ScalarFormatter(useMathText=True)
-formatter.set_scientific(True)
+
 os.chdir('..')
 
 # Use the heatmap function from the seaborn package
-sns.heatmap(df_heatmap_survival, annot=True)
+#df_heatmap_survival=df_heatmap_survival.style.format("{:e}")
+#plt.ticklabel_format(style='plain', axis='y')
+
+tick = tkr.ScalarFormatter(useOffset=False, useMathText=True)
+tick.set_powerlimits((0,0))
+tg = [u"${}$".format(tick.format_data(x)) for x in rho_list]
+sns.heatmap(df_heatmap_survival, annot=True, yticklabels=tg) #, yticklabels=rho_list)
 ax.invert_yaxis()
+#ax.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
 plt.xlabel(r'\bf{Initial antibiotic concentration ($\mu$g/ml)}')
 plt.ylabel(r'\bf{$\rho$ (initial cells/ml)}')
 plt.tight_layout()
