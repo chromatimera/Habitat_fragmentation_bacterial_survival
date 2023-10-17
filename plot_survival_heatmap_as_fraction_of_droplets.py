@@ -11,9 +11,9 @@ import math
 
 BIGGER_SIZE = 32
 
-#plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
+plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 plt.rcParams["font.family"] = "Times New Roman"
-#plt.rc('text', usetex=True)  ## https://matplotlib.org/stable/tutorials/text/usetex.html
+plt.rc('text', usetex=True)  ## https://matplotlib.org/stable/tutorials/text/usetex.html
 plt.rc('xtick', labelsize=BIGGER_SIZE)  # fontsize of the tick labels
 plt.rc('ytick', labelsize=BIGGER_SIZE)  # fontsize of the tick labels
 plt.rc('axes', labelsize=BIGGER_SIZE)  # fontsize of the x and y labels
