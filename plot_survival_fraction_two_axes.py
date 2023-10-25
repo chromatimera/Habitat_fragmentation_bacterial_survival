@@ -13,6 +13,8 @@ from ps_theory import vol_fac
 
 BIGGER_SIZE = 32
 
+#### FIGURE 4 SURVIVAL PROBABILITY OF A POPULATION OF BACTERIA
+
 plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 plt.rc('text', usetex=True)
 plt.rc('xtick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
@@ -117,6 +119,6 @@ ax2.set_xlabel(r'\bf{m (number of subvolumes)}')
 
 ax1.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.45), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE)
 plt.tight_layout()
-plt.savefig('Survival fraction RhoV_ double axes'.format(growth), dpi=600)
+plt.savefig('Survival fraction {} y vs logx'.format(growth), dpi=600)
 
 plt.show()

@@ -8,6 +8,7 @@ import variables
 from variables import *
 from numpy import loadtxt
 
+### IGNORE SCRIPT FOR NOW
 
 def read_csv():
     df = pd.read_csv('./output/df_growth_{}_starting_nr_drops_{}.csv'.format(growth, variables.total_drop_nr))

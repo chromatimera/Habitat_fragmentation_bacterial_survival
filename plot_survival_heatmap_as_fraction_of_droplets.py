@@ -9,6 +9,9 @@ from os.path import isfile, join
 import matplotlib.ticker as tkr
 import math
 
+#### FIGURE 3 HEATMAP PLOTTING SCRIPT
+
+
 BIGGER_SIZE = 32
 
 plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
@@ -28,13 +31,11 @@ m = 1
 
 Ni = np.arange(1, 9, 1).tolist()
 antib = np.arange(0, 26, 1).tolist()
-print(Ni)
-print(antib)
 
 os.chdir('./output/')
 print(os.getcwd())
-# for ab in antib:
-#os.chdir('./survival_fraction_heatmap_{}/'.format(m))
+
+os.chdir('./survival_fraction_heatmap_{}/'.format(m))
 print(os.getcwd())
 
 colnames = ['lambda']
@@ -108,7 +109,7 @@ os.chdir('..')
 tick = tkr.ScalarFormatter(useOffset=False, useMathText=True)
 tick.set_powerlimits((0,0))
 tg = [u"${}$".format(tick.format_data(x)) for x in rho_list]
-sns.heatmap(df_heatmap_survival, annot=True, yticklabels=tg) #, yticklabels=rho_list)
+sns.heatmap(df_heatmap_survival, annot=False, yticklabels=tg) #, yticklabels=rho_list)
 ax.invert_yaxis()
 #ax.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
 plt.xlabel(r'\bf{Initial antibiotic concentration ($\mu$g/ml)}')

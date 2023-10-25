@@ -7,7 +7,13 @@ import os
 from os.path import isfile, join
 import math
 
+
+#### IGNORE THIS SCRIPT
+
+
 BIGGER_SIZE = 22
+
+
 
 plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 plt.rc('text', usetex=True) ## https://matplotlib.org/stable/tutorials/text/usetex.html

@@ -8,7 +8,8 @@ from variables import total_sim
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import cm
 
-### FIGURE 4 in paper
+### FIGURE 8 plotting script
+
 growth1 = 'binary'
 growth2 = 'binary'
 rootdir = 'output/'

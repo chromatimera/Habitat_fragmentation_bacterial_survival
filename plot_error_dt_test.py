@@ -4,6 +4,9 @@ import matplotlib.pyplot as plt
 from decimal import *
 from variables import nr_timesteps
 
+
+### IGNORE THIS SCRIPT FOR NOW
+
 getcontext().prec = 15
 decay1 = 'exponential_decay'
 decay2 = 'linear_decay'

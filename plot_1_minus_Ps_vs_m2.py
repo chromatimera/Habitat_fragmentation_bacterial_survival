@@ -9,8 +9,8 @@ from ps_theory import vol_fac
 
 BIGGER_SIZE = 22
 
-#plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
-#plt.rc('text', usetex=True)
+plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
+plt.rc('text', usetex=True)
 plt.rc('xtick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
 plt.rc('ytick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
 plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
