@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 #pylatex
 BIGGER_SIZE = 22
 
-plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
-plt.rc('text', usetex=True) ## https://matplotlib.org/stable/tutorials/text/usetex.html
+#plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
+#plt.rc('text', usetex=True) ## https://matplotlib.org/stable/tutorials/text/usetex.html
 plt.rc('xtick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
 plt.rc('ytick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
 plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
@@ -23,7 +23,9 @@ F=(AB_x-MIC )+medkm* np.log (AB_x/MIC)
 rhoT=(deathrate/ Vmax)*F
 rhoT_low=((AB_x-MIC )+ lowkm* np.log (AB_x/MIC) )* (deathrate/ Vmax)
 rhoT_high= ((AB_x-MIC )+ highkm* np.log (AB_x/MIC)) * (deathrate/ Vmax)
-
+#example calc;
+RHOt_eg =((30-MIC )+ medkm* np.log (30/MIC) )* (deathrate/ Vmax)
+print('{:.5E}'.format(RHOt_eg))
 y =rhoT
 y[0]=0
 x=AB_x
