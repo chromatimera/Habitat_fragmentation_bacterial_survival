@@ -9,8 +9,8 @@ from ps_theory import vol_fac
 
 BIGGER_SIZE = 22
 
-plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
-plt.rc('text', usetex=True)
+#plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
+#plt.rc('text', usetex=True)
 plt.rc('xtick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
 plt.rc('ytick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
 plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
@@ -27,8 +27,10 @@ plt.figure(figsize=(9, 9))
 color = iter(plt.cm.rainbow(np.linspace(0, 1, 5)))
 color_list = []
 label_list = []
+slope=np.empty(len(ab))
+intercept=np.empty(len(ab))
 #print(color)
-
+g=0
 for antib, c, ind in zip(ab, color, range(len(ab))):
 
     if ind == 2:
@@ -39,10 +41,12 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     theory_line_df = theory_line_df.sort_values(by="Vol_fac", ascending=True)
     subvol_list=1e-4 /vol_fac
 
-
-
+    logPs = np.log(theory_line_df)
+    #gradient;
+    slope[g], intercept[g] = np.polyfit(subvol_list[100:400], logPs[100:400], 1)
+    g=g+1
     ## for plot of log (1-Ps) vs 1/m2
-    logPs=np.log(theory_line_df)
+
     one_minus_Ps = 1 - theory_line_df
    #print('one minus ps first', one_minus_Ps)
     one_minus_Ps['m2']=one_minus_Ps.index **2
@@ -65,7 +69,7 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     ## plot 1-Ps versus 1/m2
     plt.plot(one_minus_Ps['m2'], one_minus_Ps['log'])
     #print(os.getcwd())
-
+   #plot little v vs log Ps;
     plt.figure(2)
     plt.plot(subvol_list, logPs)
 
@@ -86,3 +90,6 @@ plt.xlabel(r'\bf{little v (subvolume in ml)}')
 plt.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.17), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE)
 plt.savefig('logPs_{}'.format(growth), dpi=600)
 plt.show()
+
+#print('Gradients:',"{0:.2E}".format(slope))
+print('Gradients:',slope)
