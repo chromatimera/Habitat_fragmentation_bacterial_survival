@@ -8,6 +8,19 @@ from variables import total_sim
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import cm
 
+BIGGER_SIZE = 22
+LEGEND_SIZE = 20
+
+plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
+plt.rc('text', usetex=True)
+plt.rc('xtick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
+plt.rc('ytick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
+plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
+plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsize
+plt.rcParams['figure.figsize'] = [8, 6.5]
+
+
+
 ab = [100]
 sim_reps= 100
 dt=1
@@ -18,7 +31,6 @@ rootdir = 'output/'
 os.chdir(rootdir)
 color = iter(cm.rainbow(np.linspace(0, 1, 5)))
 
-plt.figure(figsize=(7.5,5))
 
 for antib, c in zip(ab, color):
     os.chdir('RESOURCE_dropnr_1000_loading_rand_growth_{}_initialN_5_abconc_{}'.format(growth, antib))
@@ -71,12 +83,14 @@ for antib, c in zip(ab, color):
 
 plt.grid(False)
 plt.figure(2)
-plt.ylabel('N/N0', fontsize=text_size)
-plt.xlabel('Time (min)', fontsize=text_size)
-plt.legend(['m=1', 'm=500', 'm=1000'], title='Number of subvolumes:', fontsize='large', loc='upper left')
-
-plt.savefig('100_ugml-resource.png', dpi=300)
+plt.ylabel('', )
+plt.ylabel(r'\bf{N/N0}')
+plt.xlabel(r'\bf{Time (min)}')
+plt.legend([r'm=1', r'm=500', r'm=1000'], title=r'\bf{Number of subvolumes:}',fontsize = LEGEND_SIZE, title_fontsize=LEGEND_SIZE, loc='upper left')
+plt.tight_layout()
+plt.savefig('100_ugml-resource.png', dpi=600)
 plt.show()
+
 ###Average;
 plt.figure(4)
 #plt.plot(timee, df_average['0 1'], label='m=1')
