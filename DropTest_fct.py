@@ -35,12 +35,16 @@ class DropTest(object):
                 total_drop_nr = droplet_list[i]
                 print('total droplets', total_drop_nr)
                 m_fact = droplet_list[-1]/total_drop_nr
+
                 ## volume for one small droplet is 1e-7, but we're starting the simulation from the one big droplet and further getting to smaller droplets
                 new_volume = variables.volume * droplet_list[-1]/ droplet_list[i]
 
+                ## check to see if trying to simulate 0 droplets - error and stop the simulation
                 if total_drop_nr == 0:
                     print("Error in partitioning; the partitioning factor is so small that you're trying to simulate 0 droplets")
                 else:
+
+
                     part_fact.append(total_drop_nr)
 
                     ## simulate growth with new params
@@ -48,25 +52,33 @@ class DropTest(object):
                     Droplet_exp = droplets_R(total_drop_nr, strain_R, variables.AB_conc, new_volume, m_fact)
                     Droplet_exp.run(loading, growth)
                     #print(i)
-                    ## calculate the total nr of bacteria in all droplets, if any survived, prob survival = 1
-                    Droplet_exp.countTotalMass(growth)
-                    #Droplet_exp.plots(growth)
-                    Droplet_exp.save('initialN{}_growthrate{}_MIC{}_totaldropnr{}_ABconc{}_'
-                                     'dt{}_loading{}_growth{}.csv'.format(initialN, growthrate, MIC, total_drop_nr,variables.AB_conc, dt, loading, growth),
-                                     'ABconc{}_loading{}_growth{}.csv'.format(variables.AB_conc, loading, growth), 'Time.csv',  variables.AB_conc)
 
-                    nr_bact_each_ts = Droplet_exp.total_mass
-                    ## append the nr of bacteria to dataframe with N(t) vs part factor
-                    df_total_mass['{} {}'.format(nr_sim, total_drop_nr)] = nr_bact_each_ts
-                    index = int(spec_time / variables.dt)
+                    volume_cell = 1e-12  ## UNITS: mL
 
-                    if nr_bact_each_ts[index] == 0:
-                        prob_survival = 0
+                    ## check to see if the droplet volume is smaller than the volume taken up by the bacteria - error and stop the simulation
+                    if new_volume < volume_cell * strain_R.initialN:
+                        print("Error in partitioning; the volume of the droplet is smaller than the volume of the bacteria simulated inside")
                     else:
-                        prob_survival = 1
 
-                    ## append probs to a list with diff probs for diff part factors
-                    prob_diff_part.append(prob_survival)
+                        ## calculate the total nr of bacteria in all droplets, if any survived, prob survival = 1
+                        Droplet_exp.countTotalMass(growth)
+                        #Droplet_exp.plots(growth)
+                        Droplet_exp.save('initialN{}_growthrate{}_MIC{}_totaldropnr{}_ABconc{}_'
+                                         'dt{}_loading{}_growth{}.csv'.format(initialN, growthrate, MIC, total_drop_nr,variables.AB_conc, dt, loading, growth),
+                                         'ABconc{}_loading{}_growth{}.csv'.format(variables.AB_conc, loading, growth), 'Time.csv',  variables.AB_conc)
+
+                        nr_bact_each_ts = Droplet_exp.total_mass
+                        ## append the nr of bacteria to dataframe with N(t) vs part factor
+                        df_total_mass['{} {}'.format(nr_sim, total_drop_nr)] = nr_bact_each_ts
+                        index = int(spec_time / variables.dt)
+
+                        if nr_bact_each_ts[index] == 0:
+                            prob_survival = 0
+                        else:
+                            prob_survival = 1
+
+                        ## append probs to a list with diff probs for diff part factors
+                        prob_diff_part.append(prob_survival)
 
                 ## append row at the end of each simulation for each partition factor
             prob_part_per_iteration = pd.DataFrame(data=[prob_diff_part])
