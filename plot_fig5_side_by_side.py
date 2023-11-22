@@ -12,6 +12,8 @@ from matplotlib.lines import Line2D
 from collections import Counter
 from matplotlib import rc
 
+
+
 BIGGER_SIZE = 22
 
 rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})

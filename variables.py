@@ -7,7 +7,7 @@ getcontext().prec = 50
 
 ### nr of droplets and the power of i and j in the partitioning loop are related i.e. for 100 droplets, the loop goes from 0 to 3.
 #droplet_list = [1]
-droplet_list = np.arange(0, 100001, 5000)
+droplet_list = np.arange(0, 1001, 50)
 droplet_list[0] = 1
 
 # setting up time values
