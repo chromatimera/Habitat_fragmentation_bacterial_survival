@@ -53,8 +53,8 @@ Vmax = 3.5e-8 #ug/cell/min
 epsilon = 0.03
 
 ##type of loading and growth
-loading = "det"  # rand #det
-growth = 'gillespie_binary'
+loading = "rand"  # rand #det
+growth = 'binary'
 degradation = 'MM_exponential'
 
 

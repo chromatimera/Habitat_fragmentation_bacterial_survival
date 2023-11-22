@@ -15,15 +15,15 @@ BIGGER_SIZE = 32
 
 #### FIGURE 4 SURVIVAL PROBABILITY OF A POPULATION OF BACTERIA
 
-plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
-plt.rc('text', usetex=True)
+#plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
+#plt.rc('text', usetex=True)
 plt.rc('xtick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
 plt.rc('ytick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
 plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
 plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsize
 
 #rootdir = './output/'
-ab = [15, 35,55, 75]
+ab = [15, 45,55, 75]
 rho = 5e7 ## this is the initial density of cells/mL; for sim starting with lamda = 5; change accordingly
 
 zz=np.load('prob_line.npy')
@@ -92,10 +92,16 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
 
     surv_fraction_transpose = surv_fraction_transpose.set_index('RhoV', drop=True)
     theory_line_df = theory_line_df.set_index('RhoV', drop=True)
-
+    plt.figure(1)
     theory_line_df["big_Ps"].plot.line(ax=ax1, c=c, linestyle='dashed', label='_nolegend_', logx=True)#, color = 'orange'
-    surv_fraction_transpose["Surv frac"].plot.line(ax=ax1, yerr=surv_fraction_errors, c=c, logx=True)#, color = 'orange')
+    surv_fraction_transpose["Surv frac"].plot.line(ax=ax1, marker='x',    linestyle='None',yerr=surv_fraction_errors, c=c, logx=True)#, color = 'orange')
     label_list.append('{}'.format(antib))
+    logPs=np.log(theory_line_df)
+    logPs_sim=np.log(surv_fraction_transpose)
+
+    plt.figure(2)
+    plt.plot(    logPs, c=c)
+    plt.plot(logPs_sim,marker='x',linestyle='None' ,c=c)
 
     surv_fraction_transpose.to_csv('../Survival_fraction_transpose_{}'.format(antib))
     os.chdir('..')
@@ -111,14 +117,22 @@ ax1.set_xticklabels(xticks_label)
 ax2 = ax1.secondary_xaxis("top")
 ax2.xaxis.set_ticks(xticks[::-1], labels=second_ticks[::-1])
 
-
+plt.figure(1)
 plt.xlabel(r'\bf{m (number of subvolumes)}')
 ax1.set_xlabel(r'\bf{$\rho$v (number of cells in droplet)}')
 ax1.set_ylabel(r'\bf{Probability of survival}')
 ax2.set_xlabel(r'\bf{m (number of subvolumes)}')
-
+plt.xlim([100,5])
 ax1.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.45), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE)
 plt.tight_layout()
 plt.savefig('Survival fraction {} y vs logx'.format(growth), dpi=600)
 
+
+plt.figure(2)
+plt.xlim([1,100])
+plt.ylim([-30,1])
+ax1.set_ylabel('Log (Ps)')
+ax1.set_xlabel(r'\bf{$\rho$v (number of cells in droplet)}')
+plt.gca().invert_xaxis()
+plt.savefig('Log_Ps_plus sim'.format(growth), dpi=600)
 plt.show()
