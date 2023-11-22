@@ -22,8 +22,9 @@ print(os.getcwd())
 #g2 = 'gillespie_binary'
 nr_drops = 1000
 
-droplet_list = np.arange(0, 1001, 10)
+droplet_list = np.arange(0, 5001, 100)
 droplet_list[0] = 1
+initialN = 1
 antib = [10, 15, 20, 30]
 color = iter(plt.cm.rainbow(np.linspace(0, 1, 5)))
 
@@ -40,7 +41,7 @@ for ab, c, ind in zip(antib, color, range(len(antib))):
     for i in range(len(droplet_list)):
 
         ### read dataframe and ignore first column as it's the index column
-        filename = 'output/dropnr_1000_loading_rand_growth_binary_initialN_5_abconc_{}_gr_0.01/initialN5_growthrate0.01_MIC1_totaldropnr{}_ABconc{}_dt1_loadingrand_growthbinary.csv'.format(ab,droplet_list[i],ab)
+        filename = 'output/dropnr_{}_loading_rand_growth_binary_initialN_{}_abconc_{}_gr_0.01/initialN{}_growthrate0.01_MIC1_totaldropnr{}_ABconc{}_dt1_loadingrand_growthbinary.csv'.format(droplet_list[-1],initialN, ab, initialN, droplet_list[i],ab)
         with open(filename) as x:
             ncols = len(x.readline().split(','))
         binary_df = pd.read_csv(filename, usecols=range(1,ncols))
@@ -75,5 +76,5 @@ for ab, c, ind in zip(antib, color, range(len(antib))):
 plt.ylabel(r'\bf{Fraction of droplets surviving}')
 plt.xlabel(r'\bf{m (number of subvolumes)}')
 plt.legend(antib, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.18), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE-5)
-plt.savefig('./output/Survival fraction 20 ab more points zoomed in.png', dpi=600)
+plt.savefig('./output/Survival fraction {} .png'.format(droplet_list[-1]), dpi=600)
 plt.show()

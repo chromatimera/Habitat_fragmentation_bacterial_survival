@@ -15,7 +15,7 @@ t_start = 0
 t_end = 300
 dt = 1
 spec_time = 299  # this is a specific time at which we calculate the number of bacteria left alive; it is set to 299 as it is the last timepoint in the for loop
-total_sim = 1 # number of simulation repeats
+total_sim = 1000 # number of simulation repeats
 step = 1
 
 
@@ -33,6 +33,8 @@ param_small_droplets = 1/droplet_list[-1]
 volume = round(volume_big_drop * param_small_droplets, 12)
 
 Nsat = 1e8
+
+## Cchange N to be equivalent to 5 bact for 1000 droplets - to link with the other simulations
 initialN = 5
 growthrate = 0.01 # per minute from experimental data Nia thesis
 deathrate  = 0.045  # per minute from Gore 2013
@@ -40,7 +42,7 @@ slowrate =0.0 #per min; for resource model
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
-AB_conc = 30 #ug per mL
+AB_conc = 35 #ug/mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL
@@ -51,8 +53,8 @@ Vmax = 3.5e-8 #ug/cell/min
 epsilon = 0.03
 
 ##type of loading and growth
-loading = "rand"  # rand #det
-growth = 'binary'
+loading = "det"  # rand #det
+growth = 'gillespie_binary'
 degradation = 'MM_exponential'
 
 
