@@ -6,6 +6,8 @@ import pandas as pd
 from variables import *
 import matplotlib.pyplot as plt
 from ps_theory import vol_fac
+#import matplotlib as mpl
+#mpl.rcParams.update(mpl.rcParamsDefault)
 
 BIGGER_SIZE = 22
 
