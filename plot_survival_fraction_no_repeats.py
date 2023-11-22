@@ -22,9 +22,9 @@ print(os.getcwd())
 #g2 = 'gillespie_binary'
 nr_drops = 1000
 
-droplet_list = np.arange(0, 5001, 100)
+droplet_list = np.arange(0, 20001, 400)
 droplet_list[0] = 1
-initialN = 1
+initialN = 0.25
 antib = [10, 15, 20, 30]
 color = iter(plt.cm.rainbow(np.linspace(0, 1, 5)))
 

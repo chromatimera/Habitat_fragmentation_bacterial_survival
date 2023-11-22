@@ -8,6 +8,9 @@ from variables import total_sim
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import cm
 
+#### FIGURE PLOT RESOURCE
+
+
 BIGGER_SIZE = 22
 LEGEND_SIZE = 20
 

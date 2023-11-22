@@ -7,7 +7,7 @@ getcontext().prec = 50
 
 ### nr of droplets and the power of i and j in the partitioning loop are related i.e. for 100 droplets, the loop goes from 0 to 3.
 #droplet_list = [1]
-droplet_list = np.arange(0, 1001, 50)
+droplet_list = np.arange(0, 20001, 400)
 droplet_list[0] = 1
 
 # setting up time values
@@ -32,17 +32,17 @@ volume_big_drop = 1e-4  ## should be 1e-4
 param_small_droplets = 1/droplet_list[-1]
 volume = round(volume_big_drop * param_small_droplets, 12)
 
-Nsat = 1e8
+Nsat = 1e12
 
 ## Cchange N to be equivalent to 5 bact for 1000 droplets - to link with the other simulations
-initialN = 5
+initialN = 0.25
 growthrate = 0.01 # per minute from experimental data Nia thesis
 deathrate  = 0.045  # per minute from Gore 2013
 slowrate =0.0 #per min; for resource model
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
-AB_conc = 35 #ug/mL
+AB_conc = 30 #ug/mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL
@@ -53,8 +53,8 @@ Vmax = 3.5e-8 #ug/cell/min
 epsilon = 0.03
 
 ##type of loading and growth
-loading = "det"  # rand #det
-growth = 'gillespie_binary'
+loading = "rand"  # rand #det
+growth = 'binary' #gillespie_binary
 degradation = 'MM_exponential'
 
 

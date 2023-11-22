@@ -146,17 +146,13 @@ class strain(object):
         #print('initialN', self.initialN)
         #print('Nsat', self.Nsat)
         if self.initialN != 0:
-            print('INITIAL N', self.initialN)
-            if isinstance(self.initialN, float) == True:
-                self.initialN = round(self.initialN)
-                print('INT N', self.initialN)
 
             # stoichiometry vector
             stoichiometry = np.array([1, -1])
 
             # set up time and initial values
             self.t_array = np.array([0])
-            self.N = np.array([self.N])
+            self.N = np.array([round(self.N)])
             self.AB_conc_array = np.array([AB_conc])
 
             s = 0

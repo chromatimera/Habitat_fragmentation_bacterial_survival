@@ -12,6 +12,7 @@ from matplotlib.lines import Line2D
 from collections import Counter
 from matplotlib import rc
 
+#### FIGURE SUPPLEMENTARY MATERIAL COMPARISON BINARY VS GILLESPIE
 
 
 BIGGER_SIZE = 22

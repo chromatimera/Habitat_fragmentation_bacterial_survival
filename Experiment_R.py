@@ -45,6 +45,7 @@ class Experiment_R(object):
 
         if init_type == "det":
             self.N_array[0] = self.strain_r.initialN
+
         elif init_type == "rand":
             #randomize initial starting numbers:
             self.strain_r.N = poisson.rvs(mu=self.strain_r.initialN, size=1)
