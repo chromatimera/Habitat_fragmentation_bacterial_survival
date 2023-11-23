@@ -31,7 +31,7 @@ zz=np.load('prob_line.npy')
 zzz= zz.T
 #os.chdir(rootdir)
 
-
+markers = ['-', '--', ':', '-.']
 print('current dir', os.getcwd())
 
 
@@ -86,11 +86,10 @@ for c in color:
 
             surv_fraction_transpose = surv_fraction_transpose.set_index('RhoV', drop=True)
 
-            surv_fraction_transpose["Surv frac"].plot.line(ax=ax1, yerr=surv_fraction_errors, c=c, logx=True)#, color = 'orange')
+            surv_fraction_transpose["Surv frac"].plot.line(ax=ax1, yerr=surv_fraction_errors, c=c, logx=True)#, linestyle=markers[ind])#, color = 'orange')
             label_list.append('{}, {}'.format(loading, growth))
             print('{}, {}'.format(loading, growth))
             os.chdir('..')
-            c = next(color)
             ind +=1
 
 

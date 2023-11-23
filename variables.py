@@ -6,7 +6,7 @@ import numpy as np
 getcontext().prec = 50
 
 ### nr of droplets and the power of i and j in the partitioning loop are related i.e. for 100 droplets, the loop goes from 0 to 3.
-#droplet_list = [1]
+#droplet_list = [2000]
 droplet_list = np.arange(0, 20001, 400)
 droplet_list[0] = 1
 
@@ -15,7 +15,7 @@ t_start = 0
 t_end = 300
 dt = 1
 spec_time = 299  # this is a specific time at which we calculate the number of bacteria left alive; it is set to 299 as it is the last timepoint in the for loop
-total_sim = 1000 # number of simulation repeats
+total_sim = 1 # number of simulation repeats
 step = 1
 
 
@@ -42,7 +42,7 @@ slowrate =0.0 #per min; for resource model
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
-AB_conc = 30 #ug/mL
+AB_conc = 10 #ug/mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL

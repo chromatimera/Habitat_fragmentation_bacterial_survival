@@ -25,7 +25,7 @@ nr_drops = 1000
 droplet_list = np.arange(0, 20001, 400)
 droplet_list[0] = 1
 initialN = 0.25
-antib = [10, 15, 20, 30]
+antib = [10, 15]
 color = iter(plt.cm.rainbow(np.linspace(0, 1, 5)))
 
 m_list = []
@@ -53,7 +53,11 @@ for ab, c, ind in zip(antib, color, range(len(antib))):
 
         surviving_last_row = np.count_nonzero(last_row)
         first_row_nonzero = np.count_nonzero(first_row)
-        percentage = surviving_last_row/first_row_nonzero
+        if first_row_nonzero == 0:
+            percentage = 0
+        else:
+
+            percentage = surviving_last_row/first_row_nonzero
         m_subvol= len(last_row[0,:])
 
         m_list.append(m_subvol)
