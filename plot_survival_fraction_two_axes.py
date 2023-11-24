@@ -23,13 +23,15 @@ plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
 plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsize
 
 #rootdir = './output/'
-ab = [15, 45,55, 75]
+ab = [15, 35,55, 75]
 rho = 5e7 ## this is the initial density of cells/mL; for sim starting with lamda = 5; change accordingly
 
 zz=np.load('prob_line.npy')
 #os.chdir(rootdir)
 zzz= zz.T
 #os.chdir(rootdir)
+subvol_list = 1e-4 / vol_fac
+rhoV = 5E7 * subvol_list
 
 
 print('current dir', os.getcwd())
@@ -94,14 +96,17 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     theory_line_df = theory_line_df.set_index('RhoV', drop=True)
     plt.figure(1)
     theory_line_df["big_Ps"].plot.line(ax=ax1, c=c, linestyle='dashed', label='_nolegend_', logx=True)#, color = 'orange'
-    surv_fraction_transpose["Surv frac"].plot.line(ax=ax1, marker='x',    linestyle='None',yerr=surv_fraction_errors, c=c, logx=True)#, color = 'orange')
+    surv_fraction_transpose["Surv frac"].plot.line(ax=ax1, marker='o',    linestyle='None',yerr=surv_fraction_errors, c=c, logx=True)#, color = 'orange')
     label_list.append('{}'.format(antib))
     logPs=np.log(theory_line_df)
     logPs_sim=np.log(surv_fraction_transpose)
 
     plt.figure(2)
-    plt.plot(    logPs, c=c)
-    plt.plot(logPs_sim,marker='x',linestyle='None' ,c=c)
+    #logPs.plot.line(y='big_Ps', c=c)
+   # plt.plot( rhoV,logPs, c=c)
+    logPs['big_Ps'].plot.line( c=c) #theory
+    logPs_sim['Surv frac'].plot.line(marker='o',linestyle='None' ,c=c)
+   # plt.plot(rhoV, logPs_sim,marker='o',linestyle='None' ,c=c)
 
     surv_fraction_transpose.to_csv('../Survival_fraction_transpose_{}'.format(antib))
     os.chdir('..')
@@ -131,8 +136,8 @@ plt.savefig('Survival fraction {} y vs logx'.format(growth), dpi=600)
 plt.figure(2)
 plt.xlim([1,100])
 plt.ylim([-30,1])
-ax1.set_ylabel('Log (Ps)')
-ax1.set_xlabel(r'\bf{$\rho$v (number of cells in droplet)}')
+plt.ylabel('Log (Ps) /// log(sim_surv_fract)')
+plt.xlabel(r'\bf{$\rho$v (number of cells in droplet)}')
 plt.gca().invert_xaxis()
 plt.savefig('Log_Ps_plus sim'.format(growth), dpi=600)
 plt.show()
