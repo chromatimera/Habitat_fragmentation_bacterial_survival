@@ -1,4 +1,7 @@
 import math
+
+import numpy as np
+
 import variables
 from os import listdir
 from os.path import isfile, join
@@ -9,7 +12,7 @@ from ps_theory import vol_fac
 #import matplotlib as mpl
 #mpl.rcParams.update(mpl.rcParamsDefault)
 
-BIGGER_SIZE = 22
+BIGGER_SIZE = 15 ##22
 
 #plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 #plt.rc('text', usetex=True)
@@ -32,23 +35,34 @@ color_list = []
 label_list = []
 slope=np.empty(len(ab))
 intercept=np.empty(len(ab))
+slope5=np.empty(len(ab))
+intercept5=np.empty(len(ab))
 #print(color)
 g=0
 #c=next(color)
+a = [x - MIC for x in ab]
+a_m=[x / MIC for x in ab]
+F=(a )+6.7* np.log (a_m)
+rhoT=(deathrate/ Vmax)*F
+
 for antib, c, ind in zip(ab, color, range(len(ab))):
 
     if ind == 2:
         c = next(color)
-    print(c)
+   # print(c)
     theory_line_df = pd.DataFrame(zzz[:, ind], columns=['big_Ps'], index=vol_fac)
     theory_line_df.index.name = 'Vol_fac'
     theory_line_df = theory_line_df.sort_values(by="Vol_fac", ascending=True)
     subvol_list=1e-4 /vol_fac
     rhoV= 5E7 *subvol_list
+    x_axis =rhoV*((rhoT[g]/5E7 -1)**2)
+    x_axis2= (rhoT[g]/5E7 -(rhoT[g]/5E7)*np.log(1+ ((rhoT[g]-5E7)/5E7) ) -1) *rhoV
     logPs = np.log(theory_line_df)
     #gradient;
     slope[g], intercept[g] = np.polyfit(subvol_list[100:400], logPs[100:400], 1)
-    g=g+1
+    slope5[g], intercept5[g] = np.polyfit(x_axis2[20:400], logPs[20:400], 1)
+
+    g = g + 1
     ## for plot of log (1-Ps) vs 1/m2
 
     one_minus_Ps = 1 - theory_line_df
@@ -73,11 +87,20 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     ## plot 1-Ps versus 1/m2
     #plt.plot(one_minus_Ps['m2'], one_minus_Ps['log'])
     #print(os.getcwd())
+
    #plot little v vs log Ps;
-    plt.figure(2)
-    plt.plot(subvol_list, logPs, c=c)
+ #   plt.figure(2)
+  #  plt.plot(subvol_list, logPs, c=c)
+
     plt.figure(3)
     plt.plot(rhoV, logPs, c=c)
+
+
+    plt.figure(4)
+    plt.plot(x_axis, logPs, c=c)
+
+    plt.figure(5)
+    plt.plot(x_axis2, logPs, c=c)
 #plt.figure(1)
 #plt.ylabel(r'\bf{log(1-$P_{s}$)}')
 #plt.xlabel(r'\bf{$m^{2}$ (number of subvolumes)}')
@@ -86,15 +109,15 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
 #plt.tight_layout()
 #plt.savefig('1-ps_{}'.format(growth), dpi=600)
 
-plt.figure(2)
+#plt.figure(2)
 #plt.tight_layout()
 #ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
-plt.ylabel(r'\bf{log($P_{s}$)}')
-plt.xlabel(r'\bf{v (ml)}')
-plt.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/ml}', loc='upper center', bbox_to_anchor=(0.5, 1.17), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE)
+#plt.ylabel(r'\bf{log($P_{s}$)}')
+#plt.xlabel(r'\bf{v (ml)}')
+#plt.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/ml}', loc='upper center', bbox_to_anchor=(0.5, 1.17), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE)
 #plt.tight_layout()
-plt.xlim([0,6E6])
-plt.savefig('logPs_{}'.format(growth), dpi=600)
+#plt.xlim([0,6E6])
+#plt.savefig('logPs_{}'.format(growth), dpi=600)
 
 
 plt.figure(3)
@@ -107,7 +130,22 @@ plt.xlabel('rho*v (cells)')
 #plt.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/ml}', loc='upper center', bbox_to_anchor=(0.5, 1.17), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE)
 plt.tight_layout()
 plt.savefig('logPs_theory', dpi=600)
+
+
+plt.figure(4)
+plt.ylabel('log(P_s)')
+plt.xlabel('(rho*v (rhoT/rho -1 )^2)')
+plt.savefig('logPs_norm_rhoT', dpi=600)
+
+
+
+plt.figure(5)
+plt.ylabel('log(P_s)')
+plt.xlabel('rho*v *(rhoT/rho -(rhoT/rho)*np.log(1+ ((rhoT-rho)/rho) ) -1)')
+plt.savefig('logPs_rhoT_full', dpi=600)
+
+
 plt.show()
 
 #print('Gradients:',"{0:.2E}".format(slope))
-print('Gradients:',slope)
+print('Gradients:',slope5)

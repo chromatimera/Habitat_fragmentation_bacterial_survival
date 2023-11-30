@@ -156,3 +156,5 @@ cython_debug/
 *.csv
 *.png
 output/*
+variables.py
+variables.py
