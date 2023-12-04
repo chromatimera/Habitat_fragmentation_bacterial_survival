@@ -12,7 +12,7 @@ from ps_theory import vol_fac
 #import matplotlib as mpl
 #mpl.rcParams.update(mpl.rcParamsDefault)
 
-BIGGER_SIZE = 15 ##22
+BIGGER_SIZE = 10 ##22
 
 #plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 #plt.rc('text', usetex=True)
@@ -56,12 +56,12 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     subvol_list=1e-4 /vol_fac
     rhoV= 5E7 *subvol_list
     x_axis =rhoV*((rhoT[g]/5E7 -1)**2)
-    x_axis2= (rhoT[g]/5E7 -(rhoT[g]/5E7)*np.log(1+ ((rhoT[g]-5E7)/5E7) ) -1) *rhoV
+    x_axis2= (rhoT[g]/5E7 -(rhoT[g]/5E7)*np.log (1+((rhoT[g]-5E7)/5E7) ) -1) *rhoV
     logPs = np.log(theory_line_df)
     #gradient;
     slope[g], intercept[g] = np.polyfit(subvol_list[100:400], logPs[100:400], 1)
-    slope5[g], intercept5[g] = np.polyfit(x_axis2[20:400], logPs[20:400], 1)
-
+    #slope5[g], intercept5[g] = np.polyfit(x_axis2[20:400], logPs[20:400], 1)
+    slope5[g], intercept5[g] = np.polyfit(x_axis2[100:400], logPs[100:400], 1)
     g = g + 1
     ## for plot of log (1-Ps) vs 1/m2
 
@@ -100,7 +100,7 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     plt.plot(x_axis, logPs, c=c)
 
     plt.figure(5)
-    plt.plot(x_axis2, logPs, c=c)
+    plt.plot(x_axis2, logPs, c=c,linestyle='dashed')
 #plt.figure(1)
 #plt.ylabel(r'\bf{log(1-$P_{s}$)}')
 #plt.xlabel(r'\bf{$m^{2}$ (number of subvolumes)}')
@@ -141,7 +141,8 @@ plt.savefig('logPs_norm_rhoT', dpi=600)
 
 plt.figure(5)
 plt.ylabel('log(P_s)')
-plt.xlabel('rho*v *(rhoT/rho -(rhoT/rho)*np.log(1+ ((rhoT-rho)/rho) ) -1)')
+plt.xlabel('\rho v  f(\rho, \rho*)' )
+#plt.xlabel('rho*v *(rhoT/rho -(rhoT/rho)*np.log(1+ ((rhoT-rho)/rho) ) -1)')
 plt.savefig('logPs_rhoT_full', dpi=600)
 
 

@@ -11,7 +11,7 @@ from collections import Counter
 
 from ps_theory import vol_fac
 
-BIGGER_SIZE = 32
+BIGGER_SIZE = 10
 
 #### FIGURE 4 SURVIVAL PROBABILITY OF A POPULATION OF BACTERIA
 
@@ -32,7 +32,10 @@ zzz= zz.T
 #os.chdir(rootdir)
 subvol_list = 1e-4 / vol_fac
 rhoV = 5E7 * subvol_list
-
+a = [x - MIC for x in ab]
+a_m=[x / MIC for x in ab]
+F=(a )+6.7* np.log (a_m)
+rhoT=(deathrate/ Vmax)*F
 
 print('current dir', os.getcwd())
 
@@ -43,10 +46,9 @@ color = iter(plt.cm.rainbow(np.linspace(0, 1, 5)))
 color_list = []
 label_list = []
 print(color)
-
+g=0
 for antib, c, ind in zip(ab, color, range(len(ab))):
     print('ab conc', antib)
-    print(c)
 
     if ind == 2:
         c = next(color)
@@ -71,9 +73,8 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     theory_line_df = theory_line_df.sort_values(by="Vol_fac", ascending=True)
     theory_line_df['M'] = theory_line_df.index.astype(int)
     theory_line_df['RhoV'] = theory_line_df.apply(lambda x: rho * 1e-4 / x['M'], axis=1)
-
-    plt.figure(1)
-
+    theory_line_df['logPs'] = theory_line_df.apply(lambda x:np.log(x["big_Ps"]), axis=1)
+    theory_line_df['f(rho,rho*)RV'] = theory_line_df.apply(lambda x: (rhoT[g] / 5E7 - (rhoT[g] / 5E7) * np.log(1 + ((rhoT[g] - 5E7) / 5E7)) - 1) * x['RhoV'], axis=1)
     ### transpose of dataframe
     surv_fraction_transpose = surv_fraction.T
     surv_fraction_transpose.index.name = 'Part_fact'
@@ -81,7 +82,10 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     surv_fraction_transpose.columns = ['Surv frac']
     surv_fraction_transpose['M'] = surv_fraction_transpose.index.astype(int)
     surv_fraction_transpose['RhoV'] = surv_fraction_transpose.apply(lambda x: rho * 1e-4 / x['M'], axis=1)
+    surv_fraction_transpose['logPs'] = surv_fraction_transpose.apply(lambda x:np.log(x["Surv frac"]), axis=1)
+    surv_fraction_transpose['f(rho,rho*)RV'] = surv_fraction_transpose.apply(lambda x: (rhoT[g] / 5E7 - (rhoT[g] / 5E7) * np.log(1 + ((rhoT[g] - 5E7) / 5E7)) - 1) * x['RhoV'], axis=1)
 
+    g=g+1
 
     surv_fraction_transpose['Error95'] = surv_fraction_transpose.apply(lambda x: 2 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(variables.total_sim), axis=1)
     surv_fraction_transpose['Error99'] = surv_fraction_transpose.apply(lambda x: 2.6 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(variables.total_sim), axis=1)
@@ -91,22 +95,44 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     #print('errors',surv_fraction_errors)
 
     surv_fraction_transpose.index = surv_fraction_transpose.index.map(int)
-
     surv_fraction_transpose = surv_fraction_transpose.set_index('RhoV', drop=True)
     theory_line_df = theory_line_df.set_index('RhoV', drop=True)
+
     plt.figure(1)
     theory_line_df["big_Ps"].plot.line(ax=ax1, c=c, linestyle='dashed', label='_nolegend_', logx=True)#, color = 'orange'
     surv_fraction_transpose["Surv frac"].plot.line(ax=ax1, marker='o',    linestyle='None',yerr=surv_fraction_errors, c=c, logx=True)#, color = 'orange')
     label_list.append('{}'.format(antib))
+
+    #fig 2
     logPs=np.log(theory_line_df)
     logPs_sim=np.log(surv_fraction_transpose)
 
     plt.figure(2)
     #logPs.plot.line(y='big_Ps', c=c)
    # plt.plot( rhoV,logPs, c=c)
-    logPs['big_Ps'].plot.line( c=c) #theory
-    logPs_sim['Surv frac'].plot.line(marker='o',linestyle='None' ,c=c)
+    logPs['big_Ps'].plot.line( c=c,linestyle='dashed') #theory
+    surv_fraction_transpose['logPs'].plot.line(marker='o',linestyle='None' ,c=c)
+
+    #fig 3;
    # plt.plot(rhoV, logPs_sim,marker='o',linestyle='None' ,c=c)
+    #logPs['RhoV'] = logPs.apply(lambda x: rho * 1e-4 / x['M'], axis=1)
+    #logPs['f(rho,rho*)RV'] = logPs.apply(lambda x: (rhoT[g] / 5E7 - (rhoT[g] / 5E7) * np.log(1 + ((rhoT[g] - 5E7) / 5E7)) - 1) * x['RhoV'], axis=1)
+    #logPs = logPs.set_index('f(rho,rho*)RV', drop=True)  #new xaxis
+    #logPs_sim = logPs_sim.set_index('f(rho,rho*)RV', drop=True)
+   # logPs_sim['RhoV'] = logPs_sim.apply(lambda x: rho * 1e-4 / x['M'], axis=1)
+   # logPs_sim['f(rho,rho*)RV'] = logPs_sim.apply(lambda x: (rhoT[g] / 5E7 - (rhoT[g] / 5E7) * np.log(1 + ((rhoT[g] - 5E7) / 5E7)) - 1) * x['RhoV'], axis=1)
+    #logPs_sim = logPs_sim.set_index('f(rho,rho*)RV', drop=True)  #new xaxis
+
+    theory_line_df = theory_line_df.set_index('f(rho,rho*)RV', drop=True)
+    surv_fraction_transpose = surv_fraction_transpose.set_index('f(rho,rho*)RV', drop=True)
+
+    plt.figure(3)
+    theory_line_df['logPs'].plot( style='--', c=c)
+    #theory_line_df['logPs'].plot(x=theory_line_df['f(rho,rho*)RV'], style='--',c=c)
+    surv_fraction_transpose['logPs'].plot( style='o',c=c)
+   # logPs['big_Ps'].plot.line(c=c, linestyle='dashed')
+   # logPs_sim["logPs"].plot.line(marker='o',   linestyle='None', c=c)
+
 
     surv_fraction_transpose.to_csv('../Survival_fraction_transpose_{}'.format(antib))
     os.chdir('..')
@@ -140,4 +166,12 @@ plt.ylabel('Log (Ps) /// log(sim_surv_fract)')
 plt.xlabel(r'\bf{$\rho$v (number of cells in droplet)}')
 plt.gca().invert_xaxis()
 plt.savefig('Log_Ps_plus sim'.format(growth), dpi=600)
+
+plt.figure(3)
+plt.ylabel('Log (Ps) /// log(sim_surv_fract)')
+plt.xlabel(r'\bf{$\rho$v f(rho , rho*)}')
+plt.xlim([-20,0.5])
+plt.ylim([-20,0.5])
+plt.savefig('Log_Ps_V_f(rho,rhoT) plus sim_zoom', dpi=600)
+
 plt.show()
