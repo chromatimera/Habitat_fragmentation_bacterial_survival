@@ -42,55 +42,53 @@ color_list = []
 label_list = []
 print(color)
 
-for c in color:
-    ind = 0
-    for loading in (['det', 'rand']):
-        for growth in (['binary', 'gillespie_binary']):
+for loading in (['det', 'rand']):
+    for growth in (['binary', 'gillespie_binary']):
 
-            os.chdir('dropnr_1000_loading_{}_growth_{}_initialN_5_abconc_35'.format(loading, growth))
-            path = os.getcwd()
+        os.chdir('dropnr_1000_loading_{}_growth_{}_initialN_5_abconc_35'.format(loading, growth))
+        path = os.getcwd()
 
-            onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
-            onlyfiles = sorted(onlyfiles)
-            #print(onlyfiles)
+        onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
+        onlyfiles = sorted(onlyfiles)
+        #print(onlyfiles)
 
-            if '.DS_Store' in onlyfiles:
-                onlyfiles.remove('.DS_Store')
-            else:
-                pass
+        if '.DS_Store' in onlyfiles:
+            onlyfiles.remove('.DS_Store')
+        else:
+            pass
 
-            surv_fraction = pd.read_csv(onlyfiles[3])
-            #print('surf fraction df', surv_fraction)
-            part_fact = np.loadtxt(onlyfiles[2])
+        surv_fraction = pd.read_csv(onlyfiles[3])
+        #print('surf fraction df', surv_fraction)
+        part_fact = np.loadtxt(onlyfiles[2])
 
 
-            plt.figure(1)
+        plt.figure(1)
 
-            ### transpose of dataframe
-            surv_fraction_transpose = surv_fraction.T
-            surv_fraction_transpose.index.name = 'Part_fact'
+        ### transpose of dataframe
+        surv_fraction_transpose = surv_fraction.T
+        surv_fraction_transpose.index.name = 'Part_fact'
 
-            surv_fraction_transpose.columns = ['Surv frac']
-            surv_fraction_transpose['M'] = surv_fraction_transpose.index.astype(int)
-            surv_fraction_transpose['RhoV'] = surv_fraction_transpose.apply(lambda x: rho * 1e-4 / x['M'], axis=1)
+        surv_fraction_transpose.columns = ['Surv frac']
+        surv_fraction_transpose['M'] = surv_fraction_transpose.index.astype(int)
+        surv_fraction_transpose['RhoV'] = surv_fraction_transpose.apply(lambda x: rho * 1e-4 / x['M'], axis=1)
 
 
-            surv_fraction_transpose['Error95'] = surv_fraction_transpose.apply(lambda x: 2 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(variables.total_sim), axis=1)
-            surv_fraction_transpose['Error99'] = surv_fraction_transpose.apply(lambda x: 2.6 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(variables.total_sim), axis=1)
-            surv_fraction_errors = surv_fraction_transpose.Error95.to_frame('Surv frac')
-            surv_fraction_errors.index = surv_fraction_errors.index.map(int)
-            surv_fraction_errors.index = surv_fraction_transpose['RhoV']
-            #print('errors',surv_fraction_errors)
+        surv_fraction_transpose['Error95'] = surv_fraction_transpose.apply(lambda x: 2 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(variables.total_sim), axis=1)
+        surv_fraction_transpose['Error99'] = surv_fraction_transpose.apply(lambda x: 2.6 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(variables.total_sim), axis=1)
+        surv_fraction_errors = surv_fraction_transpose.Error95.to_frame('Surv frac')
+        surv_fraction_errors.index = surv_fraction_errors.index.map(int)
+        surv_fraction_errors.index = surv_fraction_transpose['RhoV']
+        #print('errors',surv_fraction_errors)
 
-            surv_fraction_transpose.index = surv_fraction_transpose.index.map(int)
+        surv_fraction_transpose.index = surv_fraction_transpose.index.map(int)
 
-            surv_fraction_transpose = surv_fraction_transpose.set_index('RhoV', drop=True)
+        surv_fraction_transpose = surv_fraction_transpose.set_index('RhoV', drop=True)
 
-            surv_fraction_transpose["Surv frac"].plot.line(ax=ax1, yerr=surv_fraction_errors, c=c, logx=True)#, linestyle=markers[ind])#, color = 'orange')
-            label_list.append('{}, {}'.format(loading, growth))
-            print('{}, {}'.format(loading, growth))
-            os.chdir('..')
-            ind +=1
+        surv_fraction_transpose["Surv frac"].plot.line(ax=ax1, yerr=surv_fraction_errors, c=c, logx=True)#, linestyle=next(markers))#, color = 'orange')
+        #label_list.append('{}, {}'.format(loading, growth))
+        print('{}, {}'.format(loading, growth))
+        os.chdir('..')
+        ind +=1
 
 
 
