@@ -13,7 +13,8 @@ from ps_theory import vol_fac
 
 BIGGER_SIZE = 22
 
-#### FIGURE 4 SURVIVAL PROBABILITY OF A POPULATION OF BACTERIA
+#### FIGURE SUPPL MATERIAL COMPARISON BETWEEN RAND/DET LOADING + STOCH/DET GROWTH
+
 
 plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 plt.rc('text', usetex=True)
@@ -25,23 +26,24 @@ plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsize
 #rootdir = './output/'
 ab = [35]
 rho = 5e7 ## this is the initial density of cells/mL; for sim starting with lamda = 5; change accordingly
+total_sim = 1000 # number of simulation repeats
 
 zz=np.load('prob_line.npy')
 #os.chdir(rootdir)
 zzz= zz.T
 #os.chdir(rootdir)
 
-markers = ['-', '--', ':', '-.']
+# markers = ['-', '--', ':', '-.']
+linestyles = [ '--', ':','-', '-.'] #['dotted', 'dashed', 'dashdot', 'long dash with offset']
 print('current dir', os.getcwd())
 
 
 fig = plt.figure(figsize=(8,9))
 ax1 = fig.add_subplot(111)
-color = iter(plt.cm.rainbow(np.linspace(0, 1,5)))
-color_list = []
-label_list = []
-print(color)
+color = plt.cm.rainbow(np.linspace(0, 1,5))
 
+label_list = []
+ind = 0
 for loading in (['det', 'rand']):
     for growth in (['binary', 'gillespie_binary']):
 
@@ -73,8 +75,8 @@ for loading in (['det', 'rand']):
         surv_fraction_transpose['RhoV'] = surv_fraction_transpose.apply(lambda x: rho * 1e-4 / x['M'], axis=1)
 
 
-        surv_fraction_transpose['Error95'] = surv_fraction_transpose.apply(lambda x: 2 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(variables.total_sim), axis=1)
-        surv_fraction_transpose['Error99'] = surv_fraction_transpose.apply(lambda x: 2.6 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(variables.total_sim), axis=1)
+        surv_fraction_transpose['Error95'] = surv_fraction_transpose.apply(lambda x: 2 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(total_sim), axis=1)
+        surv_fraction_transpose['Error99'] = surv_fraction_transpose.apply(lambda x: 2.6 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(total_sim), axis=1)
         surv_fraction_errors = surv_fraction_transpose.Error95.to_frame('Surv frac')
         surv_fraction_errors.index = surv_fraction_errors.index.map(int)
         surv_fraction_errors.index = surv_fraction_transpose['RhoV']
@@ -84,8 +86,8 @@ for loading in (['det', 'rand']):
 
         surv_fraction_transpose = surv_fraction_transpose.set_index('RhoV', drop=True)
 
-        surv_fraction_transpose["Surv frac"].plot.line(ax=ax1, yerr=surv_fraction_errors, c=c, logx=True)#, linestyle=next(markers))#, color = 'orange')
-        #label_list.append('{}, {}'.format(loading, growth))
+        surv_fraction_transpose["Surv frac"].plot.line(ax=ax1, yerr=surv_fraction_errors, c = color[0], linestyle = linestyles[ind], logx=True)#, linestyle=next(markers))#, color = 'orange')
+        label_list.append('{}, {}'.format(loading, growth))
         print('{}, {}'.format(loading, growth))
         os.chdir('..')
         ind +=1
@@ -113,5 +115,4 @@ ax2.set_xlabel(r'\bf{m (number of subvolumes)}')
 ax1.legend(label_list, title=r'\bf{Type of simulation}', loc='upper center', bbox_to_anchor=(0.5, 1.45), ncol=2, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE)
 plt.tight_layout()
 plt.savefig('Prob of survival comparison det to stoc'.format(growth), dpi=600)
-
 plt.show()
