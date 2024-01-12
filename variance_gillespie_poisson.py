@@ -12,7 +12,7 @@ from matplotlib.lines import Line2D
 from collections import Counter
 from matplotlib import rc
 
-#### SCRIPT TO COMPARE VARIANCE BETWEEN GILLESPIE SIMULATIONS +
+#### SCRIPT TO COMPARE VARIANCE BETWEEN GILLESPIE SIMULATIONS - NOT WORKING YET
 
 
 BIGGER_SIZE = 22
