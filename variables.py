@@ -35,7 +35,7 @@ volume = round(volume_big_drop * param_small_droplets, 12)
 Nsat = 1e12
 
 ## Cchange N to be equivalent to 5 bact for 1000 droplets - to link with the other simulations
-initialN = 0.25
+initialN = 0.25 # lambda value defined for the highest/max m value simulated
 growthrate = 0.01 # per minute from experimental data Nia thesis
 deathrate  = 0.045  # per minute from Gore 2013
 slowrate =0.0 #per min; for resource model
