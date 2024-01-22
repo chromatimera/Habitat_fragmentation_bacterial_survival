@@ -88,6 +88,8 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     g=g+1
 
     surv_fraction_transpose['Error95'] = surv_fraction_transpose.apply(lambda x: 2 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(variables.total_sim), axis=1)
+    surv_fraction_transpose['Error95_SEM'] = surv_fraction_transpose.apply(lambda x: 2 *np.std(x['Surv frac'] )/ math.sqrt(variables.total_sim), axis=1)
+
     surv_fraction_transpose['Error99'] = surv_fraction_transpose.apply(lambda x: 2.6 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(variables.total_sim), axis=1)
     surv_fraction_errors = surv_fraction_transpose.Error95.to_frame('Surv frac')
     surv_fraction_errors.index = surv_fraction_errors.index.map(int)

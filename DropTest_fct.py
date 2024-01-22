@@ -60,7 +60,7 @@ class DropTest(object):
                         print("Error in partitioning; the volume of the droplet is smaller than the volume of the bacteria simulated inside")
                     else:
 
-                        ## calculate the total nr of bacteria in all droplets, if any survived, prob survival = 1
+                        ## calculate the total nr of bacteria in all droplets, if any survived,  survival FRACTION = 1
                         Droplet_exp.countTotalMass(growth)
                         #Droplet_exp.plots(growth)
                         Droplet_exp.save('initialN{}_growthrate{}_MIC{}_totaldropnr{}_ABconc{}_'

@@ -23,8 +23,9 @@ F=(AB_x-MIC )+medkm* np.log (AB_x/MIC)
 rhoT=(deathrate/ Vmax)*F
 rhoT_low=((AB_x-MIC )+ lowkm* np.log (AB_x/MIC) )* (deathrate/ Vmax)
 rhoT_high= ((AB_x-MIC )+ highkm* np.log (AB_x/MIC)) * (deathrate/ Vmax)
-#example calc;
-RHOt_eg =((30-MIC )+ medkm* np.log (30/MIC) )* (deathrate/ Vmax)
+
+#example calc (replace AB_x);
+RHOt_eg =((55-MIC )+ medkm* np.log (55/MIC) )* (deathrate/ Vmax)
 print('{:.5E}'.format(RHOt_eg))
 y =rhoT
 y[0]=0

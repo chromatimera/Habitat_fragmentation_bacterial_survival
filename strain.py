@@ -130,7 +130,7 @@ class strain(object):
             self.N = self.N + self.N * self.growthrate * self.dt  ## N grows uninhibited, normalized by dt
         else:
             self.N = self.N - self.N * self.deathrate * self.dt   ## N dies with growthrate normalized by dt
-        if self.N < 1.0:  #### #can't have less than 1 bacteria ??
+        if self.N < 1:  #### #can't have less than 1 bacteria
            self.N = 0
 
     def resource_growth(self, AB_conc): #DET growth

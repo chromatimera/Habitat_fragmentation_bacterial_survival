@@ -7,13 +7,14 @@ getcontext().prec = 50
 
 ### nr of droplets and the power of i and j in the partitioning loop are related i.e. for 100 droplets, the loop goes from 0 to 3.
 #droplet_list = [2000]
-droplet_list = np.arange(0, 20001, 400)
+droplet_list = np.arange(0, 10001, 1000)
 droplet_list[0] = 1
 
 # setting up time values
 t_start = 0
 t_end = 300
-dt = 1
+dt = 30
+
 spec_time = 299  # this is a specific time at which we calculate the number of bacteria left alive; it is set to 299 as it is the last timepoint in the for loop
 total_sim = 1 # number of simulation repeats
 step = 1
@@ -34,7 +35,7 @@ volume = round(volume_big_drop * param_small_droplets, 12)
 
 Nsat = 1e12
 
-## Cchange N to be equivalent to 5 bact for 1000 droplets - to link with the other simulations
+## Change N to be equivalent to 5 bact for 1000 droplets - to link with the other simulations
 initialN = 0.25 # lambda value defined for the highest/max m value simulated
 growthrate = 0.01 # per minute from experimental data Nia thesis
 deathrate  = 0.045  # per minute from Gore 2013
