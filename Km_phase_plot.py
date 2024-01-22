@@ -34,7 +34,7 @@ x=AB_x
 
 plt.plot(x,rhoT_high,'--', linewidth=4, label="Large KM", color='black')
 plt.plot(x,rhoT_low,'.', linewidth=4,label="Small KM", color='black')
-plt.plot(x,rhoT, linewidth=4,label="Small KM", color='black')
+plt.plot(x,rhoT, linewidth=4,label="KM", color='black')
 
 plt.rcParams['hatch.color'] = 'g'
 ax2.fill_between(x, y, facecolor='red', alpha=0.2)

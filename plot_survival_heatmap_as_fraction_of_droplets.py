@@ -5,7 +5,7 @@ import numpy as np
 from os import listdir
 import os
 from os.path import isfile, join
-
+from variables import *
 import matplotlib.ticker as tkr
 import math
 
@@ -30,7 +30,11 @@ total_sim = 1
 m = 1
 
 Ni = np.arange(1, 9, 1).tolist()
-antib = np.arange(0, 26, 1).tolist()
+antib = np.arange(0, 26, 1)
+#calculate rho for phase line;
+F=(antib-MIC )+Km* np.log (antib/MIC)  #########
+rhoT=(deathrate/ Vmax)*F
+antib = antib.tolist()
 
 os.chdir('./output/')
 print(os.getcwd())
@@ -96,6 +100,7 @@ df_heatmap_survival.set_index('Rho', inplace=True, drop=True)
 print(df_heatmap_survival)
 rho_list = np.array(df_heatmap_survival.index)
 rho_list=rho_list  *1e7  ## do we just get rid ??
+plt.plot(antib,rhoT, linewidth=4,label="KM", color='white')   #adding rho* phase line
 
 # Define the plot
 fig, ax = plt.subplots(figsize=(15, 8))
