@@ -60,6 +60,7 @@ for loading in (['det', 'rand']):
             pass
 
         surv_fraction = pd.read_csv(onlyfiles[3])
+        print(onlyfiles[3])
         #print('surf fraction df', surv_fraction)
         part_fact = np.loadtxt(onlyfiles[2])
 
@@ -77,6 +78,7 @@ for loading in (['det', 'rand']):
 
         surv_fraction_transpose['Error95'] = surv_fraction_transpose.apply(lambda x: 2 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(total_sim), axis=1)
         surv_fraction_transpose['Error99'] = surv_fraction_transpose.apply(lambda x: 2.6 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(total_sim), axis=1)
+
         surv_fraction_errors = surv_fraction_transpose.Error95.to_frame('Surv frac')
         surv_fraction_errors.index = surv_fraction_errors.index.map(int)
         surv_fraction_errors.index = surv_fraction_transpose['RhoV']
@@ -90,6 +92,7 @@ for loading in (['det', 'rand']):
         label_list.append('{}, {}'.format(loading, growth))
         print('{}, {}'.format(loading, growth))
         os.chdir('..')
+        print(surv_fraction_transpose)
         ind +=1
 
 
@@ -98,8 +101,8 @@ for loading in (['det', 'rand']):
 ax1.set_xlim(10**(2.3), 10**(0.6))
 #plt.grid(True)
 xticks = [200, 100, 50, 25, 10, 5]
-xticks_label = [5000, 100, 50, 25, 10, 5]
-second_ticks = [1, 50, 100, 200, 500, 1000]
+xticks_label = [200, 100, 50, 25, 10, 5]
+second_ticks = [25, 50, 100, 200, 500, 1000]
 ax1.set_xticks(xticks)
 ax1.set_xticklabels(xticks_label)
 
@@ -111,7 +114,7 @@ plt.xlabel(r'\bf{m (number of subvolumes)}')
 ax1.set_xlabel(r'\bf{$\rho$v (number of cells in droplet)}')
 ax1.set_ylabel(r'\bf{Probability of survival}')
 ax2.set_xlabel(r'\bf{m (number of subvolumes)}')
-
+plt.xlim([200,5])
 ax1.legend(label_list, title=r'\bf{Type of simulation}', loc='upper center', bbox_to_anchor=(0.5, 1.45), ncol=2, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE)
 plt.tight_layout()
 plt.savefig('Prob of survival comparison det to stoc'.format(growth), dpi=600)
