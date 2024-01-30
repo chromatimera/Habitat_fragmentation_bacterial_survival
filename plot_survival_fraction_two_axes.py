@@ -11,12 +11,12 @@ from collections import Counter
 
 from ps_theory import vol_fac
 
-BIGGER_SIZE = 10
+BIGGER_SIZE = 22
 
 #### FIGURE 4 SURVIVAL PROBABILITY OF A POPULATION OF BACTERIA
 
-#plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
-#plt.rc('text', usetex=True)
+plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
+plt.rc('text', usetex=True)
 plt.rc('xtick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
 plt.rc('ytick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
 plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
@@ -129,11 +129,9 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     surv_fraction_transpose = surv_fraction_transpose.set_index('f(rho,rho*)RV', drop=True)
 
     plt.figure(3)
-    theory_line_df['logPs'].plot( style='--', c=c)
+    theory_line_df['logPs'].plot( style='--', c=c,label='_nolegend_')
+    surv_fraction_transpose['logPs'].plot(style='o', c=c, yerr=surv_fraction_errors)
     #theory_line_df['logPs'].plot(x=theory_line_df['f(rho,rho*)RV'], style='--',c=c)
-    surv_fraction_transpose['logPs'].plot( style='o',c=c)
-   # logPs['big_Ps'].plot.line(c=c, linestyle='dashed')
-   # logPs_sim["logPs"].plot.line(marker='o',   linestyle='None', c=c)
 
 
     surv_fraction_transpose.to_csv('../Survival_fraction_transpose_{}'.format(antib))
@@ -164,16 +162,21 @@ plt.savefig('Survival fraction {} y vs logx'.format(growth), dpi=600)
 plt.figure(2)
 plt.xlim([1,100])
 plt.ylim([-30,1])
+plt.tight_layout()
 plt.ylabel('Log (Ps) /// log(sim_surv_fract)')
 plt.xlabel(r'\bf{$\rho$v (number of cells in droplet)}')
 plt.gca().invert_xaxis()
 plt.savefig('Log_Ps_plus sim'.format(growth), dpi=600)
 
+
 plt.figure(3)
-plt.ylabel('Log (Ps) /// log(sim_surv_fract)')
-plt.xlabel(r'\bf{$\rho$v f(rho , rho*)}')
+plt.ylabel('Log ($P_s$)')  #/// log(sim_surv_fract)
+plt.xlabel(r'\bf{$\rho$v f($\rho$ , $\rho$*)}')
 plt.xlim([-20,0.5])
 plt.ylim([-20,0.5])
+plt.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE-10)
+plt.tight_layout()
 plt.savefig('Log_Ps_V_f(rho,rhoT) plus sim_zoom', dpi=600)
+
 
 plt.show()

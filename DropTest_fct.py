@@ -34,7 +34,7 @@ class DropTest(object):
             for i in range(len(droplet_list)):
                 total_drop_nr = droplet_list[i]
                 print('total droplets', total_drop_nr)
-                m_fact = droplet_list[-1]/total_drop_nr
+                m_fact = droplet_list[-1]/total_drop_nr # what is m_fact?
 
                 ## volume for one small droplet is 1e-7, but we're starting the simulation from the one big droplet and further getting to smaller droplets
                 new_volume = variables.volume * droplet_list[-1]/ droplet_list[i]
@@ -51,6 +51,8 @@ class DropTest(object):
                     strain_R = strain(m_fact)
                     Droplet_exp = droplets_R(total_drop_nr, strain_R, variables.AB_conc, new_volume, m_fact)
                     Droplet_exp.run(loading, growth)
+                    if total_drop_nr == 1000:
+                        print('lambda check: at subvol', new_volume, 'ml. mean=', strain_R.initialN, '. sim example=',Droplet_exp.N_r_array[0,0])
                     #print(i)
 
                     volume_cell = 1e-12  ## UNITS: mL

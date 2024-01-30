@@ -25,10 +25,10 @@ nr_drops = 1000
 #droplet_list = np.arange(0, 20001, 400)
 droplet_list = np.arange(0, 10001, 1000)  ##nv
 droplet_list[0] = 1
-initialN = 0.25
+initialN = 0.5
 antib = [30]
-color = iter(plt.cm.spring(np.linspace(0, 1, 5)))
-dt_list=[0.1, 1, 10, 20, 30, 50]
+color = iter(plt.cm.spring(np.linspace(0, 1, 6)))
+dt_list=[0.1, 1, 10, 20, 30,60]
 m_list = []
 survival_outcomes = []
 color_list = []
@@ -36,8 +36,6 @@ color_list = []
 plt.figure(figsize=(8,7))
 for t in dt_list:
  for ab, c, ind in zip(antib, color, range(len(antib))):
-    if ind == 2:
-        c = next(color)
 
     for i in range(len(droplet_list)):
         ### read dataframe and ignore first column as it's the index column
@@ -74,8 +72,10 @@ for t in dt_list:
     df["Surv frac"].plot.line(yerr = df['Error95'], c=c)
     m_list.clear()
     survival_outcomes.clear()
-plt.ylabel(r'\bf{Fraction of surviving subvolumes}')
+plt.ylabel(r'\bf{Fraction of surviving subvolumes, $p_s$}')
 plt.xlabel(r'\bf{m (number of subvolumes)}')
-plt.legend(dt_list, title=r'\bf{Timestep, dt (min)}', loc='upper center', bbox_to_anchor=(0.5, 1.18), ncol=5, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE-5)
+plt.legend(dt_list, title=r'\bf{Timestep, dt (min)}', loc='upper center', bbox_to_anchor=(0.5, 1.18), ncol=6, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE-5,borderpad=0.5, labelspacing=0.5,fontsize="14")
+plt.tight_layout
 plt.savefig('./output/Survival_fraction_dt {} .png'.format(droplet_list[-1]), dpi=600)
+
 plt.show()

@@ -33,17 +33,16 @@ volume_big_drop = 1e-4  ## should be 1e-4
 param_small_droplets = 1/droplet_list[-1]
 volume = round(volume_big_drop * param_small_droplets, 12)
 
-Nsat = 1e12
 
 ## Change N to be equivalent to 5 bact for 1000 droplets - to link with the other simulations
-initialN = 0.25 # lambda value defined for the highest/max m value simulated
+initialN =5 # lambda value defined for the highest/max m value simulated ;; 0.5 for 10,000 ;;
 growthrate = 0.01 # per minute from experimental data Nia thesis
 deathrate  = 0.045  # per minute from Gore 2013
 slowrate =0.0 #per min; for resource model
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
-AB_conc = 35 #ug/mL
+AB_conc = 55 #ug/mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL
@@ -52,7 +51,7 @@ Vmax = 3.5e-8 #ug/cell/min
 
 ## epsilon parameter for tau precheck
 epsilon = 0.03
-
+Nsat = 1e12
 ##type of loading and growth
 loading = "rand"  # rand #det
 growth = 'binary' #gillespie_binary
