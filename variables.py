@@ -16,7 +16,7 @@ t_end = 300
 dt = 1
 
 spec_time = 299  # this is a specific time at which we calculate the number of bacteria left alive; it is set to 299 as it is the last timepoint in the for loop
-total_sim = 1 # number of simulation repeats
+total_sim = 100 # number of simulation repeats
 step = 1
 
 
@@ -42,7 +42,7 @@ slowrate =0.0 #per min; for resource model
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
 MIC = 1 # ug/mL
-AB_conc = 55 #ug/mL
+AB_conc = 35 #ug/mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL

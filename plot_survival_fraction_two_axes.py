@@ -81,9 +81,12 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
 
     surv_fraction_transpose.columns = ['Surv frac']
     surv_fraction_transpose['M'] = surv_fraction_transpose.index.astype(int)
+    surv_fraction_transpose['subvol'] = surv_fraction_transpose.apply(lambda x: 1e-4/x['M'], axis=1)
+
     surv_fraction_transpose['RhoV'] = surv_fraction_transpose.apply(lambda x: rho * 1e-4 / x['M'], axis=1)
     surv_fraction_transpose['logPs'] = surv_fraction_transpose.apply(lambda x:np.log(x["Surv frac"]), axis=1)
-    surv_fraction_transpose['f(rho,rho*)RV'] = surv_fraction_transpose.apply(lambda x: (rhoT[g] / 5E7 - (rhoT[g] / 5E7) * np.log(1 + ((rhoT[g] - 5E7) / 5E7)) - 1) * x['RhoV'], axis=1)
+   # ##surv_fraction_transpose['f(rho,rho*)RV'] = surv_fraction_transpose.apply(lambda x: (rhoT[g] / 5E7 - (rhoT[g] / 5E7) * np.log(1 + ((rhoT[g] - 5E7) / 5E7)) - 1) * x['RhoV'], axis=1)
+    surv_fraction_transpose['f(rho,rho*)RV'] = surv_fraction_transpose.apply(lambda x: (rhoT[g] / 5E7 - (rhoT[g] / 5E7) * np.log(1 + ((rhoT[g] - 5E7) / 5E7)) - 1) * x['RhoV'] -np.log(x['subvol'])*(3/2), axis=1)
 
     g=g+1
 
@@ -115,22 +118,16 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     logPs['big_Ps'].plot.line( c=c,linestyle='dashed') #theory
     surv_fraction_transpose['logPs'].plot.line(marker='o',linestyle='None' ,c=c)
 
-    #fig 3;
-   # plt.plot(rhoV, logPs_sim,marker='o',linestyle='None' ,c=c)
-    #logPs['RhoV'] = logPs.apply(lambda x: rho * 1e-4 / x['M'], axis=1)
-    #logPs['f(rho,rho*)RV'] = logPs.apply(lambda x: (rhoT[g] / 5E7 - (rhoT[g] / 5E7) * np.log(1 + ((rhoT[g] - 5E7) / 5E7)) - 1) * x['RhoV'], axis=1)
-    #logPs = logPs.set_index('f(rho,rho*)RV', drop=True)  #new xaxis
-    #logPs_sim = logPs_sim.set_index('f(rho,rho*)RV', drop=True)
-   # logPs_sim['RhoV'] = logPs_sim.apply(lambda x: rho * 1e-4 / x['M'], axis=1)
-   # logPs_sim['f(rho,rho*)RV'] = logPs_sim.apply(lambda x: (rhoT[g] / 5E7 - (rhoT[g] / 5E7) * np.log(1 + ((rhoT[g] - 5E7) / 5E7)) - 1) * x['RhoV'], axis=1)
-    #logPs_sim = logPs_sim.set_index('f(rho,rho*)RV', drop=True)  #new xaxis
-
     theory_line_df = theory_line_df.set_index('f(rho,rho*)RV', drop=True)
     surv_fraction_transpose = surv_fraction_transpose.set_index('f(rho,rho*)RV', drop=True)
 
     plt.figure(3)
-    theory_line_df['logPs'].plot( style='--', c=c,label='_nolegend_')
-    surv_fraction_transpose['logPs'].plot(style='o', c=c, yerr=surv_fraction_errors)
+    theory_line_df['logPs'].plot.line( style='--', c=c,label='_nolegend_')
+    surv_fraction_transpose['logPs'].plot.line(marker='o', c=c, linestyle='None',yerr=surv_fraction_transpose['Error95'])
+
+    plt.figure(4)
+    surv_fraction_transpose['logPs'].plot.line(marker='o', c=c, linestyle='None',
+                                               yerr=surv_fraction_transpose['Error95'])
     #theory_line_df['logPs'].plot(x=theory_line_df['f(rho,rho*)RV'], style='--',c=c)
 
 
@@ -172,11 +169,31 @@ plt.savefig('Log_Ps_plus sim'.format(growth), dpi=600)
 plt.figure(3)
 plt.ylabel('Log ($P_s$)')  #/// log(sim_surv_fract)
 plt.xlabel(r'\bf{$\rho$v f($\rho$ , $\rho$*)}')
-plt.xlim([-20,0.5])
-plt.ylim([-20,0.5])
-plt.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE-10)
+plt.xlim([-15,0.5])
+plt.ylim([-15,0.5])
+plt.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}',  loc='upper center', bbox_to_anchor=(0.5, 1.2),ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE-5)
 plt.tight_layout()
 plt.savefig('Log_Ps_V_f(rho,rhoT) plus sim_zoom', dpi=600)
 
 
+plt.figure(4)
+plt.axline((0, 0), slope=1,linestyle='--' , label='_nolegend_', c='k')
+plt.ylabel('Log ($P_s$)')  #/// log(sim_surv_fract)
+plt.xlabel(r'\bf{$\rho$v f($\rho$ , $\rho$*)}')
+plt.xlim([-15,0.5])
+plt.ylim([-15,0.5])
+plt.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}',  loc='upper center', bbox_to_anchor=(0.5, 1.2),ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE-5)
+plt.tight_layout()
+plt.savefig('Log_Ps_V_f(rho,rhoT) plus sim_zoom', dpi=600)
+
 plt.show()
+
+# fig 3;
+# plt.plot(rhoV, logPs_sim,marker='o',linestyle='None' ,c=c)
+# logPs['RhoV'] = logPs.apply(lambda x: rho * 1e-4 / x['M'], axis=1)
+# logPs['f(rho,rho*)RV'] = logPs.apply(lambda x: (rhoT[g] / 5E7 - (rhoT[g] / 5E7) * np.log(1 + ((rhoT[g] - 5E7) / 5E7)) - 1) * x['RhoV'], axis=1)
+# logPs = logPs.set_index('f(rho,rho*)RV', drop=True)  #new xaxis
+# logPs_sim = logPs_sim.set_index('f(rho,rho*)RV', drop=True)
+# logPs_sim['RhoV'] = logPs_sim.apply(lambda x: rho * 1e-4 / x['M'], axis=1)
+# logPs_sim['f(rho,rho*)RV'] = logPs_sim.apply(lambda x: (rhoT[g] / 5E7 - (rhoT[g] / 5E7) * np.log(1 + ((rhoT[g] - 5E7) / 5E7)) - 1) * x['RhoV'], axis=1)
+# logPs_sim = logPs_sim.set_index('f(rho,rho*)RV', drop=True)  #new xaxis
