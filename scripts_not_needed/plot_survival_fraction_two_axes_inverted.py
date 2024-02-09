@@ -24,7 +24,7 @@ plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsize
 ab = [15, 35, 55, 75]
 rho = 5e7 ## this is the initial density of cells/mL; for sim starting with lamda = 5; change accordingly
 
-zz=np.load('prob_line.npy')
+zz=np.load('../prob_line.npy')
 #os.chdir(rootdir)
 zzz= zz.T
 #os.chdir(rootdir)
@@ -94,7 +94,7 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     surv_fraction_transpose["Surv frac"].plot.line(ax=ax1, yerr=surv_fraction_errors, c=c, logx=True)#, color = 'orange')
     label_list.append('{}'.format(antib))
 
-    os.chdir('..')
+    os.chdir('../..')
 
 
 plt.xlim(10**(0.6), 10**(2.3))
