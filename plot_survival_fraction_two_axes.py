@@ -23,7 +23,7 @@ plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
 plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsize
 
 #rootdir = './output/'
-ab = [15, 35,55, 75]
+ab = [15, 35, 55, 75]
 rho = 5e7 ## this is the initial density of cells/mL; for sim starting with lamda = 5; change accordingly
 
 zz=np.load('prob_line.npy')
@@ -147,13 +147,13 @@ ax2.xaxis.set_ticks(xticks[::-1], labels=second_ticks[::-1])
 
 plt.figure(1)
 plt.xlabel(r'\bf{m (number of subvolumes)}')
-ax1.set_xlabel(r'\bf{$\rho$v (number of cells in droplet)}')
-ax1.set_ylabel(r'\bf{Probability of survival}')
+ax1.set_xlabel(r'\bf{$\rho$v (average number of cells per subvolume)}')
+ax1.set_ylabel(r'\bf{$P_{s}$}')
 ax2.set_xlabel(r'\bf{m (number of subvolumes)}')
 plt.xlim([100,5])
-ax1.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.45), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE)
+ax1.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.55), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE)
 plt.tight_layout()
-plt.savefig('Survival fraction {} y vs logx'.format(growth), dpi=600)
+plt.savefig('Survival fraction {} y vs logx updated'.format(growth), dpi=600)
 
 
 plt.figure(2)

@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 #pylatex
 BIGGER_SIZE = 22
 
-#plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
-#plt.rc('text', usetex=True) ## https://matplotlib.org/stable/tutorials/text/usetex.html
+plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
+plt.rc('text', usetex=True) ## https://matplotlib.org/stable/tutorials/text/usetex.html
 plt.rc('xtick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
 plt.rc('ytick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
 plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
@@ -32,6 +32,7 @@ y[0]=0
 x=AB_x
 (ax1, ax2) = plt.subplots(sharex=True, sharey=True)
 
+print(rhoT)
 plt.plot(x,rhoT_high,'--', linewidth=4, label="Large KM", color='black')
 plt.plot(x,rhoT_low,'.', linewidth=4,label="Small KM", color='black')
 plt.plot(x,rhoT, linewidth=4,label="KM", color='black')
@@ -43,8 +44,8 @@ ax2.fill_between(x, y, plt.ylim()[1], facecolor='green', hatch = '.', alpha=0.2 
 
 xcoord = x[int((x.size/2.5)*2)]
 ycoord = y[int((x.size/6)*2)] / 2
-plt.xlabel(r'\bf{Initial antibiotic concentration ($\mu$g/ml)}')
-plt.ylabel(r'\bf{$\rho$ (initial cells/ml)}')
+plt.xlabel(r'$a_{init}$($\mu$g/ml)')
+plt.ylabel(r'$\rho$ (initial cells/ml)')
 plt.xlim(0,55)
 plt.ylim(0,0.9e8)
 plt.tight_layout()

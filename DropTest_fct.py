@@ -64,7 +64,7 @@ class DropTest(object):
 
                         ## calculate the total nr of bacteria in all droplets, if any survived,  survival FRACTION = 1
                         Droplet_exp.countTotalMass(growth)
-                        #Droplet_exp.plots(growth)
+                        Droplet_exp.plots(growth)
                         Droplet_exp.save('initialN{}_growthrate{}_MIC{}_totaldropnr{}_ABconc{}_'
                                          'dt{}_loading{}_growth{}.csv'.format(initialN, growthrate, MIC, total_drop_nr,variables.AB_conc, dt, loading, growth),
                                          'ABconc{}_loading{}_growth{}.csv'.format(variables.AB_conc, loading, growth), 'Time.csv',  variables.AB_conc)

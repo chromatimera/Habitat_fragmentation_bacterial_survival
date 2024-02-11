@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 BIGGER_SIZE = 22
 
 
-### FIGURE 5 survival fraction droplets
+### FIGURE 5 survival fraction droplets DT PLOT supplementary material
 
 plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 plt.rc('text', usetex=True)

@@ -4,7 +4,7 @@ from variables import *
 from matplotlib import rc
 import matplotlib.pyplot as plt
 #pylatex
-BIGGER_SIZE = 22
+BIGGER_SIZE = 28
 
 plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 plt.rc('text', usetex=True) ## https://matplotlib.org/stable/tutorials/text/usetex.html
@@ -54,11 +54,12 @@ for antib, c, ind in zip(ab_conc, color, range(len(ab_conc))):
 
 xcoord = x[int((x.size/2.5)*2)]
 ycoord = y[int((x.size/6)*2)] / 2
-plt.xlabel(r'\bf{Initial antibiotic concentration ($\mu$g/ml)}')
-plt.ylabel(r'\bf{$\rho$ (initial cells/ml)}')
+plt.xlabel(r'$a_{init}$($\mu$g/ml)')
+plt.ylabel(r'$\rho$ (initial cells/ml)')
 plt.xlim(0,80)
 plt.ylim(0,0.9e8)
 plt.tight_layout()
 plt.xticks([0,15,35,55,75])
+plt.tight_layout()
 plt.savefig('km_inset.png', dpi=600)
 plt.show()

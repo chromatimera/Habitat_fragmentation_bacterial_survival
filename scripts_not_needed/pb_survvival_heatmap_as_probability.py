@@ -32,7 +32,7 @@ antib = np.arange(0, 3, 5).tolist()
 
 
 
-os.chdir('./output/')
+os.chdir('../output/')
 print(os.getcwd())
 #for ab in antib:
 os.chdir('./survival_Fraction_heatmap_1000/')
@@ -74,7 +74,7 @@ for l in Ni:
 
         surv_fraction = pd.read_csv(onlyfiles[3])
         part_fact = np.loadtxt(onlyfiles[2])
-        os.chdir('..')
+        os.chdir('../..')
 
         surv_diff_ab_same_Ni.append(surv_fraction.iloc[0,0])
         print(surv_diff_ab_same_Ni)
@@ -96,7 +96,7 @@ fig, ax = plt.subplots(figsize=(8,5))
 
 # Add title to the Heat map
 
-os.chdir('..')
+os.chdir('../..')
 
 # Use the heatmap function from the seaborn package
 sns.heatmap(df_heatmap_survival, annot=True)

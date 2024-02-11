@@ -22,18 +22,19 @@ plt.rc('axes', labelsize=BIGGER_SIZE)  # fontsize of the x and y labels
 plt.rc('legend', fontsize=BIGGER_SIZE)  # legend fontsize
 #plt.gca().ticklabel_format(useMathText=True)
 
-#ax.yaxis.major.formatter._useMathText = True
-
-
 growth = 'binary'
 total_sim = 1
 m = 1
 
 Ni = np.arange(1, 9, 1).tolist()
 antib = np.arange(0, 26, 1)
+AB_x = np.arange(0, 25, 0.5)
+
 #calculate rho for phase line;
-F=(antib-MIC )+Km* np.log (antib/MIC)  #########
+#F=(antib-MIC )+Km* np.log (antib/MIC)  #########
+F=(AB_x-MIC )+Km* np.log (AB_x/MIC)
 rhoT=(deathrate/ Vmax)*F
+rhoT[0] = 0 ## for antib = 0 rhoT is -inf, fored to 0
 antib = antib.tolist()
 
 os.chdir('./output/')
@@ -91,23 +92,24 @@ for l in Ni:
         #     ## append last row from the surv_fraction dataframe
     df_heatmap_survival.iloc[s] = survival_outcomes
     s = s + 1
-
-print(df_heatmap_survival)
+print('ANTIB',antib)
+print('rhot', rhoT)
+#print(df_heatmap_survival)
 
 df_heatmap_survival['Rho'] = df_heatmap_survival.index#* 1e7
 #df_heatmap_survival['Rho'] = df_heatmap_survival['Rho'].astype(int)
 df_heatmap_survival.set_index('Rho', inplace=True, drop=True)
-print(df_heatmap_survival)
+
 rho_list = np.array(df_heatmap_survival.index)
 rho_list=rho_list  *1e7  ## do we just get rid ??
-plt.plot(antib,rhoT, linewidth=4,label="KM", color='white')   #adding rho* phase line
+#plt.plot(antib,rhoT, linewidth=4,label="KM", color='white')   #adding rho* phase line
 
 # Define the plot
 fig, ax = plt.subplots(figsize=(15, 8))
 
 os.chdir('..')
 
-# Use the heatmap function from the seaborn package
+# Use the heatmap function from the seaåborn package
 #df_heatmap_survival=df_heatmap_survival.style.format("{:e}")
 #plt.ticklabel_format(style='plain', axis='y')
 
@@ -116,9 +118,12 @@ tick.set_powerlimits((0,0))
 tg = [u"${}$".format(tick.format_data(x)) for x in rho_list]
 sns.heatmap(df_heatmap_survival, annot=False, yticklabels=tg) #, yticklabels=rho_list)
 ax.invert_yaxis()
+
+plt.plot(AB_x,rhoT, linewidth=4,label="KM", color='red')
+
 #ax.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
-plt.xlabel(r'\bf{Initial antibiotic concentration ($\mu$g/ml)}')
-plt.ylabel(r'\bf{$\rho$ (initial cells/ml)}')
+plt.xlabel(r'$a_{init}$ ($\mu$g/ml)')
+plt.ylabel(r'$\rho$ (initial cells/ml)')
 plt.tight_layout()
 plt.savefig('heatmap {}.png'.format(m), dpi=600)
 plt.show()
