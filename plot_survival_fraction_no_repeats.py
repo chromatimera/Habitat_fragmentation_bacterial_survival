@@ -23,9 +23,9 @@ print(os.getcwd())
 nr_drops = 1000
 
 #droplet_list = np.arange(0, 20001, 400)
-droplet_list = np.arange(0, 1001, 20)  ##nv
+droplet_list = np.arange(0, 20001, 400)  ##nv
 droplet_list[0] = 1
-initialN = 5
+initialN = 0.25
 antib = [10,15,20,30]
 #color = iter(plt.cm.rainbow(np.linspace(0, 1, 5)))
 color = plt.cm.rainbow(np.linspace(0, 1,5))
@@ -38,7 +38,7 @@ color_list = []
 colors = ['lightseagreen', color[0], 'deeppink', 'darkblue']
 ind= 0
 
-plt.figure(figsize=(8,9))
+plt.figure(figsize=(8,7))
 
 for ab, index in zip(antib, range(len(antib))):
     #if ind == 2:
@@ -92,7 +92,7 @@ for ab, index in zip(antib, range(len(antib))):
 
 plt.ylabel(r'Subpopulation survival probability $p_s$')
 plt.xlabel(r'm (number of subvolumes)')
-plt.tight_layout()
-#plt.legend(antib, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.18), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE-5)
-plt.savefig('./output/Survival fraction {} no legend .png'.format(droplet_list[-1]), dpi=600)
-#plt.show()
+#plt.tight_layout()
+plt.legend(antib, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.18), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE-5)
+plt.savefig('./output/Survival fraction {} with legend .png'.format(droplet_list[-1]), dpi=600)
+plt.show()

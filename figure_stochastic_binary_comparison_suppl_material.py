@@ -108,14 +108,15 @@ ax1.set_xticklabels(xticks_label)
 
 ax2 = ax1.secondary_xaxis("top")
 ax2.xaxis.set_ticks(xticks[::-1], labels=second_ticks[::-1])
-
-
-plt.xlabel(r'\bf{m (number of subvolumes)}')
-ax1.set_xlabel(r'\bf{$\rho$v (number of cells in droplet)}')
-ax1.set_ylabel(r'\bf{Probability of survival}')
-ax2.set_xlabel(r'\bf{m (number of subvolumes)}')
+#partitioning stochasticity vs demographic stochasticity
+label_sim = ['No stochasticity', 'Demographic stochasticity (DS)', 'Partitioning stochasticity (PS)', 'Both DS and PS']
+print(label_list)
+plt.xlabel(r'm (number of subvolumes)')
+ax1.set_xlabel(r'$\rho$v (average number of cells per subvolume)')
+ax1.set_ylabel(r'$P_{s}$')
+ax2.set_xlabel(r'm (number of subvolumes)')
 plt.xlim([200,5])
-ax1.legend(label_list, title=r'\bf{Type of simulation}', loc='upper center', bbox_to_anchor=(0.5, 1.45), ncol=2, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE)
+ax1.legend(label_sim, title=r'\bf{Type of simulation}', loc='upper center', bbox_to_anchor=(0.5, 1.45), ncol=2, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE)
 plt.tight_layout()
 plt.savefig('Prob of survival comparison det to stoc'.format(growth), dpi=600)
 plt.show()

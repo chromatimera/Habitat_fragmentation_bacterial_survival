@@ -12,12 +12,11 @@ from matplotlib.lines import Line2D
 from collections import Counter
 from matplotlib import rc
 
-#### FIGURE SUPPLEMENTARY MATERIAL COMPARISON BINARY VS GILLESPIE - NOT WORKING
+#### FIGURE SUPPLEMENTARY MATERIAL COMPARISON BINARY VS GILLESPIE - working but need to check error for gillespie
 
 
 
 BIGGER_SIZE = 22
-
 rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 rc('text', usetex=True)
 rc('xtick', labelsize=BIGGER_SIZE)    # fontsize of the tick labels
@@ -34,7 +33,7 @@ rho = 5e7
 os.chdir(rootdir)
 print('current dir', os.getcwd())
 
-colors = plt.cm.rainbow(np.linspace(0, 1, 5))
+colors = iter(plt.cm.rainbow(np.linspace(0, 1, 5)))
 color_list = []
 label_list = []
 
@@ -44,11 +43,19 @@ plt.subplots_adjust(hspace=0.46)
 # loop through two types of plots
 ax1 = fig.add_subplot(211)
 ax2 = fig.add_subplot(212)
-
+c_ind=0
 for antib, c in zip(ab, colors):
     #print(ind)
-    if Counter(c) == Counter(colors[2]):
-       c = colors[3]
+    ## skipping colour 2 for bad constrast and 3 because it's associated with ab-15 ug/ml
+    #if Counter(c) == Counter(colors[0]):
+    #   c = colors[1]
+    #if Counter(c) == Counter(colors[2]):
+    #    c = colors[3]
+    if c_ind == 0:
+        c = next(colors)
+    if c_ind ==1:
+        c = next(colors)
+
     ### plot the deterministic value + error
     os.chdir('dropnr_1000_loading_rand_growth_{}_initialN_5_abconc_{}'.format(growth1, antib))
     path = os.getcwd()
@@ -98,7 +105,7 @@ for antib, c in zip(ab, colors):
     surv_fraction_transpose2['Error99'] = surv_fraction_transpose2.apply(lambda x: 2.6 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac'])) / math.sqrt(variables.total_sim), axis=1)
 
     rhov = list(surv_fraction_transpose2['RhoV'])
-    print(rhov)
+    #print(rhov)
 
     # plt.grid(True)
     surv_fraction_errors1 = surv_fraction_transpose1.Error95.to_frame('Surv frac')
@@ -181,7 +188,10 @@ for antib, c in zip(ab, colors):
     surv_fraction_transpose1["Surv frac"].plot.line(yerr=surv_fraction_errors1, c=color_list[ind], ax=ax2, logx=True)  # , color = 'orange')
     surv_fraction_transpose2["Surv frac"].plot.line(yerr=surv_fraction_errors2, linestyle='dashed',  c=color_list[ind], ax=ax2, logx=True, label='_nolegend_')  # color = 'orange')
 
+    #print('SURV FRAC ERROR GILL', surv_fraction_errors2)
+
     label_list.append('{}'.format(antib))
+    c_ind +=1
 
 # chart formatting
 xticks = [200, 100, 50, 25, 10, 5]
@@ -191,24 +201,24 @@ second_ticks = [1, 50, 100, 200, 500, 1000]
 ax1.set_xlim(10**(2.3), 10**(0.6))
 ax1.set_xticks(xticks)
 ax1.set_xticklabels(xticks_label)
-ax1.set_xlabel(r'\bf{$\rho$v (number of cells in droplet)}')
-ax1.set_ylabel(r'\bf{N(300 mins)}')
+ax1.set_xlabel(r'$\rho$v (average number of cells per subvolume)')
+ax1.set_ylabel(r'N(300 mins)')
 
 ax3 = ax1.secondary_xaxis("top")
 ax3.xaxis.set_ticks(xticks[::-1], labels=second_ticks[::-1])
-ax3.set_xlabel(r'\bf{m (number of subvolumes)}')
+ax3.set_xlabel(r'm (number of subvolumes)')
 
 ax2.set_xlim(10**(2.3), 10**(0.6))
 ax2.set_xticks(xticks)
 ax2.set_xticklabels(xticks_label)
-ax2.set_xlabel(r'\bf{$\rho$v (number of cells in droplet)}')
-ax2.set_ylabel(r'\bf{$P_{s}$}')
+ax2.set_xlabel(r'$\rho$v (average number of cells per subvolume)')
+ax2.set_ylabel(r'$P_{s}$')
 
 ax4 = ax2.secondary_xaxis("top")
 ax4.xaxis.set_ticks(xticks[::-1], labels=second_ticks[::-1])
-ax4.set_xlabel(r'\bf{m (number of subvolumes)}')
+ax4.set_xlabel(r'm (number of subvolumes)')
 
-#ax1.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.35), ncol=4, fancybox=True, shadow=True, fontsize= BIGGER_SIZE)
+ax1.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.35), ncol=4, fancybox=True, shadow=True, fontsize= BIGGER_SIZE)
 plt.tight_layout()
-plt.savefig('Survival fraction and Nf_vs_part_fact side by side.png', dpi=600)
+plt.savefig('Survival fraction and Nf_vs_part_fact side by side updated.png', dpi=600)
 plt.show()
