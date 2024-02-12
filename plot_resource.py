@@ -27,6 +27,7 @@ plt.rcParams['figure.figsize'] = [8, 6.5]
 ab = [100]
 sim_reps= 100
 dt=1
+thresh=25
 growth = 'resource'
 rootdir = 'output/'
 
@@ -36,7 +37,7 @@ color = iter(cm.rainbow(np.linspace(0, 1, 5)))
 
 
 for antib, c in zip(ab, color):
-    os.chdir('RESOURCE_dropnr_1000_loading_rand_growth_{}_initialN_5_abconc_{}'.format(growth, antib))
+    os.chdir('RESOURCE_dropnr_1000_loading_rand_growth_{}_initialN_5_abconc_{}_thresh{}'.format(growth, antib, thresh))
     path = os.getcwd()
 
     onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
@@ -60,7 +61,7 @@ for antib, c in zip(ab, color):
     error_sem = pd.DataFrame(error_sem, columns=part_fact)
     #TIME== x  axis
     plt.figure(1)
-    timee = np.arange(0, 100, dt)
+    timee = np.arange(0, 300, dt)
     plt.plot(timee, df_bact_count['0 1'], label='m=1')
     plt.plot(timee,df_bact_count['0 1000'], label='m=1000')
 
@@ -72,14 +73,16 @@ for antib, c in zip(ab, color):
      plt.figure(2)
      timee_cut=np.arange(0, 100, dt)
      indx=int(100/dt)
+     first_100_count= df_bact_count.iloc[0:indx]
      first_100= df_bact_count.iloc[0:indx]/df_bact_count.iloc[0]
      plt.plot( timee_cut,first_100[ kk1], label='m=1', color='g')
      plt.plot( timee_cut,first_100[ kk500], label='m=500', color='b')
      plt.plot(timee_cut,first_100[kk1000], label='m=1000', color='m')
 
      plt.figure(3)
-     plt.plot( timee,df_bact_count[ kk1], label='m=1', color='g')
-     plt.plot(timee,df_bact_count[kk1000], label='m=1000', color='m')
+     plt.plot( timee_cut,first_100_count[ kk1], label='m=1', color='g')
+     plt.plot(timee_cut, first_100_count[kk500], label='m=500', color='b')
+     plt.plot(timee_cut,first_100_count[kk1000], label='m=1000', color='m')
 
     os.chdir('..')
 
@@ -91,8 +94,16 @@ plt.ylabel(r'\bf{N/N0}')
 plt.xlabel(r'\bf{Time (min)}')
 plt.legend([r'm=1', r'm=500', r'm=1000'], title=r'\bf{Number of subvolumes:}',fontsize = LEGEND_SIZE, title_fontsize=LEGEND_SIZE, loc='upper left')
 plt.tight_layout()
-plt.savefig('100_ugml-resource.png', dpi=600)
-plt.show()
+plt.savefig('{}_ugml_{}th-resource_norm.png'.format(ab, thresh), dpi=600)
+
+plt.figure(3)
+plt.xlabel(r'\bf{Time (min)}')
+plt.ylabel(r'\bf{N}')
+plt.legend([r'm=1', r'm=500', r'm=1000'], title=r'\bf{Number of subvolumes:}',fontsize = LEGEND_SIZE, title_fontsize=LEGEND_SIZE, loc='upper left')
+plt.tight_layout()
+plt.savefig('{}_ugml_{}th-resource.png'.format(ab,thresh), dpi=600)
+
+
 
 ###Average;
 plt.figure(4)

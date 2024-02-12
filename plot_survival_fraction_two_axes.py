@@ -126,8 +126,7 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     surv_fraction_transpose['logPs'].plot.line(marker='o', c=c, linestyle='None',yerr=surv_fraction_transpose['Error95'])
 
     plt.figure(4)
-    surv_fraction_transpose['logPs'].plot.line(marker='o', c=c, linestyle='None',
-                                               yerr=surv_fraction_transpose['Error95'])
+    surv_fraction_transpose['logPs'].plot.line(marker='o', c=c, linestyle='None',yerr=surv_fraction_transpose['Error95'])
     #theory_line_df['logPs'].plot(x=theory_line_df['f(rho,rho*)RV'], style='--',c=c)
 
 
@@ -184,7 +183,7 @@ plt.xlim([-15,0.5])
 plt.ylim([-15,0.5])
 plt.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}',  loc='upper center', bbox_to_anchor=(0.5, 1.2),ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE-5)
 plt.tight_layout()
-plt.savefig('Log_Ps_V_f(rho,rhoT) plus sim_zoom', dpi=600)
+plt.savefig('Log_Ps_V_f(rho,rhoT)only_sim_zoom', dpi=600)
 
 plt.show()
 

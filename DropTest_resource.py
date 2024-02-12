@@ -121,7 +121,7 @@ class DropTest_resource_release(object):
 
         # Check whether the specified path exists or not
 
-        folder_name = 'output/RESOURCE_dropnr_{}_loading_{}_growth_{}_initialN_{}_abconc_{}'.format(variables.droplet_list[-1], variables.loading, variables.growth, variables.initialN, AB_conc)
+        folder_name = 'output/RESOURCE_dropnr_{}_loading_{}_growth_{}_initialN_{}_abconc_{}_thresh{}'.format(variables.droplet_list[-1], variables.loading, variables.growth, variables.initialN, AB_conc, MIC)
         path = os.path.join(curr_path, folder_name)
         isExist = os.path.exists(path)
 
