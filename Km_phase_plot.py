@@ -4,7 +4,7 @@ from variables import *
 from matplotlib import rc
 import matplotlib.pyplot as plt
 #pylatex
-BIGGER_SIZE = 22
+BIGGER_SIZE = 32
 
 plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 plt.rc('text', usetex=True) ## https://matplotlib.org/stable/tutorials/text/usetex.html
@@ -47,7 +47,10 @@ ycoord = y[int((x.size/6)*2)] / 2
 plt.xlabel(r'$a_{init}$($\mu$g/ml)')
 plt.ylabel(r'$\rho$ (initial cells/ml)')
 plt.xlim(0,55)
+plt.yticks([0,2e7, 4e7, 6e7, 8e7, 10e7])
+plt.xticks([0, 10, 20, 30, 40, 50])
 plt.ylim(0,0.9e8)
 plt.tight_layout()
 plt.savefig('km_green_hatch.png', dpi=600)
+plt.savefig('km_green_hatch.svg', format='svg', dpi=600)
 plt.show()

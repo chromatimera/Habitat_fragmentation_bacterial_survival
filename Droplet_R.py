@@ -136,7 +136,7 @@ class droplets_R():
             X = np.arange(0, self.t_end, self.dt).tolist()
             XX= np.tile(X, (self.total_drop_number, 1))
 
-            fig, ax= plt.subplots(figsize=(9,7))
+            plt.figure(1, figsize=(9,7))
             plt.plot (XX.T, self.N_r_array.T)
             print('N_R.T', self.N_r_array.T)
             plt.grid(False)
@@ -167,12 +167,13 @@ class droplets_R():
             print('y_deth', y_deth)
             print('XX.T', XX.T[:,1])
             plt.rcParams['hatch.color'] = 'g'
-            plt.yticks([2,5,6,8,10])
+            plt.yticks([1,2,3,4,5,6,7,8,9,10])
             plt.fill_between(list(XX.T[:,0]), y_surv, 100, color='green', alpha=0.2, hatch = '.', interpolate=True)
             plt.fill_between(list(XX.T[:,0]), 0, y_deth, color='red', alpha=0.2, interpolate=True)
             plt.xticks(np.arange(0,self.t_end + 1, 25))
             plt.tight_layout()
             plt.savefig('plot_Nbact_loading_{}_growth_{}ab_conc_{}'.format(loading, growth, AB_conc), dpi=600)
+            plt.savefig('plot_Nbact_loading_{}_growth_{}ab_conc_{}.svg'.format(loading, growth, AB_conc),format="svg", dpi=600)
             plt.show()
 
 
@@ -195,6 +196,7 @@ class droplets_R():
             plt.xticks(np.arange(0, self.t_end + 1, 25))
             plt.tight_layout()
             plt.savefig('plot_ABconc_{}_loading_{}_growth_{}'.format(self.AB_conc, loading, growth), dpi=600)
+            plt.savefig('plot_ABconc_{}_loading_{}_growth_{}.svg'.format(self.AB_conc, loading, growth),format="svg", dpi=600)
             plt.show()
 
 

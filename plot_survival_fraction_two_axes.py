@@ -11,7 +11,7 @@ from collections import Counter
 
 from ps_theory import vol_fac
 
-BIGGER_SIZE = 22
+BIGGER_SIZE = 25
 
 #### FIGURE 4 SURVIVAL PROBABILITY OF A POPULATION OF BACTERIA
 
@@ -40,7 +40,7 @@ rhoT=(deathrate/ Vmax)*F
 print('current dir', os.getcwd())
 
 
-fig = plt.figure(figsize=(11,11.5))
+fig = plt.figure(figsize=(10,10))
 ax1 = fig.add_subplot(111)
 color = iter(plt.cm.rainbow(np.linspace(0, 1, 5)))
 color_list = []
@@ -145,15 +145,18 @@ ax2 = ax1.secondary_xaxis("top")
 ax2.xaxis.set_ticks(xticks[::-1], labels=second_ticks[::-1])
 
 plt.figure(1)
-plt.xlabel(r'\bf{m (number of subvolumes)}')
-ax1.set_xlabel(r'\bf{$\rho$v (average number of cells per subvolume)}')
-ax1.set_ylabel(r'\bf{$P_{s}$}')
-ax2.set_xlabel(r'\bf{m (number of subvolumes)}')
+plt.xlabel(r'm (number of subvolumes)')
+ax1.set_xlabel(r'$\rho$v (average number of cells per subvolume')
+ax1.yaxis.tick_right()
+ax1.set_ylabel(r'$P_{s}$')
+ax1.yaxis.set_label_position("right")
+ax2.set_xlabel(r'm (number of subvolumes)')
 plt.xlim([100,5])
-ax1.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.55), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE)
+#ax1.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.55), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE)
 plt.tight_layout()
-plt.savefig('Survival fraction {} y vs logx updated'.format(growth), dpi=600)
-
+plt.savefig('Survival fraction {} y vs logx square'.format(growth), dpi=600)
+plt.savefig('Survival fraction {} y vs logx square.svg'.format(growth),format='svg')
+plt.show()
 
 plt.figure(2)
 plt.xlim([1,100])
@@ -184,8 +187,6 @@ plt.ylim([-15,0.5])
 plt.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}',  loc='upper center', bbox_to_anchor=(0.5, 1.2),ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE-5)
 plt.tight_layout()
 plt.savefig('Log_Ps_V_f(rho,rhoT)only_sim_zoom', dpi=600)
-
-plt.show()
 
 # fig 3;
 # plt.plot(rhoV, logPs_sim,marker='o',linestyle='None' ,c=c)
