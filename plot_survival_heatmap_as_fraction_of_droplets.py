@@ -27,7 +27,7 @@ total_sim = 1
 m = 1
 
 Ni = np.arange(1, 9, 1).tolist()
-antib = np.arange(0, 26, 1)
+antib = np.arange(0, 26, 1)  #antib = np.arange(0, 26, 1)
 AB_x = np.arange(0, 25, 0.5)
 
 #calculate rho for phase line;
@@ -40,8 +40,8 @@ antib = antib.tolist()
 os.chdir('./output/')
 print(os.getcwd())
 
-os.chdir('./survival_fraction_heatmap_{}/'.format(m))
-print(os.getcwd())
+#os.chdir('./survival_fraction_heatmap_{}/'.format(m))
+#print(os.getcwd())
 
 colnames = ['lambda']
 df_heatmap_survival = pd.DataFrame(Ni)
@@ -62,7 +62,10 @@ for l in Ni:
 
     for ab in antib:
         path = os.getcwd()
+       #nia path="C://Users//niave//Documents//PYTHON2//droplets_vs_bulk_survival_paper//output//dropnr_1000_loading_rand_growth_binary_initialN_5_abconc_100//output//"
         os.chdir('./dropnr_{}_loading_rand_growth_binary_initialN_{}_abconc_{}_gr_0.01/'.format(m, l, ab))
+        #niaos.chdir(path+'/dropnr_{}_loading_rand_growth_binary_initialN_{}_abconc_{}/'.format(m, l, ab))
+
         ### calculate probability of survival
 
         path = os.getcwd()
@@ -93,7 +96,7 @@ for l in Ni:
     df_heatmap_survival.iloc[s] = survival_outcomes
     s = s + 1
 print('ANTIB',antib)
-print('rhot', rhoT)
+#print('rhot', rhoT)
 #print(df_heatmap_survival)
 
 df_heatmap_survival['Rho'] = df_heatmap_survival.index#* 1e7
@@ -112,14 +115,25 @@ os.chdir('..')
 # Use the heatmap function from the seaåborn package
 #df_heatmap_survival=df_heatmap_survival.style.format("{:e}")
 #plt.ticklabel_format(style='plain', axis='y')
+# TROUBLESHOOTING line plot ;;
+x = np.arange(10)
+y = np.linspace(0, 9, 10)  # Example linear function
+
+df_rhoT=pd.DataFrame({'ab':AB_x, 'rhot':rhoT})
+
+
 
 tick = tkr.ScalarFormatter(useOffset=False, useMathText=True)
 tick.set_powerlimits((0,0))
 tg = [u"${}$".format(tick.format_data(x)) for x in rho_list]
 sns.heatmap(df_heatmap_survival, annot=False, yticklabels=tg) #, yticklabels=rho_list)
 ax.invert_yaxis()
+#df_rhoT=pd.dataframe[rhoT]
+#plt.plot(x + 0.5, y + 0.5, color='red', linewidth=2)
+#sns.lineplot(data=df_rhoT,x='ab',y='rhot', linewidth=4, ax=ax)
+#ax.plot(AB_x, rhoT)
 
-plt.plot(AB_x,rhoT, linewidth=4,label="KM", color='red')
+plt.plot(AB_x,rhoT/1e7, linewidth=4,label="KM", color='red')
 
 #ax.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
 plt.xlabel(r'$a_{init}$ ($\mu$g/ml)')
