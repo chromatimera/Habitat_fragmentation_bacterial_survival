@@ -39,7 +39,8 @@ for t in dt_list:
 
     for i in range(len(droplet_list)):
         ### read dataframe and ignore first column as it's the index column
-        filename = 'output/dropnr_10000_loading_rand_growth_binary_initialN_{}_abconc_{}_gr_0.01/initialN{}_growthrate0.01_MIC1_totaldropnr{}_ABconc{}_dt{}_loadingrand_growthbinary.csv'.format(initialN, ab, initialN, droplet_list[i],ab, t)
+        filename = 'output/dt_sim/dropnr_10000_loading_rand_growth_binary_initialN_{}_abconc_{}_gr_0.01/initialN{}_growthrate0.01_MIC1_totaldropnr{}_ABconc{}_dt{}_loadingrand_growthbinary.csv'.format(initialN, ab, initialN, droplet_list[i],ab, t)
+        #filename= 'output/dt_sim/initialN{}_growthrate0.01_MIC1_totaldropnr{}_ABconc{}_dt{}_loadingrand_growthbinary.csv'.format(initialN, droplet_list[i],ab, t)
         with open(filename) as x:
             ncols = len(x.readline().split(','))
         binary_df = pd.read_csv(filename, usecols=range(1,ncols))
@@ -72,10 +73,11 @@ for t in dt_list:
     df["Surv frac"].plot.line(yerr = df['Error95'], c=c)
     m_list.clear()
     survival_outcomes.clear()
-plt.ylabel(r'\bf{Fraction of surviving subvolumes, $p_s$}')
-plt.xlabel(r'\bf{m (number of subvolumes)}')
-plt.legend(dt_list, title=r'\bf{Timestep, dt (min)}', loc='upper center', bbox_to_anchor=(0.5, 1.18), ncol=6, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE-5,borderpad=0.5, labelspacing=0.5,fontsize="14")
-plt.tight_layout
+plt.ylabel(r'Subpopulation survival probability $p_s$')
+plt.xlabel(r'm (number of subvolumes)')
+plt.legend(dt_list, title=r'\bf{Timestep, dt (min)}', loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=6, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE-5,borderpad=0.5, labelspacing=0.5,fontsize="14")
+#plt.xticks([1,50000,100000,150000,200000])
+plt.tight_layout()
 plt.savefig('./output/Survival_fraction_dt {} .png'.format(droplet_list[-1]), dpi=600)
 
 plt.show()
