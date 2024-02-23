@@ -138,7 +138,7 @@ class droplets_R():
 
             fig, ax= plt.subplots(figsize=(9,7))
             plt.plot (XX.T, self.N_r_array.T)
-            print('N_R.T', self.N_r_array.T)
+           # print('N_R.T', self.N_r_array.T)
             plt.grid(False)
             plt.ylabel(r'$N(t)$ (cells)')
             plt.xlabel(r'$t$ (min)')
@@ -148,7 +148,7 @@ class droplets_R():
             plt.ylim(bottom=0)
             ## find position in N_array at which the pop survives/dies, for each ab concentration there should be a diff pair of initial N (in case of ab = 15 ; N init = 6 - survival, N init = 5 death)
             y_survival=np.argwhere(np.array(self.N_r_array.T[0,:])==6)
-            print('y survival', y_survival)
+           # print('y survival', y_survival)
 
             y_death = np.argwhere(np.array(self.N_r_array.T[0,:])==5)
             print('y_death', y_death)
