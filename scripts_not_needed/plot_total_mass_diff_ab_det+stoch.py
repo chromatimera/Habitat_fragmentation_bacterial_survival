@@ -84,7 +84,7 @@ for antib, c in zip(ab, color):
     # (avg_nr_bact.iloc[-1, 0:(len(part_fact))]/avg_nr_bact.iloc[0, 0:len(part_fact)]).plot(yerr=error_nr_bact.iloc[-1, 0:len(part_fact)].tolist())  ### plot final nr of bacteria
     #
 
-    os.chdir('..')
+    os.chdir('../..')
 
     ### plot the stochastic points
     os.chdir('dropnr_1000_loading_rand_growth_{}_initialN_5_abconc_{}'.format(growth2, antib))
@@ -146,7 +146,7 @@ for antib, c in zip(ab, color):
     # (avg_nr_bact.iloc[-1, 0:(len(part_fact))]/avg_nr_bact.iloc[0, 0:len(part_fact)]).plot(yerr=error_nr_bact.iloc[-1, 0:len(part_fact)].tolist())  ### plot final nr of bacteria
     #
 
-    os.chdir('..')
+    os.chdir('../..')
 
 
 plt.grid(False)

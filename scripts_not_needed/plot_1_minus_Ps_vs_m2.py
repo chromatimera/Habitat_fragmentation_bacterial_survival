@@ -23,7 +23,7 @@ plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsize
 
 ab = [15,35, 55, 75]
 
-zz=np.load('prob_line.npy')
+zz=np.load('../prob_line.npy')
 zzz= zz.T
 
 print('current dir', os.getcwd())

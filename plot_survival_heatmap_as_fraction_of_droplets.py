@@ -26,9 +26,14 @@ growth = 'binary'
 total_sim = 1
 m = 1
 
+if m==1:
+    bool=True
+else:
+    bool=True
+
 Ni = np.arange(1, 9, 1).tolist()
 antib = np.arange(0, 26, 1)  #antib = np.arange(0, 26, 1)
-AB_x = np.arange(0, 25, 0.5)
+AB_x = np.arange(0, 26.5, 0.5)
 
 #calculate rho for phase line;
 #F=(antib-MIC )+Km* np.log (antib/MIC)  #########
@@ -40,8 +45,8 @@ antib = antib.tolist()
 os.chdir('./output/')
 print(os.getcwd())
 
-#os.chdir('./survival_fraction_heatmap_{}/'.format(m))
-#print(os.getcwd())
+os.chdir('./survival_fraction_heatmap_{}/'.format(m))
+print(os.getcwd())
 
 colnames = ['lambda']
 df_heatmap_survival = pd.DataFrame(Ni)
@@ -108,7 +113,7 @@ rho_list=rho_list  *1e7  ## do we just get rid ??
 #plt.plot(antib,rhoT, linewidth=4,label="KM", color='white')   #adding rho* phase line
 
 # Define the plot
-fig, ax = plt.subplots(figsize=(15, 8))
+fig, ax = plt.subplots(figsize=(14, 8))
 
 os.chdir('..')
 
@@ -126,14 +131,14 @@ df_rhoT=pd.DataFrame({'ab':AB_x, 'rhot':rhoT})
 tick = tkr.ScalarFormatter(useOffset=False, useMathText=True)
 tick.set_powerlimits((0,0))
 tg = [u"${}$".format(tick.format_data(x)) for x in rho_list]
-sns.heatmap(df_heatmap_survival, annot=False, yticklabels=tg) #, yticklabels=rho_list)
+sns.heatmap(df_heatmap_survival,cmap='viridis', annot=False, yticklabels=tg, cbar=bool) #, yticklabels=rho_list)
 ax.invert_yaxis()
 #df_rhoT=pd.dataframe[rhoT]
 #plt.plot(x + 0.5, y + 0.5, color='red', linewidth=2)
 #sns.lineplot(data=df_rhoT,x='ab',y='rhot', linewidth=4, ax=ax)
 #ax.plot(AB_x, rhoT)
 
-plt.plot(AB_x,rhoT/1e7, linewidth=4,label="KM", color='red')
+plt.plot(AB_x,rhoT/1e7, linewidth=7,label="KM", color='white')
 
 #ax.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
 plt.xlabel(r'$a_{init}$ ($\mu$g/ml)')
