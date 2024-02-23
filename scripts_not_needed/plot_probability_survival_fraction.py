@@ -26,7 +26,7 @@ plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsize
 ab = [50, 75]
 rho = 5e7 ## this is the initial density of cells/mL; for sim starting with lamda = 5; change accordingly
 
-zz=np.load('prob_line.npy')
+zz=np.load('../prob_line.npy')
 #os.chdir(rootdir)
 zzz= zz.T
 #os.chdir(rootdir)
@@ -103,7 +103,7 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     label_list.append('{}'.format(antib))
 
 
-    os.chdir('..')
+    os.chdir('../..')
 
 plt.ylabel(r'\bf{Probability of survival}')
 plt.xlabel(r'\bf{$\rho$v (number of cells in droplet)}')
