@@ -22,12 +22,12 @@ plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
 plt.rc('legend', fontsize=BIGGER_SIZE)    # legend fontsize
 plt.rcParams['figure.figsize'] = [8, 6.5]
 
-
-
+km=15
+rmax=1e-8
 ab = [100]
-sim_reps= 100
+sim_reps= 10
 dt=1
-thresh=25
+thresh=50
 growth = 'resource'
 rootdir = 'output/'
 
@@ -37,7 +37,7 @@ color = iter(cm.rainbow(np.linspace(0, 1, 5)))
 
 
 for antib, c in zip(ab, color):
-    os.chdir('RESOURCE_dropnr_1000_loading_rand_growth_{}_initialN_5_abconc_{}_thresh{}'.format(growth, antib, thresh))
+    os.chdir('RESOURCE_dropnr_1000_loading_rand_growth_{}_initialN_5_abconc_{}_thresh{}_rmax{}_Km{}'.format(growth, antib, thresh, rmax,km))
     path = os.getcwd()
 
     onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
@@ -60,10 +60,11 @@ for antib, c in zip(ab, color):
 
     error_sem = pd.DataFrame(error_sem, columns=part_fact)
     #TIME== x  axis
-    plt.figure(1)
+   # plt.figure(1)
     timee = np.arange(0, 300, dt)
-    plt.plot(timee, df_bact_count['0 1'], label='m=1')
-    plt.plot(timee,df_bact_count['0 1000'], label='m=1000')
+   # plt.plot(timee, df_bact_count['0 1'], label='m=1')
+   # plt.plot(timee,df_bact_count['0 1000'], label='m=1000')
+
 
     for k in range (0,sim_reps):  #for each sim repeat
      kk1=str(k)+' 1'
@@ -71,8 +72,8 @@ for antib, c in zip(ab, color):
      kk1000=str(k)+' 1000'
 
      plt.figure(2)
-     timee_cut=np.arange(0, 100, dt)
-     indx=int(100/dt)
+     timee_cut=np.arange(0, 150, dt)
+     indx=int(150/dt)
      first_100_count= df_bact_count.iloc[0:indx]
      first_100= df_bact_count.iloc[0:indx]/df_bact_count.iloc[0]
      plt.plot( timee_cut,first_100[ kk1], label='m=1', color='g')
@@ -84,6 +85,11 @@ for antib, c in zip(ab, color):
      plt.plot(timee_cut, first_100_count[kk500], label='m=500', color='b')
      plt.plot(timee_cut,first_100_count[kk1000], label='m=1000', color='m')
 
+     norm_df=df_bact_count/df_bact_count.iloc[0]
+     plt.figure(4)
+     plt.plot(timee, norm_df[kk1], label='m=1', color='g')
+     plt.plot(timee,norm_df[kk500], label='m=500', color='b')
+     plt.plot(timee,norm_df[kk1000], label='m=1000', color='m')
     os.chdir('..')
 
 
@@ -104,15 +110,21 @@ plt.tight_layout()
 plt.savefig('{}_ugml_{}th-resource.png'.format(ab,thresh), dpi=600)
 
 
+plt.figure(4)
+plt.xlabel(r'\bf{Time (min)}')
+plt.legend([r'm=1', r'm=500', r'm=1000'], title=r'\bf{Number of subvolumes:}',fontsize = LEGEND_SIZE, title_fontsize=LEGEND_SIZE, loc='upper left')
+plt.ylabel(r'\bf{N/N0}')
+plt.tight_layout()
+
 
 ###Average;
-plt.figure(4)
+#plt.figure(4)
 #plt.plot(timee, df_average['0 1'], label='m=1')
 #plt.plot(timee, df_average['1'], label='m=1000')
-plt.fill_between(timee, df_average['1'] - error_sem.iloc[:,0], df_average['1'] + error_sem.iloc[:,0],
-                 color='gray', alpha=0.2)
-plt.fill_between(timee, df_average['1000'] - error_sem.iloc[:,2], df_average['1000'] + error_sem.iloc[:,2],
-                 color='gray', alpha=0.2)
+#plt.fill_between(timee, df_average['1'] - error_sem.iloc[:,0], df_average['1'] + error_sem.iloc[:,0],
+#                 color='gray', alpha=0.2)
+#plt.fill_between(timee, df_average['1000'] - error_sem.iloc[:,2], df_average['1000'] + error_sem.iloc[:,2],
+#                 color='gray', alpha=0.2)
 plt.show()
 
 

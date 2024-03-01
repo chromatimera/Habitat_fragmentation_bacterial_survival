@@ -54,7 +54,7 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
         c = next(color)
     os.chdir('dropnr_1000_loading_rand_growth_{}_initialN_5_abconc_{}'.format(growth, antib))
     path = os.getcwd()
-
+    #print(path)
     onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
     onlyfiles = sorted(onlyfiles)
     #print(onlyfiles)
@@ -85,8 +85,12 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
 
     surv_fraction_transpose['RhoV'] = surv_fraction_transpose.apply(lambda x: rho * 1e-4 / x['M'], axis=1)
     surv_fraction_transpose['logPs'] = surv_fraction_transpose.apply(lambda x:np.log(x["Surv frac"]), axis=1)
-   # ##surv_fraction_transpose['f(rho,rho*)RV'] = surv_fraction_transpose.apply(lambda x: (rhoT[g] / 5E7 - (rhoT[g] / 5E7) * np.log(1 + ((rhoT[g] - 5E7) / 5E7)) - 1) * x['RhoV'], axis=1)
+    #Original (email calc);
+   # surv_fraction_transpose['f(rho,rho*)RV'] = surv_fraction_transpose.apply(lambda x: (rhoT[g] / 5E7 - (rhoT[g] / 5E7) * np.log(1 + ((rhoT[g] - 5E7) / 5E7)) - 1) * x['RhoV'], axis=1)
+    #email calc minus 3/2log factor;
     surv_fraction_transpose['f(rho,rho*)RV'] = surv_fraction_transpose.apply(lambda x: (rhoT[g] / 5E7 - (rhoT[g] / 5E7) * np.log(1 + ((rhoT[g] - 5E7) / 5E7)) - 1) * x['RhoV'] -np.log(x['subvol'])*(3/2), axis=1)
+    #Current paper calc;
+    #surv_fraction_transpose['f(rho,rho*)RV'] = surv_fraction_transpose.apply(lambda x: rhoT[g]*x['subvol'] * (1+np.log(5E7/rhoT[g]) -5E7/rhoT[g]) -np.log(x['subvol'])*(3/2), axis=1)
 
     g=g+1
 
@@ -110,18 +114,18 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     logPs=np.log(theory_line_df)
     logPs_sim=np.log(surv_fraction_transpose)
 
-    plt.figure(2)
+    #plt.figure(2)
     #logPs.plot.line(y='big_Ps', c=c)
    # plt.plot( rhoV,logPs, c=c)
-    logPs['big_Ps'].plot.line( c=c,linestyle='dashed') #theory
-    surv_fraction_transpose['logPs'].plot.line(marker='o',linestyle='None' ,c=c)
+    #logPs['big_Ps'].plot.line( c=c,linestyle='dashed') #theory
+    #surv_fraction_transpose['logPs'].plot.line(marker='o',linestyle='None' ,c=c)
 #=========================
     theory_line_df = theory_line_df.set_index('f(rho,rho*)RV', drop=True)
     surv_fraction_transpose = surv_fraction_transpose.set_index('f(rho,rho*)RV', drop=True)
 
-    plt.figure(3)
-    theory_line_df['logPs'].plot.line( style='--', c=c,label='_nolegend_')
-    surv_fraction_transpose['logPs'].plot.line(marker='o', c=c, linestyle='None',yerr=surv_fraction_transpose['Error95'])
+    #plt.figure(3)
+    #theory_line_df['logPs'].plot.line( style='--', c=c,label='_nolegend_')
+    #surv_fraction_transpose['logPs'].plot.line(marker='o', c=c, linestyle='None',yerr=surv_fraction_transpose['Error95'])
 
     plt.figure(4)
     surv_fraction_transpose['logPs'].plot.line(marker='o', c=c, linestyle='None',yerr=surv_fraction_transpose['Error95'])
@@ -154,38 +158,38 @@ plt.xlim([100,5])
 plt.tight_layout()
 plt.savefig('Survival fraction {} y vs logx square'.format(growth), dpi=600)
 plt.savefig('Survival fraction {} y vs logx square.svg'.format(growth),format='svg')
-plt.show()
 
-plt.figure(2)
-plt.xlim([1,100])
-plt.ylim([-30,1])
-plt.tight_layout()
-plt.ylabel('Log (Ps) /// log(sim_surv_fract)')
-plt.xlabel(r'\bf{$\rho$v (number of cells in droplet)}')
-plt.gca().invert_xaxis()
-plt.savefig('Log_Ps_plus sim'.format(growth), dpi=600)
+#plt.figure(2)
+#plt.xlim([1,100])
+#plt.ylim([-30,1])
+#plt.tight_layout()
+#plt.ylabel('Log (Ps) /// log(sim_surv_fract)')
+#plt.xlabel(r'\bf{$\rho$v (number of cells in droplet)}')
+#plt.gca().invert_xaxis()
+#plt.savefig('Log_Ps_plus sim'.format(growth), dpi=600)
 
 
-plt.figure(3)
-plt.ylabel('Log ($P_s$)')  #/// log(sim_surv_fract)
-plt.xlabel(r'\bf{$\rho$v f($\rho$ , $\rho$*)}')
-plt.xlim([-15,0.5])
-plt.ylim([-15,0.5])
-plt.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}',  loc='upper center', bbox_to_anchor=(0.5, 1.2),ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE-5)
-plt.tight_layout()
-plt.savefig('Log_Ps_V_f(rho,rhoT) plus sim_zoom', dpi=600)
+#plt.figure(3)
+#plt.ylabel('Log ($P_s$)')  #/// log(sim_surv_fract)
+#plt.xlabel(r'\bf{$\rho$v f($\rho$ , $\rho$*)}')
+#plt.xlim([-15,0.5])
+#plt.ylim([-15,0.5])
+#plt.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}',  loc='upper center', bbox_to_anchor=(0.5, 1.2),ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE-5)
+#plt.tight_layout()
+#plt.savefig('Log_Ps_V_f(rho,rhoT) plus sim_zoom', dpi=600)
 
 
 plt.figure(4)
 plt.axline((0, 0), slope=1,linestyle='--' , label='_nolegend_', c='k')
 plt.ylabel('Log ($P_s$)')  #/// log(sim_surv_fract)
 plt.xlabel(r'\bf{$\rho$v f($\rho$ , $\rho$*)}')
-plt.xlim([-15,0.5])
-plt.ylim([-15,0.5])
-plt.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}',  loc='upper center', bbox_to_anchor=(0.5, 1.2),ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE-5)
+#plt.xlim([-15,0.5])
+#plt.ylim([-15,0.5])
+plt.legend(label_list,title=r'\bf{Antibiotic concentration in $\mu$g/mL}',ncol=4,prop={'size':10},loc='lower right')
+#plt.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}',  loc='upper center', bbox_to_anchor=(0.5, 1.4),ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE-5, borderpad=0.5, labelspacing=0.55)
 plt.tight_layout()
-plt.savefig('Log_Ps_V_f(rho,rhoT)only_sim_zoom', dpi=600)
-
+plt.savefig('Log_Ps_V_f(rho,rhoT)only_sim', dpi=600)
+plt.show()
 # fig 3;
 # plt.plot(rhoV, logPs_sim,marker='o',linestyle='None' ,c=c)
 # logPs['RhoV'] = logPs.apply(lambda x: rho * 1e-4 / x['M'], axis=1)
