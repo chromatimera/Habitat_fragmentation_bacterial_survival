@@ -91,8 +91,9 @@ for ab, index in zip(antib, range(len(antib))):
 
 plt.ylabel(r'Subpopulation survival probability $p_s$')
 plt.xlabel(r'm (number of subvolumes)')
-plt.legend(antib, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.18), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE-5)
-#plt.tight_layout()
+plt.legend(antib, title=r'\bf{Antibiotic concentration in $\mu$g/mL}', loc='upper center', bbox_to_anchor=(0.5, 1.20), ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE-5)
+plt.xticks([1,50000,100000,150000,200000])
+plt.tight_layout()
 plt.savefig('./output/Figure_5_{}_with_legend'.format(droplet_list[-1]), dpi=600)
 plt.savefig('./output/Figure_5_{}_with_legend.svg'.format(droplet_list[-1]), format='svg', dpi=600)
 
