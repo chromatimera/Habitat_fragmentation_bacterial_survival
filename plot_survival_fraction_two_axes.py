@@ -74,7 +74,11 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     theory_line_df['M'] = theory_line_df.index.astype(int)
     theory_line_df['RhoV'] = theory_line_df.apply(lambda x: rho * 1e-4 / x['M'], axis=1)
     theory_line_df['logPs'] = theory_line_df.apply(lambda x:np.log(x["big_Ps"]), axis=1)
-    theory_line_df['f(rho,rho*)RV'] = theory_line_df.apply(lambda x: (rhoT[g] / 5E7 - (rhoT[g] / 5E7) * np.log(1 + ((rhoT[g] - 5E7) / 5E7)) - 1) * x['RhoV'], axis=1)
+    theory_line_df['subvol'] = theory_line_df.apply(lambda x: 1e-4/x['M'], axis=1)
+
+    #theory_line_df['f(rho,rho*)RV'] = theory_line_df.apply(lambda x: (rhoT[g] / 5E7 - (rhoT[g] / 5E7) * np.log(1 + ((rhoT[g] - 5E7) / 5E7)) - 1) * x['RhoV'], axis=1)
+    theory_line_df['f(rho,rho*)RV'] = theory_line_df.apply(lambda x: rhoT[g]*x['subvol'] * (1+np.log(5E7/rhoT[g]) -5E7/rhoT[g]) +np.log(1E-4/x['subvol'])-0.5*np.log(2*math.pi *  rhoT[g] *x['subvol']), axis=1)
+
     ### transpose of dataframe
     surv_fraction_transpose = surv_fraction.T
     surv_fraction_transpose.index.name = 'Part_fact'
@@ -88,13 +92,16 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     #Original (email calc);
    # surv_fraction_transpose['f(rho,rho*)RV'] = surv_fraction_transpose.apply(lambda x: (rhoT[g] / 5E7 - (rhoT[g] / 5E7) * np.log(1 + ((rhoT[g] - 5E7) / 5E7)) - 1) * x['RhoV'], axis=1)
     #email calc minus 3/2log factor;
-    surv_fraction_transpose['f(rho,rho*)RV'] = surv_fraction_transpose.apply(lambda x: (rhoT[g] / 5E7 - (rhoT[g] / 5E7) * np.log(1 + ((rhoT[g] - 5E7) / 5E7)) - 1) * x['RhoV'] -np.log(x['subvol'])*(3/2), axis=1)
+    #surv_fraction_transpose['f(rho,rho*)RV'] = surv_fraction_transpose.apply(lambda x: (rhoT[g] / 5E7 - (rhoT[g] / 5E7) * np.log(1 + ((rhoT[g] - 5E7) / 5E7)) - 1) * x['RhoV'] -np.log(x['subvol'])*(3/2), axis=1)
     #Current paper calc;
     #surv_fraction_transpose['f(rho,rho*)RV'] = surv_fraction_transpose.apply(lambda x: rhoT[g]*x['subvol'] * (1+np.log(5E7/rhoT[g]) -5E7/rhoT[g]) -np.log(x['subvol'])*(3/2), axis=1)
+#new eq 06/03/24
+    surv_fraction_transpose['f(rho,rho*)RV'] = surv_fraction_transpose.apply(lambda x: rhoT[g]*x['subvol'] * (1+np.log(5e7/rhoT[g]) -5e7/rhoT[g]) +np.log(1e-4/x['subvol'])-0.5*np.log(2*math.pi *  rhoT[g] *x['subvol']), axis=1)
 
     g=g+1
 
     surv_fraction_transpose['Error95'] = surv_fraction_transpose.apply(lambda x: 2 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(variables.total_sim), axis=1)
+    surv_fraction_transpose['Error95_log'] = surv_fraction_transpose.apply(lambda x: abs(x['Error95']/x['Surv frac']), axis=1)
     surv_fraction_transpose['Error95_SEM'] = surv_fraction_transpose.apply(lambda x: 2 *np.std(x['Surv frac'] )/ math.sqrt(variables.total_sim), axis=1)
     surv_fraction_transpose['Error99'] = surv_fraction_transpose.apply(lambda x: 2.6 * math.sqrt(x['Surv frac'] * (1 - x['Surv frac']))/ math.sqrt(variables.total_sim), axis=1)
     surv_fraction_errors = surv_fraction_transpose.Error95.to_frame('Surv frac')
@@ -128,8 +135,8 @@ for antib, c, ind in zip(ab, color, range(len(ab))):
     #surv_fraction_transpose['logPs'].plot.line(marker='o', c=c, linestyle='None',yerr=surv_fraction_transpose['Error95'])
 
     plt.figure(4)
-    surv_fraction_transpose['logPs'].plot.line(marker='o', c=c, linestyle='None',yerr=surv_fraction_transpose['Error95'])
-    #theory_line_df['logPs'].plot(x=theory_line_df['f(rho,rho*)RV'], style='--',c=c)
+    surv_fraction_transpose['logPs'].plot.line(marker='o', c=c, linestyle='None',yerr=surv_fraction_transpose['Error95_log'])
+ #   theory_line_df['logPs'].plot( style='--',c=c)  #x=theory_line_df['f(rho,rho*)RV']
 
 
     surv_fraction_transpose.to_csv('../Survival_fraction_transpose_{}'.format(antib))
@@ -182,13 +189,13 @@ plt.savefig('Survival fraction {} y vs logx square.svg'.format(growth),format='s
 plt.figure(4)
 plt.axline((0, 0), slope=1,linestyle='--' , label='_nolegend_', c='k')
 plt.ylabel('Log ($P_s$)')  #/// log(sim_surv_fract)
-plt.xlabel(r'\bf{$\rho$v f($\rho$ , $\rho$*)}')
-#plt.xlim([-15,0.5])
-#plt.ylim([-15,0.5])
+plt.xlabel(r'\bf{f($v$, $\rho$*)}')
+plt.xlim([-12,0.5])
+plt.ylim([-12,0.5])
 plt.legend(label_list,title=r'\bf{Antibiotic concentration in $\mu$g/mL}',ncol=4,prop={'size':10},loc='lower right')
 #plt.legend(label_list, title=r'\bf{Antibiotic concentration in $\mu$g/mL}',  loc='upper center', bbox_to_anchor=(0.5, 1.4),ncol=4, fancybox=True, shadow=True, title_fontsize=BIGGER_SIZE-5, borderpad=0.5, labelspacing=0.55)
 plt.tight_layout()
-plt.savefig('Log_Ps_V_f(rho,rhoT)only_sim', dpi=600)
+plt.savefig('Log_Ps_V_f(v,rho)_onlysim', dpi=600)
 plt.show()
 # fig 3;
 # plt.plot(rhoV, logPs_sim,marker='o',linestyle='None' ,c=c)
