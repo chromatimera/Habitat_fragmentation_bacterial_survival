@@ -4,7 +4,10 @@ from variables import *
 from matplotlib import rc
 import matplotlib.pyplot as plt
 #pylatex
-BIGGER_SIZE = 32
+BIGGER_SIZE = 18
+
+## FIGURE 2C Km phase plot
+
 
 plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 plt.rc('text', usetex=True) ## https://matplotlib.org/stable/tutorials/text/usetex.html
@@ -33,6 +36,10 @@ x=AB_x
 (ax1, ax2) = plt.subplots(sharex=True, sharey=True)
 
 print(rhoT)
+
+plt.figure(1, figsize=(9, 7))
+
+
 plt.plot(x,rhoT_high,'--', linewidth=4, label="Large KM", color='black')
 plt.plot(x,rhoT_low,'.', linewidth=4,label="Small KM", color='black')
 plt.plot(x,rhoT, linewidth=4,label="KM", color='black')

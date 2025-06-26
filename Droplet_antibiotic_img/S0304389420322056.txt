@@ -1,0 +1,11 @@
+Xin Wen, Junchao Cao, Jiandui Mi, Jielan Huang, Jiadi Liang, Yan Wang, Baohua Ma, Yongde Zou, Xindi Liao, Juan Boo Liang, Yinbao Wu,
+Metabonomics reveals an alleviation of fitness cost in resistant E. coli competing against susceptible E. coli at sub-MIC doxycycline,
+Journal of Hazardous Materials,
+Volume 405,
+2021,
+124215,
+ISSN 0304-3894,
+https://doi.org/10.1016/j.jhazmat.2020.124215.
+(https://www.sciencedirect.com/science/article/pii/S0304389420322056)
+Abstract: High concentrations of antibiotics may induce bacterial resistance mutations and further lead to fitness costs by reducing growth of resistant bacteria. However, antibiotic concentrations faced by bacteria are usually low in common environments, which leads to questions about how resistant bacteria with fitness costs regulate metabolism to coexist or compete with susceptible bacteria during sublethal challenge. Our study revealed that a low proportion (< 15%) of resistant bacteria coexisted with susceptible bacteria due to the fitness cost without doxycycline. However, the cost for the resistant strain decreased at a doxycycline concentration of 1 mg/L and even disappeared when the doxycycline concentration was 2 mg/L. Metabonomics analysis revealed that bypass carbon metabolism and biosynthesis of secondary metabolites were the primary metabolic pathways enriching various upregulated metabolites in resistant bacteria without doxycycline. Moreover, the alleviation of fitness cost for resistant bacteria competed with susceptible bacteria at 1 mg/L doxycycline was correlated with the downregulation of the biomarkers pyruvate and pilocarpine. Our study offered new insight into the metabolic mechanisms by which the fitness cost of resistant mutants was reduced at doxycycline concentrations as low as 1 mg/L and identified various potential metabolites to limit the spread of antimicrobial resistance in the environment.
+Keywords: Resistant bacteria; Susceptible bacteria; Fitness cost; Metabolic mechanism; Sub-MIC

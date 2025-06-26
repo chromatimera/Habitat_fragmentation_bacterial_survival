@@ -52,6 +52,40 @@ class strain(object):
         return rates, a, a0
 
     """
+       Evolve death rate as a function of antibiotic concentration.
+       """
+    def calculate_death_rate(self, AB_conc, E_max, EC50, k):
+        """
+        Calculate death rate using Hill-type model.
+
+        Parameters:
+        AB_conc (float): Antibiotic concentration (ug/mL).
+        E_max (float): Maximum death rate.
+        EC50 (float): Antibiotic concentration at half-maximal effect.
+        n (float): Hill coefficient (steepness of the curve).
+
+        Returns:
+        float: Death rate.
+        """
+        death_rate = (E_max * (AB_conc ** k)) / ((AB_conc ** k) + (EC50 ** k))
+        return death_rate
+
+    def calculate_death_rate_mirrored(self, AB_conc, E_max, EC50, k):
+        """
+        Calculate death rate using Hill-type model.
+
+        Parameters:
+        AB_conc (float): Antibiotic concentration (ug/mL).
+        E_max (float): Maximum death rate.
+        EC50 (float): Antibiotic concentration at half-maximal effect.
+        n (float): Hill coefficient (steepness of the curve).
+
+        Returns:
+        float: Death rate.
+        """
+        death_rate = (E_max * (EC50 ** k)) / ((AB_conc ** k) + (EC50 ** k))
+        return death_rate
+    """
    Evolve antibiotic concentration array for one tau 
 
    The antibiotic can be degraded in 3 ways: based on Mikaelis-Menten linear, exponential or just exponential decay - I kept this as all simulations so far with exponential decay.
@@ -166,6 +200,16 @@ class strain(object):
            # print('final N', self.N)
             return self.t_array, self.N, self.AB_conc_array
 
+    def balanced_grow(self, AB_conc):
+        # hill function
+        dynamic_deathrate = self.calculate_death_rate(AB_conc, variables.E_max, variables.EC50, variables.k)
+        # mirrored hill function
+        dynamic_deathrate = self.calculate_death_rate_mirrored(AB_conc, variables.E_max, variables.EC50, variables.k)
+        print("dynamic_deathrate", dynamic_deathrate)
+        print("self.growthrate", self.growthrate)
+        self.N = self.N + self.N * self.growthrate * self.dt - self.N * dynamic_deathrate * self.dt
+        if self.N < 1:  #### #can't have less than 1 bacteria
+           self.N = 0
 
 
 

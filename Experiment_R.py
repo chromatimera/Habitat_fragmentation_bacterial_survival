@@ -105,6 +105,18 @@ class Experiment_R(object):
                                            self.volume, self.nr_drops_total_mass) #self.deg_list[i+1],
                 self.strain_r.binary_grow(self.AB_conc_array[i+1])
                 self.N_array[i+1] = self.strain_r.N
+        elif grow_meth == 'balanced':
+            print("Initial bacterial population:", self.strain_r.initialN)
+            for i in range(0, self.timesteps - 1):
+                print("timepoint", i)
+                # Grow strain for dt: ###tau_grow VS grow
+                self.AB_conc_array[i + 1] = self.degrade_ab_1_step_det(self.AB_conc_array[i], self.strain_r.N, self.dt,
+                                                                       self.volume, self.nr_drops_total_mass)  # self.deg_list[i+1],
+                print("AB_conc_array[i + 1]", self.AB_conc_array[i + 1])
+                self.strain_r.balanced_grow(self.AB_conc_array[i + 1])
+                self.N_array[i + 1] = self.strain_r.N
+                print("N_array[i + 1]", self.N_array[i + 1])
+
             # Check if growth has saturated:
             #if (self.strain_r.N > strain.Nsat):
                 # Set rest of list to Nsat:

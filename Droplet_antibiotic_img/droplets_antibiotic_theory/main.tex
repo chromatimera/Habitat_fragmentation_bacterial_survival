@@ -1,0 +1,281 @@
+\documentclass[aps,prl,reprint,superscriptaddress]{revtex4-2}
+
+\usepackage{color}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[caption=false]{subfig}
+
+
+\newcommand{\RAcomment}[1]{\textit{\textcolor{green}{#1}}}
+
+
+\begin{document}
+
+
+
+%\title{Spatial partitioning of a microbial population enhances collective enzymatic defence - TITLE CAN BE BETTER?}
+\title{Spatial partitioning enhances collective antibiotic resistance}
+
+
+
+\author{Nia Verdon}
+
+\affiliation{Theoretical Microbial Ecology, Institute of Microbiology, Faculty of Biological Sciences, Friedrich Schiller University Jena, Jena, Germany}
+\affiliation{Cluster of Excellence Balance of the Microverse, Friedrich Schiller University Jena, Jena, Germany}
+\affiliation{School of Physics and Astronomy, University of Edinburgh, Edinburgh, UK}
+\author{Ofelia Popescu}
+\affiliation{School of Physics and Astronomy, University of Edinburgh,  Edinburgh, UK}
+
+\author{Simon Titmuss}
+\affiliation{School of Physics and Astronomy, University of Edinburgh, Edinburgh, UK}
+
+\author{Rosalind J. Allen}
+\affiliation{Theoretical Microbial Ecology, Institute of Microbiology, Faculty of Biological Sciences, Friedrich Schiller University Jena, Jena, Germany}
+\affiliation{Cluster of Excellence Balance of the Microverse, Friedrich Schiller University Jena, Jena, Germany}
+\affiliation{School of Physics and Astronomy, University of Edinburgh, Edinburgh, UK}
+
+
+\date{\today}
+
+\begin{abstract}
+In the natural environment, microbial populations are often partitioned into small local communities -- yet microbiological assays such as antibiotic susceptibility tests are usually performed for large, well-mixed populations. Here, we show theoretically that spatial partitioning can strongly enhance the probability that a resistant bacterial population survives antibiotic treatment. We consider the clinically relevant case where bacteria mount a collective defence via enzymatic degradation of the antibiotic. Using a simple population dynamics model, we find that partitioned populations can survive antibiotic concentrations that would be sufficient to kill a non-partitioned population. This "partitioning resistance enhancement" originates from stochastic variation in the initial bacterial densities among different subpopulations.  
+\end{abstract}
+
+\maketitle
+
+
+
+%\begin{figure}%[h!]
+%\centering
+%  \includegraphics[width=0.48\textwidth]{fig4_N_thresh_comparison_v2_K_1000.pdf}
+%  \caption{Comparison between stochastic (left-hand panels) and deterministic (right-hand panels) biofilm growth trajectories. (a,b) Parameters in the deterministic growth regime; $N^*/K=0.7$. (c,d) Parameters in the stochastic growth regime; $N^*/K=1.17$. 
+% In all cases, $r_{\rm mig}/g = 0.8$, $r_{\rm det}/g = 0.5$, $K$=1000; and %the immigration rate is varied: $r_{\rm im}/gK$= 0.65, 0.725 and 0.783. The red dashed lines indicate the biofilm transition threshold $N^*/K$. 
+%  \label{fig:N_thresh_comparison}
+%  }
+%\end{figure}
+
+%Ecology letters? (11.5)  PRL? (9.2) PNAS? (12.7)
+
+%\section*{Introduction}
+
+Spatial partitioning is a common feature of natural microbial communities, from intracellular pathogens, to colonisers of the gut lining, plant roots and soil REFS. Such partitioning can be physical, or can arise from slow diffusion of nutrients and/or signals \cite{Dalco_2020}.  Yet microbiological assays, including tests of antibiotic efficiacy, are usually carried out on large, well-mixed bacterial populations. Previous work has shown that spatial partitioning can significantly affect  microbial interactions \cite{Boedicker2009,Connell_2014}, community assembly \cite{Hansen_2016,Hsu_2019} and  community dynamics \cite{Wu_2022}. Here we show that partitioning can also drastically alter the response of a microbial population to antibiotic treatment.
+
+Antibiotics kill bacteria, or prevent their growth, via diverse mechanisms REF?. Among the most widely used antibiotics clinically are the beta-lactams (including penicillin), which interfere with synthesis of the bacterial cell wall. However, the effectiveness of beta-lactams is compromised by the fact that many  bacterial strains produce beta-lactamase enzymes, which can degrade these antibiotics REF. Improved strategies to combat beta-lactamase producing infectious bacteria could have significant clinical impact. 
+
+The enzymatic degradation of antibiotic by beta-lactamase producing bacteria can be viewed as a collective defence mechanism, since it reduces the antibiotic concentration experienced by all bacteria in the local environment REFS. Indeed, antibiotic efficacy tests for beta-lactamase producing bacteria often show a strong inoculum effect, whereby populations with high initial bacterial density survive, while those with low initial density are killed REF. Recent mathematical modelling has shown that this effect can be understood as a "race for survival" which depends on the relative timescales for antibiotic killing versus antibiotic degradation \cite{Geyrhofer_2023}. However, the effects of spatial partitioning on this system have not been considered.
+
+Here we present a simple model for the response to antibiotic of a beta-lactamase producing bacterial population. We solve the model analytically to determine the threshold bacterial density for survival of antibiotic treatment. We then consider stochastic partitioning of the population among multiple subvolumes, and find that partitioned populations can survive under conditions where a non-partioned population is killed. This  "partitioning resistance enhancement" arises from stochastic variation in the initial bacterial densities among different subpopulations. 
+
+Cooperative defence by enzymatic degradation of a toxin is not confined to bacteria: other examples include WHAT. Therefore our findings may have broad relevance among diverse biological systems. 
+
+
+ 
+
+
+
+
+%The resistance of Gram-negative bacteria to β-lactam antibiotics is primarily due to production of β-lactamase enzymes that degrade the β-lactam ring. The enzymatic degradation of these antibiotic molecules by resistant bacteria has been proposed to be a cooperative behaviour, such that populations with a higher initial density can survive at higher initial toxin concentrations. In this scenario, bacteria survive through cooperative defence due to the benefits of the enzymatic degradation of the toxin being shared between cells, so that initially denser populations would be expected to degrade toxin faster and be more likely to reach the toxin threshold before they are eliminated. To explore this scenario in detail, here, we simulate a scenario of a population of E. coli beta-lactamase producers which are partitioned in multiple subvolumes, each subvolume being filled stochastically such that the initial population size approximates the initial bacterial density. Then we simulate both deterministic and stochastic growth and death of these populations under antibiotic treatment. We show that, as expected by the cooperative beta-lactamase scenario, at high antibiotic concentrations, bacteria partitioned in many small subpopulations are able to evade antibiotic treatment. Our results show that spatial partitioning can enhance the effects of cooperative enzymatic degradation of a toxin, with potential implications for antibiotic treatment of spatially structured infections.
+
+%\section*{Results}
+
+\subsection*{Model for a toxin-degrading  population}
+We consider a microbial population that is exposed to a toxic substance (such as an antibiotic). The population grows exponentially if the toxin concentration is low but dies (also exponentially) if the toxin concentration is high. In addition, the microbes produce an enzyme that degrades the toxin. The population is contained within a volume $V$. 
+
+We suppose that the microbial population size $N(t)$ obeys the following dynamical equation: 
+\begin{equation}
+\dot{N(t)} = N(t)\left[\gamma_R \theta(a-a_{\rm{MIC}}) -\gamma_D \theta(a_{\rm{MIC}})-a)\right]\,,
+\label{eq:1}
+\end{equation}
+where $\theta(x)$ denotes the Heaviside step function. In other words, the population grows exponentially at rate $\gamma_R$ if the toxin concentration $a(t)$ is below a threshold value $a_{\rm{MIC}}$ (the `minimum inhibitory concentration' or MIC), and it dies exponentially at rate $\gamma_D$ if the toxin concentration is above the threshold. The toxin is assumed to be degraded according to:
+\begin{equation}
+\dot{a(t)} = -\frac{b N(t)}{V}\left(\frac{v_{\rm{max}}a(t)}{a(t)+K_{\rm M}}\right)\,.
+\label{eq:2}
+\end{equation}
+Eq.~(\ref{eq:2}) corresponds to a scenario in which each microbe contains $b$ enzyme molecules (so that the enzyme concentration is $\frac{bN}{V}$), and each enzyme molecule degrades antibiotic at rate $\frac{v_{\rm{max}}a}{(a+K_{\rm M})}$, corresponding to Michaelis-Menten kinetics [REF?] with parameters $v_{\rm{max}}$ (maximal rate) and $K_{\rm M}$ (substrate concentration for half-maximal rate). A similar model was previously used to model the dynamics of $\beta$-lactamase producing bacteria in the presence of antibiotic [GORE PAPER] \cite{Yurtsev_Gore_2013, Mizrahi_Gore_2022}. In the limit that $a\gg K_{\rm M}$ (enzyme saturation), the toxin is degraded at a rate that is independent of its concentration. In the opposite limit, $a\ll K_{\rm M}$, the degradation rate is linear in the toxin concentration. For $\beta$-lactamase enzymes HERE ADD SENTENCES ABOUT PARAMETERS FROM LITERATURE, SEE NIAS THESIS. 
+
+Eqs~(\ref{eq:1}) and (\ref{eq:2}) can be solved to predict the fate of the microbial population. We assume that the toxin concentration at the start, $a_{\rm init}$, is high, $a_{\rm init}>a_{\rm{MIC}}$. 
+\textcolor{blue}{do we need to make it explicit that this is a single-cell MIC?}
+Therefore the microbial population initially decreases exponentially as $N(t) = N(0) e^{-\gamma_D t}$. Substituting this into Eq.~(\ref{eq:2}) and integrating, we obtain the following relation for the dynamics of the toxin concentration: 
+\begin{eqnarray}
+\frac{F[a(t),a_{\rm init}]}{v_{\rm{max}}}= \frac{b N(0)}{\gamma_D V}\left[1-e^{-\gamma_D t}\right]\,, 
+\label{eq:4}
+\end{eqnarray}
+where 
+\begin{equation}
+F[a(t),a_{\rm init}] \equiv \left[(a_{\rm init}-a(t)) + K_{\rm M}\ln{\left(\frac{a_{\rm init}}{a(t)}\right)}\right]\,.
+\end{equation}
+If the toxin concentration reaches the threshold $a_{\rm{MIC}}$, the microbial population will start to grow. Denoting the time at which $a=a_{\rm{MIC}}$ as $\tau$, we can write the full expression for the  dynamics of the microbial population:
+\begin{eqnarray}
+N(t) =& N(0) e^{-\gamma_D t}\qquad \qquad \,\, & t \leq \tau \label{eq:3a} \,;\\
+N(t) =& N(\tau) e^{\gamma_R (t-\tau)}\qquad \qquad & t > \tau \,.
+\label{eq:3b}
+\end{eqnarray}
+where, from Eq.~(\ref{eq:4}),
+%\begin{equation}
+%\tau= -\frac{1}{\gamma_D}\ln{\left[1-\frac{\gamma_D V}{b N(0)v_{\rm{max}}}\left[(a_{\rm init}-a_{\rm{MIC}}) + K_{\rm M}\ln{\left(\frac{a_{\rm init}}{a_{\rm{MIC}}}\right)}\right]\right]}\,,
+%\label{eq:5}
+%\end{equation}
+\begin{equation}
+\tau= -\frac{1}{\gamma_D}\ln{\left[1-\frac{\gamma_D V}{b N(0)v_{\rm{max}}}F[a_{\rm MIC},a_{\rm init}]\right]}\,,
+\label{eq:5}
+\end{equation}
+and, from Eq.~(\ref{eq:3a}), 
+\begin{equation}
+N(\tau) = N(0) \left[1-\frac{\gamma_D V}{b N(0)v_{\rm{max}}}F[a_{\rm MIC},a_{\rm init}]\right].
+\label{eq:Ntau}
+\end{equation}
+
+\subsection*{Cooperative defence: inoculum effect}
+
+\begin{figure}
+\centering
+\includegraphics[width=1\linewidth]{Figure_1_side_by_side.png}
+    \caption{Plots showing survival outcomes of deterministically simulated populations with different (Poisson distributed) initial starting numbers. Panel (a) shows the number of bacteria over time, panel (b) shows antibiotic concentration over time. Each coloured line corresponds to a separate population, and this colour represents the same population on both panels.
+    %scMIC = 1 # ug/mL
+    %initial AB_conc = 15 #ug/mL
+   }
+    \label{fig:survival_outcomes}
+\end{figure}
+
+In our model, two different outcomes are possible (Fig. \ref{fig:survival_outcomes}). The microbial population may be killed, or it may manage to degrade the toxin sufficiently that the toxin concentration falls below the threshold $a_{\rm{MIC}}$, so that the population is able to regrow. 
+
+Eq.~(\ref{eq:5}) allows us to determine how these different fates  depend on the parameters of the model. As the argument of the logarithm in Eq.~(\ref{eq:5}) tends to zero, the time $\tau$ at which the toxin concentration reaches $a_{\rm{MIC}}$ tends to $\infty$, implying that the toxin concentration never reaches the threshold, and hence that the microbial population is killed. For the population to survive and eventually regrow we require $\tau$ to be finite, i.e. the condition for survival is $N(0)/ V > \rho_T$, where the threshold initial population density $\rho_T$ is 
+%\begin{equation}
+%\rho_T = \frac{\gamma_D}{b v_{\rm{max}}}\left[(a_0-a_{\rm{MIC}}) + K_{\rm M}\ln{\left(\frac{a_0}{a_{\rm{MIC}}}\right)}\right]  \,.
+%\label{eq:6}
+%\end{equation}
+\begin{equation}
+\rho_T = \frac{\gamma_D}{b v_{\rm{max}}}  F[a_{\rm MIC},a_{\rm init}]\,.
+\label{eq:6}
+\end{equation}
+
+
+\begin{figure}
+\centering
+\includegraphics[width=0.4\textwidth]{Km_phase_plot2.png}
+    \caption{Phase diagram showing the effect of initial bacterial density ($\rho$) on population survival for a range of antibiotic concentrations (Eq. \ref{eq:6}). The green and red areas indicate the survival and death of populations calculated with the KM value used for the simulations in the rest of this paper (6.7~$\mu$g/mL). The dashed and dotted lines show the survival boundary for a high KM value and a low KM value, respectively. 
+ % medkm = 6.7  ug/mL (used in simulations)
+%lowkm = 1
+%highkm = 15
+}
+    \label{fig:rho_KM_phase}
+\end{figure}
+
+
+
+Figure \ref{fig:rho_KM_phase} shows how the fate of the microbial population, predicted by Eq.~(\ref{eq:6}), depends on the initial population density $\frac{N(0)}{V}$ and the initial toxin concentration, $a_{\rm init}$. The model shows a clear inoculum effect: populations with a higher initial density can survive at higher initial toxin concentrations. The origin of this inoculum effect is cooperative defence against the toxin REF YURTSEV, OTHERS: because the benefits of enzymatic degradation of the toxin are shared, initially denser populations degrade toxin faster and are more likely to reach the toxin threshold before they are eliminated. Interestingly, the qualitative nature of the inoculum effect is controlled by the kinetic parameters of the toxin-degrading enzyme. If $K_M$ is small ($a_{\rm init}\gg K_M$), the linear term on the right hand size of Eq.~(\ref{eq:6}) dominates and the inoculum effect depends linearly on microbial population density (dotted line, Figure \ref{fig:rho_KM_phase} ) . However, if $K_M$ is large ($a_{\rm init}\ll K_M$), the logarithmic term in Eq.~(\ref{eq:6}) dominates and the inoculum effect is weaker, depending logarithmically on population density (dashed line, Figure \ref{fig:rho_KM_phase} ). 
+
+
+
+
+\subsection*{Spatial partitioning favours survival and regrowth}
+To model spatial partitioning of a microbial population, we now suppose that a volume $V_{\rm bulk}$, containing a population of density $\rho_{\rm bulk}$, is partitioned into $m$ subvolumes, $v=\frac{V_{\rm bulk}}{m}$ REF LINCHONG YOU PAPER?. Each subvolume is filled stochastically, such that the initial population size $N_i(0)$ of subvolume $i$ is sampled from a Poisson distribution with mean $\rho_{\rm bulk} v$. Poisson statistics have indeed been observed for encapsulation of bacteria in microfluidic droplets \cite{Collins2015, barizien}. We suppose that each subvolume also contains toxin at uniform initial concentration $a_{\rm init}$ \footnote{We do not consider stochastic partitioning of toxin since the absolute number of toxin molecules is far higher than the number of microbes GIVE SOME NUMBERS EG FOR MIC OF AMPICILLIN \cite{Boer_Scott_2015}?}. Toxin and microbes are assumed not to be exchanged between subvolumes, so that the microbe-toxin dynamics evolve independently in each subvolume. 
+
+We are interested in the long-time fate of the spatially partitioned microbial population. First, we compute the probability $P_s$ that the population as a whole survives. This is equivalent to the probability that the initial population  density  is above the survival threshold given by Eq.~(\ref{eq:6}) in  at least one subvolume. We first consider the probability $p_s$ that $N_i(0) > N_T$ where $N_T = \lfloor \rho_T v\rfloor$. Since $N_i(0)$ is Poisson distributed with mean $\rho_{\rm bulk} v$, we can write  
+\begin{eqnarray}
+ p_s = p(N_i(0) > N_T) &=& e^{-\rho_{\rm bulk} v} \sum_{i=N_T+1}^{\infty}\frac{(\rho_{\rm bulk} v)^i}{i!} \\\nonumber &=& 1-\frac{\Gamma(N_T +1,\rho_{\rm bulk} v)}{N_T !} \, ,
+ \end{eqnarray}
+where $\Gamma$ is the upper incomplete Gamma function. The probability $P_s$ that at least one of the $m$ subvolumes survives is then
+\begin{equation}
+P_s = 1-(1-p_s)^{m}\, .
+\end{equation}
+
+
+\begin{figure}
+  \centering
+  \subfloat[a][ ]{\includegraphics[width=\linewidth]{diagram_final.png} \label{fig:diagram}} \\
+  \subfloat[b][ ]{\includegraphics[width=\linewidth]{Survival fraction binary + errors diff ab+ legend.png} \label{fig:Survival_prob_V_m}}
+  \caption{(a) Diagram of the spatial partitioning/simulation structure. The total bacterial number remains the same, so changes in survival probability of the populations are due to spatial partitioning effects. (b) FIGURE: PROBABILITY POPULATION AS A WHOLE SURVIVES (ie any single bacteria surviving amongst all subvolumes) VS DEGREE OF PARTITIONING. Deterministic growth simulations with Poisson distributed droplets with $\lambda=5$;COMPARE WITH NUMERICAL DETERMINISTIC SIMULATIONS: }\label{fig:AB}
+\end{figure}
+
+%\begin{figure}
+%\centering
+%\includegraphics[width=0.5\textwidth]{overall_diagram_poisson_distrib.png}
+%    \caption{Diagram of the spatial partitioning/simulation structure. The total bacterial number remains the same, so changes in survival probability of the populations are due to spatial partitioning effects.}
+%    \label{fig:diagram_simulations}
+%\end{figure}
+
+
+Figure \ref{fig:Survival_prob_V_m} shows $P_s$ as a function of the degree $m$ of spatial partitioning.
+
+%\begin{figure}
+%    \includegraphics[width=0.5\textwidth]{Survival fraction binary + theory.png}
+%    \caption{FIGURE: PROBABILITY POPULATION AS A WHOLE SURVIVES VS DEGREE OF PARTITIONING. Deterministic growth simulations with Poisson distributed droplets with $\lambda=5$;COMPARE WITH NUMERICAL DETERMINISTIC SIMULATIONS: \textcolor{blue}{how do we compare? Theoretical line the plot?}}
+%    \label{fig:Survival_prob_V_m}
+%\end{figure}
+
+For surviving populations, it is interesting to predict the dynamics of the total population size $N_{\rm tot}(t)$ at long times. On short timescales, the population $N_i(t)$ decreases exponentially in all subvolumes (according to Eq.~(\ref{eq:3a})). In those subvolumes where $N_i(0)\leq N_T$, all the microbes will eventually die, so that these subvolumes make no contribution to $N_{\rm tot}$ at long times. Therefore we only need to consider the long-time population dynamics of those subvolumes for which $N_i(0)>N_T$. This dynamics is (using Eqs.~(\ref{eq:3b}), (\ref{eq:5}) and (\ref{eq:Ntau}))
+\begin{eqnarray}
+    N_i(t) &=& N_i(0)  \left[1-\frac{\gamma_D V}{b N_i(0)v_{\rm{max}}}F[a_{\rm MIC},a_{\rm init}]\right]^{\left(1+\gamma_R/\gamma_D\right)}e^{\gamma_R t}\,,
+    \\\nonumber &\equiv&  f(N_i(0))e^{\gamma_R t} \,.
+    \label{eq:12}
+\end{eqnarray}
+Eq.~(\ref{eq:12}) shows that the growth of each surviving subpopulation is exponential with rate  $\gamma_R$, but with a prefactor $f$ that depends on the initial population size $N_i(0)$. This arises because the time $\tau_i$ at which regrowth of subpopulation $i$ starts, and the corresponding population size $N_i(\tau_i)$, depend on $N_i(0)$. For small $N_i(0)$, close to the threshold $N_T$, the prefactor $f$ tends to zero; however for large $N_i(0)$, $f$ tends to $N_i(0)$. 
+
+The total population size $N_{\rm tot}(t)$ can then be found by summing, over all initial population sizes larger than $N_T$,  the function given by Eq.~(\ref{eq:12}) weighted by the  Poisson probability:
+\begin{eqnarray}
+\label{eq:13}
+    N_{\rm tot}(t) 
+    = m e^{\gamma_R t} \sum_{n=N_T+1}^{\infty} \frac{(\rho v)^{n}e^{-\rho v}}{n!} \times f(n)  \,.
+\end{eqnarray}
+We are interested in the effect of spatial partitioning on $N_{\rm tot}(t)$. The degree of  partitioning $m$ affects the Poisson weighting factor in Eq.~(\ref{eq:13}) (since $v \sim 1/m$), but it does not affect $f(n)$. For a very high degree of partitioning (large $m$, small $v$), the Poisson weighting factor favours the small $n$ terms in the sum, for which $f(n)$ tends to zero. In this limit, subpopulations are so small that very few of them exceed the survival threshold. In contrast, for low degree of partitioning (small $m$, large $v$), the large $n$ terms are favoured, for which $f(n)$ tends to $n$. In this limit, Eq.~(\ref{eq:13}) tends to $N_{\rm tot}(t) = m e^{\gamma_R t}  \times \rho v = \rho V e^{\gamma_R t}$, i.e. the result for a non-partitioned population. An interesting result is obtained, however, for intermediate degree of partitioning. I THINK WE MIGHT ACTUALLY GET A LARGER POPULATION SIZE IN THIS CASE BUT WE NEED TO CHECK NUMERICALLY. \\
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1\linewidth]{Survival fraction and Nf_vs_part_fact side by side.png}
+\caption{(a) Total population size (Ntot, eq 13) after 300 simulated minutes of growth for different partitioning factors for deterministic (solid line) and stochastic (dashed line) growth with random loading, $\lambda$ = 5. Antibiotic concentrations used: 15 ug/mL (purple), 25 ug/mL (blue) and 55 ug/mL (turquoise).  (b) Survival probability for different partitioning factors at different antibiotic concentrations for deterministic (solid line) and stochastic (dashed line) growth with random loading, $\lambda$ = 5.}
+\label{fig: Nf_survival_prob_side_by_side}
+\end{figure}
+
+\subsection*{Stochastic dynamics also favours survival and growth}
+
+IN THIS SECTION WE COULD PRESENT GILLESPIE SIMULATIONS FOR THE SAME SCENARIO, COMPARED TO DETERMINISTIC THEORY/SIMULATIONS. I THINK WE WILL SEE THAT THE STOCHASTIC SIMULATIONS SHOW ENHANCED SURVIVAL AND POPULATION SIZE.
+Figure \ref{fig: Nf_survival_prob_side_by_side} shows enhanced survival for populations simulated stochastically (panel b, dashed lines) when compared to deterministic growth. The final number of bacteria is only enhanced by stochastic modelling in the cases where survival is also enhanced. Otherwise we see a lower final number for the stochastic case when compared to the deterministic (15ug/mL).
+
+\\
+
+%\begin{figure}[ht]
+%\centering
+%\includegraphics[width=0.5\textwidth]{Survival fraction binary + gillespie_binary + errors diff ab.png}
+%\label{fig:survival_gillespie}
+%\caption{}
+%\label{fig: survival prob}
+%\end{figure}
+
+
+
+\textcolor{blue}{Do we want to explicitly quantify the survival benefit of Poisson loading Vs stochastic dynamics?}
+
+\subsection*{Origin of the spatial partitioning effect}
+{\sc{The enhancement in survival and growth for partitioned populations actually has 2 origins. One origin is that because some subvolumes are empty, the overall microbial density in the non-empty subvolumes is higher. We can calculate this actually from the probability of an empty subvolume. The other origin is that due to the Poisson loading some subvolumes have higher than average population density. Maybe we could compare the actual result with the case where we just increase the density by the factor given by removing the empty subvolumes and see what is the effect of these two factors?}}
+
+
+
+
+
+
+
+\section*{Discussion}
+In this letter we have presented a ....
+
+\begin{itemize}
+
+\item How to test experimentally: Droplet experiment (with microscopy) that contains a range of droplet sizes. Eg by changing the flow rate? Bacterial density B1 from plate reader. Concentration just above 1.25? eg 1.75? or 2? 
+\item Mixed producer-nonproducer populations. now include a fitness cost of enzyme production. 
+What is the effect on survival of the nonproducers?
+\item Other origins of the inoculum effect, would they all give this?
+\item Other cases of enzyme-mediated cooperative effects eg elastase. 
+\item more complex tripartite cases (chembiosys, cite Hertweck / Mittag / Stallforth). 
+\end{itemize}
+
+
+\vspace{2mm}
+
+NV and RJA were supported by the Excellence Cluster Balance of the Microverse (EXC 2051 - Project-ID 390713860) funded by the Deutsche Forschungsgemeinschaft (DFG) AND BY CHEMBIOSYS!! .  NV was funded by SOFI ... OP was funded by SOFI2 ... RJA was funded by  the European Research Council under Consolidator grant 682237 EVOSTRUC.  The authors thank Joel Ching Kuma Mbanghanih, Daniel Taylor... Stefan Schuster, Tatjana Malycheva .... for valuable discussions. For the purpose of open access, the author has applied a Creative Commons Attribution (CC BY) licence to any Author Accepted Manuscript version arising from this submission.
+
+
+\bibliographystyle{apsrev4-1}
+\bibliography{masterbib} 
+
+\end{document}

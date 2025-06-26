@@ -6,17 +6,23 @@ import numpy as np
 getcontext().prec = 50
 
 ### nr of droplets and the power of i and j in the partitioning loop are related i.e. for 100 droplets, the loop goes from 0 to 3.
-#droplet_list = [2000]
-droplet_list = np.arange(0, 1001, 100)
-droplet_list[0] = 1
+droplet_list = [10]
+#droplet_list = np.arange(0, 1000001, 500000)
+#droplet_list[0] = 1
+print("droplet_list", droplet_list)
 
 # setting up time values
 t_start = 0
-t_end = 300
+t_end =  60*24
 dt = 1
 
-spec_time = 299  # this is a specific time at which we calculate the number of bacteria left alive; it is set to 299 as it is the last timepoint in the for loop
-total_sim = 100 # number of simulation repeats
+## for balanced growth where we include death
+E_max = 0.008 #per minute from Gore 2013; this is the maximum death rate
+EC50 = 1000 # ug/mL; for resistant strain very high
+k = 0.75 # unitless; for resistant strain very high
+
+spec_time = 299 #4319  # this is a specific time at which we calculate the number of bacteria left alive; it is set to 299 as it is the last timepoint in the for loop
+total_sim = 1 # number of simulation repeats
 step = 1
 
 
@@ -28,21 +34,26 @@ n_crit = 2
 #volume_exp = 1e-7   # volume of droplets from experiments ~100pL; 1pL is 1e-6 ul; 100pL - 1e-4 ul UNITS: mL
 
 ### The volume of the simulation is set at 1e-4 mL for the big droplet and it is kept constant no matter
-# the nr of droplets simulated (i.e. if we simulate 10, 100 or 10 000 droplets); see README file for more info.
-volume_big_drop = 1e-4  ## should be 1e-4
+# the nr of droplets simulated (i.e. if we simulate 10, 100 or 10 000 droplets); see README file for more info.R
+volume_big_drop = 2 #1e-4  ## should be 1e-4
 param_small_droplets = 1/droplet_list[-1]
+print("param_small_droplets", param_small_droplets)
 volume = round(volume_big_drop * param_small_droplets, 12)
+print("volume", volume)
+
+#volume = 1e-7
+
 
 
 ## Change N to be equivalent to 5 bact for 1000 droplets - to link with the other simulations
-initialN =5 # lambda value defined for the highest/max m value simulated ;; 0.5 for 10,000 ;;
-growthrate = 0.01 # per minute from experimental data Nia thesis
-deathrate  = 0.045  # per minute from Gore 2013
+initialN = 5 * 10 ** 6 # 5 lambda value defined for the highest/max m value simulated ;; 0.5 for 10,000 ;;
+growthrate = 0.01 # per minute from experimental data Nia thesis; correlates to my growth rate from the plate reader analysis
+deathrate  = 0.005 #0.045  # per minute from Gore 2013
 slowrate =0.0 #per min; for resource model
 
 #AB_molar_mass = 349.406 #g/mol (ug/umol)
-MIC = 1 # ug/mL
-AB_conc = 35 #ug/mL
+MIC = 3000 # ug/mL
+AB_conc = 250 #ug/mL
 
 ### Mikaelis Menten parameters
 Km = 6.7  #UNITS: ug/mL
@@ -52,9 +63,11 @@ Vmax = 3.5e-8 #ug/cell/min
 ## epsilon parameter for tau precheck
 epsilon = 0.03
 Nsat = 1e12
+
+
 ##type of loading and growth
 loading = "rand"  # rand #det
-growth = 'binary' #gillespie_binary
+growth = 'balanced' #gillespie_binary
 degradation = 'MM_exponential'
 
 

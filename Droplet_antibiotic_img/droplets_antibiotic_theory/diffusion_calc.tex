@@ -1,0 +1,33 @@
+
+
+
+
+
+A key assumption of our model is that there is good mixing such that the antibiotic molecules and $\beta$-lactamase enzyme activity are distributed evenly throughout each droplet.
+A back-of-the-envelope calculation can be used to justify this. In the following calculation we show that the time it would take for an antibiotic molecule to diffuse across a droplet is less than the simulation timestep, $dt$. 
+
+We use the Stokes-Einstein relation for the diffusion constant, $d_a$ of an antibiotic molecule: $d_a=\frac{k_BT}{6\pi \eta r}$,  where $r$ is the size of an antibiotic molecule and $\eta$ is the viscosity of the media.
+We can approximate the size of an ampicillin molecule, $r$, as one nanometre, and we assume a temperature, $T$, of 37$^{\circ}$C (310 K). We suppose that the viscosity, $\eta$, of the media is similar to water at this temperature (\num{7e-4} Pa s). This results in a diffusion constant, $d_a =$\num{6.5e-10} m$^2$s$^{-1}$, which is similar to the literature value of \num{3e-10} m$^2$s$^{-1}$ for a nanometre sized particle \cite{Danelon2006}.
+%1.38064E-23 *310 / (6*pi*7E-4*0.5E-9)  
+
+
+For diffusive motion the mean square displacement ($msd$) scales linearly with time as: $msd(\tau) = 6d\tau$, so that the typical time to cross the entire droplet of size (r $\approx$50 $\mu$m  SQUASHED IN RESERVOIR) is the diffusion time $\tau$= 2 s (for the largest CSA).
+
+If the droplets are round: m=1000, V=100pL = 1E-10 L, r $\approx$   35um.
+$\tau=pi*(35E-6)**2 /(6*6.5E-10)  = 1$ s
+
+For the largest volume droplets; m=1, V= 1E-7L,   r $\approx$  350um
+ $ \tau= pi*(350E-6)**2 /(6*6.5E-10) = 100$ s 
+
+
+
+
+% if simulation timestep dt=0.1 min ;;  60X0.1= 6s
+%This is smaller than the timestep, $dt$ = 0.1 min, used in the simulations, and is much smaller than the timescales of bacterial growth or death dynamics. Therefore it is reasonable to take the antibiotic concentration as homogeneous.
+
+%http://www.life.illinois.edu/crofts/bioph354/diffusion1.html
+%The Stokes-Einstein equation is  used to estimate the effective radius of a diffusing particle. 
+%https://www.pnas.org/doi/full/10.1073/pnas.152206799   ampicillin binding paper
+Furthermore, in reality, we expect there to be active mixing in the droplet caused by the motility of the bacteria, so the homogenisation of the antibiotic concentration would actually be faster than that predicted with diffusion alone. 
+
+

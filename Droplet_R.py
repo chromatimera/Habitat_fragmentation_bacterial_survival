@@ -16,7 +16,7 @@ getcontext().prec = 50
 from mpmath import *
 import matplotlib.pyplot as plt
 
-BIGGER_SIZE = 40
+BIGGER_SIZE = 22
 
 plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 plt.rc('text', usetex=True)
@@ -56,7 +56,8 @@ class droplets_R():
         Exp = Experiment_R(self.strain_r, self.AB_conc, self.nr_drops_total_mass)
         for k in range(0, self.total_drop_number):
             #print('drop. nr:', k)
-            if (grow_meth != "binary"):
+            # if growth method is different than binary or balanced
+            if (grow_meth != "binary") and (grow_meth != "balanced"):
                 Exp.run(init_type, grow_meth)
                 ## not necessarily gillespie, but the point is that the N, AB_conc and Time list have variable lengths
                 self.N_list_gillespie.append(Exp.N_array)
@@ -68,147 +69,189 @@ class droplets_R():
                 self.time_list_array[k] = Exp.ts
                 self.AB_conc_array[k] = Exp.AB_conc_array
 
-
     def plots(self, grow_meth):
-
-        # Get path of current folder
+        # Get current working directory
         curr_path = os.getcwd()
-        #print(curr_path)
 
-        # Check whether the specified path exists or not
-        folder_name = 'output/' \
-                      'dropnr_{}_loading_{}_growth_{}_initialN_{}_abconc_{}_gr_{}_dt_{}_Nsat_{}'.format(variables.droplet_list[-1],loading,growth, variables.initialN, self.AB_conc, growthrate, self.dt,variables.Nsat)
+        # Construct folder name based on parameters
+        folder_name = 'output/dropnr_{}_loading_{}_growth_{}_initialN_{}_abconc_{}_gr_{}_dt_{}_Nsat_{}'.format(
+            variables.droplet_list[-1],
+            loading,
+            growth,
+            variables.initialN,
+            self.AB_conc,
+            growthrate,
+            self.dt,
+            variables.Nsat
+        )
         path = os.path.join(curr_path, folder_name)
         isExist = os.path.exists(path)
 
         if not isExist:
-            # Create a new directory because it does not exist
+            # Create directory if it doesn't exist
             os.makedirs(path, exist_ok=True)
             print("The new directory is created!")
 
         os.chdir(path)
 
-        # create x axis of time in minutes:
-        if (grow_meth != "binary"):
-
+        # Plotting for non-binary growth methods
+        if grow_meth != "binary" and grow_meth != "balanced":
+            # Plot Number of Bacteria Over Time
             plt.figure(figsize=(7.5, 5))
-            fig, ax = plt.subplots()
-            for i in range(0, self.total_drop_number):
-                plt.plot(self.time_list_gillespie[i], self.N_list_gillespie[i])
+            for i in range(self.total_drop_number):
+                plt.plot(self.time_list_gillespie[i], self.N_list_gillespie[i], label=f'Droplet {i + 1}')
             plt.grid(False)
-            # plt.title('Growth of resistant strain')
-            #©plt.title('{}_growth'.format(growth))
-            plt.ylabel('Number of bacteria)')
+            plt.ylabel('Number of Bacteria')
             plt.xlabel('Time (min)')
             plt.xlim(0, self.t_end)
-            plt.xlim(0, self.t_end)
-            # tick_spacing = 2
-            # ax.yaxis.set_major_locator(ticker.MultipleLocator(tick_spacing))
-            plt.ylim(bottom=0)
-            plt.savefig('plot_Nbact_loading_{}_growth_{}_ab_conc_{}.png'.format(loading, growth, str(AB_conc)))
+            # Removed: plt.ylim(bottom=0) to allow automatic y-axis scaling
+            plt.legend()
+            plt.savefig(f'plot_Nbact_loading_{loading}_growth_{growth}_ab_conc_{self.AB_conc}.png')
+            plt.close()
 
-
-            plt.figure(2)
-            for i in range(0, self.total_drop_number):
-                plt.plot(self.time_list_gillespie[i], self.AB_conc_array_gillespie[i])
+            # Plot Antibiotic Concentration Over Time
+            plt.figure(figsize=(7.5, 5))
+            for i in range(self.total_drop_number):
+                plt.plot(self.time_list_gillespie[i], self.AB_conc_array_gillespie[i], label=f'Droplet {i + 1}')
             plt.grid(False)
-            # plt.title('Concentration of antibiotic over time in each droplet.')
             plt.ylabel(r'\bf{N(t)}')
             plt.xlabel(r'\bf{Time (min)}')
             plt.xlim(0, self.t_end)
-            plt.ylim(bottom=0)
-            plt.title('{}_growth'.format(growth))
-            plt.savefig('plot_ABconc_{}_loading_{}_growth_{}.png'.format(str(AB_conc), loading, growth))
-            plt.show()
+            # Removed: plt.ylim(bottom=0) to allow automatic y-axis scaling
+            plt.title(f'{growth}_growth')
+            plt.legend()
+            plt.savefig(f'plot_ABconc_{self.AB_conc}_loading_{loading}_growth_{growth}.png')
+            plt.close()
 
-            plt.figure(3)
-            for i in range(0, self.total_drop_number):
-                plt.plot(self.time_list_gillespie[i], self.N_list_gillespie[i]/self.volume)
+            # Plot Number of Bacteria per Volume Over Time
+            plt.figure(figsize=(7.5, 5))
+            for i in range(self.total_drop_number):
+                plt.plot(self.time_list_gillespie[i], self.N_list_gillespie[i] / self.volume, label=f'Droplet {i + 1}')
             plt.grid(False)
-            plt.ylabel('Number of bacteria per {} ml volume'.format(self.volume))
+            plt.ylabel(f'Number of Bacteria per {self.volume} ml Volume')
             plt.xlabel('Time (min)')
             plt.xlim(0, self.t_end)
-            plt.ylim(bottom=0)
-            plt.title('{}_growth'.format(growth))
-            plt.show()
+            # Removed: plt.ylim(bottom=0) to allow automatic y-axis scaling
+            plt.title(f'{growth}_growth')
+            plt.legend()
+            plt.savefig(f'plot_Nbact_per_volume_loading_{loading}_growth_{growth}.png')
+            plt.close()
 
+        # Plotting for binary growth method
         else:
-            X = np.arange(0, self.t_end, self.dt).tolist()
-            XX= np.tile(X, (self.total_drop_number, 1))
+            # Create x-axis of time in minutes
+            X = np.arange(0, self.t_end, self.dt)
+            XX = np.tile(X, (self.total_drop_number, 1))
 
-            plt.figure(1, figsize=(9,7))
-            plt.plot (XX.T, self.N_r_array.T)
-           # print('N_R.T', self.N_r_array.T)
+            # Plot Number of Bacteria Over Time
+            plt.figure(figsize=(9, 7))
+            for i in range(self.total_drop_number):
+                plt.plot(X, self.N_r_array[i, :], label=f'Droplet {i + 1}')
             plt.grid(False)
             plt.ylabel(r'$N(t)$ (cells)')
             plt.xlabel(r'$t$ (min)')
-            plt.xlim(0,self.t_end)
-            plt.xlim(0,self.t_end)
-            #ax.yaxis.set_major_locator(ticker.MultipleLocator(tick_spacing))
-            plt.ylim(bottom=0)
-            ## find position in N_array at which the pop survives/dies, for each ab concentration there should be a diff pair of initial N (in case of ab = 15 ; N init = 6 - survival, N init = 5 death)
-            y_survival=np.argwhere(np.array(self.N_r_array.T[0,:])==6)
-           # print('y survival', y_survival)
+            plt.xlim(0, self.t_end)
+            # Removed: plt.ylim(bottom=0) to allow automatic y-axis scaling
 
-            y_death = np.argwhere(np.array(self.N_r_array.T[0,:])==5)
+            # Commented out shading
+            """
+            # Find positions in N_array where population survives (6) or dies (5)
+            y_survival = np.argwhere(self.N_r_array.T[0, :] == 6)
+            y_death = np.argwhere(self.N_r_array.T[0, :] == 5)
+            print('y_surv', y_survival)
             print('y_death', y_death)
 
-            col_ind_y_survival = int(y_survival[0].item())
-            y_surv = list(self.N_r_array.T[:, col_ind_y_survival])
+            # Initialize variables
+            y_surv = []
+            y_deth = []
+            col_ind_y_survival = None
+            col_ind_y_death = None
 
-            if len(y_death) == 0:
-                col_ind_y_survival = None
+            # Handle y_survival
+            if y_survival.size > 0:
+                col_ind_y_survival = int(y_survival[0].item())
+                y_surv = list(self.N_r_array.T[:, col_ind_y_survival])
             else:
+                print("No survival cases found.")
+                y_surv = [0] * self.timesteps  # Example default
+
+            # Handle y_death
+            if y_death.size > 0:
                 col_ind_y_death = int(y_death[0].item())
                 y_deth = list(self.N_r_array.T[:, col_ind_y_death])
+            else:
+                print("No death cases found.")
+                y_deth = [0] * self.timesteps  # Example default
 
+            # Proceed with plotting fill_between only if both indices are found
+            if col_ind_y_survival is not None and col_ind_y_death is not None:
+                print('y_surv', y_surv)
+                print('y_deth', y_deth)
+                plt.rcParams['hatch.color'] = 'g'
+                plt.yticks(range(1, 11))
+                plt.fill_between(X, y_surv, 100, color='green', alpha=0.2, hatch='.', interpolate=True)
+                plt.fill_between(X, 0, y_deth, color='red', alpha=0.2, interpolate=True)
+            else:
+                print("Skipping fill_between due to missing survival or death data.")
+            """
 
-            print('y_surv', y_surv)
-            print('y_deth', y_deth)
-            print('XX.T', XX.T[:,1])
-            plt.rcParams['hatch.color'] = 'g'
-            plt.yticks([1,2,3,4,5,6,7,8,9,10])
-            plt.fill_between(list(XX.T[:,0]), y_surv, 100, color='green', alpha=0.2, hatch = '.', interpolate=True)
-            plt.fill_between(list(XX.T[:,0]), 0, y_deth, color='red', alpha=0.2, interpolate=True)
-            plt.xticks(np.arange(0,self.t_end + 1, 25))
-            plt.tight_layout()
-            plt.savefig('plot_Nbact_loading_{}_growth_{}ab_conc_{}'.format(loading, growth, AB_conc), dpi=600)
-            plt.savefig('plot_Nbact_loading_{}_growth_{}ab_conc_{}.svg'.format(loading, growth, AB_conc),format="svg", dpi=600)
-            plt.show()
+            plt.legend()
+            plt.savefig(f'plot_Nbact_loading_{loading}_growth_{growth}ab_conc_{AB_conc}_m_{self.total_drop_number}.png')
+            plt.savefig(f'plot_Nbact_loading_{loading}_growth_{growth}ab_conc_{AB_conc}_m_{self.total_drop_number}.svg', format="svg", dpi=600)
+            plt.close()
 
-
-            plt.figure(2, figsize=(9,7))
-            plt.plot(XX.T, self.AB_conc_array.T)
+            # Plot Antibiotic Concentration Over Time
+            plt.figure(figsize=(9, 7))
+            for i in range(self.total_drop_number):
+                plt.plot(X, self.AB_conc_array[i, :], label=f'Droplet {i + 1}')
             plt.grid(False)
-            #plt.title('Concentration of antibiotic over time in each droplet.')
             plt.ylabel(r'$a(t)$ ($\mu$g/ml)')
             plt.xlabel(r'$t$ (min)')
             plt.xlim(0, self.t_end)
-            plt.ylim(bottom=0)
-            y_surv = list(self.AB_conc_array.T[:, col_ind_y_survival])
-            y_deth = list(self.AB_conc_array.T[:, col_ind_y_death])
+            # Removed: plt.ylim(bottom=0) to allow automatic y-axis scaling
+
+            # Commented out shading
+            """
+            # Reuse col_ind_y_survival and col_ind_y_death for AB concentration
+            if col_ind_y_survival is not None:
+                y_surv = list(self.AB_conc_array.T[:, col_ind_y_survival])
+            else:
+                y_surv = [0] * self.timesteps  # Example default
+
+            if col_ind_y_death is not None:
+                y_deth = list(self.AB_conc_array.T[:, col_ind_y_death])
+            else:
+                y_deth = [0] * self.timesteps  # Example default
 
             print('y_surv', y_surv)
+            print('y_deth', y_deth)
             print('XX.T', XX.T[:, 1])
+
             plt.rcParams['hatch.color'] = 'g'
-            plt.fill_between(list(XX.T[:, 0]), y_deth, 100, color='red', alpha=0.2, interpolate=True)
-            plt.fill_between(list(XX.T[:, 0]), 0, y_surv, color='green', alpha=0.2, hatch='.', interpolate=True)
-            plt.xticks(np.arange(0, self.t_end + 1, 25))
-            plt.tight_layout()
-            plt.savefig('plot_ABconc_{}_loading_{}_growth_{}'.format(self.AB_conc, loading, growth), dpi=600)
-            plt.savefig('plot_ABconc_{}_loading_{}_growth_{}.svg'.format(self.AB_conc, loading, growth),format="svg", dpi=600)
-            plt.show()
+            plt.fill_between(X, y_deth, 100, color='red', alpha=0.2, interpolate=True)
+            plt.fill_between(X, 0, y_surv, color='green', alpha=0.2, hatch='.', interpolate=True)
+            """
 
+            plt.legend()
+            plt.savefig(f'plot_ABconc_{self.AB_conc}_loading_{loading}_growth_{growth}_m_{self.total_drop_number}.png')
+            plt.savefig(f'plot_ABconc_{self.AB_conc}_loading_{loading}_growth_{growth}_m_{self.total_drop_number}.svg', format="svg", dpi=600)
+            plt.close()
 
-            plt.figure(3, figsize=(8,6))
-            plt.plot(XX.T, self.N_r_array.T / self.volume)
+            # Plot Number of Bacteria per Volume Over Time
+            plt.figure(figsize=(8, 6))
+            for i in range(self.total_drop_number):
+                plt.plot(X, self.N_r_array[i, :] / self.volume, label=f'Droplet {i + 1}')
             plt.grid(False)
-            plt.ylabel('Number of bacteria per {} ml volume'.format(self.volume))
+            plt.ylabel(f'Number of Bacteria per {self.volume} ml Volume')
             plt.xlabel('Time (min)')
             plt.xlim(0, self.t_end)
-            plt.ylim(bottom=0)
-            plt.title('{}_growth'.format(growth))
-            #plt.show()
+            # Removed: plt.ylim(bottom=0) to allow automatic y-axis scaling
+            plt.title(f'{growth}_growth')
+            plt.legend()
+            plt.savefig(f'plot_Nbact_per_volume_loading_{loading}_growth_{growth}_m_{self.total_drop_number}.png')
+            plt.savefig(f'plot_Nbact_per_volume_loading_{loading}_growth_{growth}_m_{self.total_drop_number}.svg', format="svg", dpi=600)
+
+            plt.close()
 
         os.chdir(curr_path)
 
@@ -216,7 +259,7 @@ class droplets_R():
         self.last_N_list = []
         self.first_N_list = []
 
-        if (grow_meth != "binary"):
+        if (grow_meth != "binary" and grow_meth != "balanced"):
             for i in range(0, len(self.N_list_gillespie)):
                 self.last_N_list.append(self.N_list_gillespie[i][-1])
                 self.first_N_list.append(self.N_list_gillespie[i][0])
@@ -239,7 +282,7 @@ class droplets_R():
     def countTotalMass(self, grow_meth):
         self.total_mass = np.empty(self.timesteps)
 
-        if (grow_meth != "binary"):
+        if (grow_meth != "binary" and grow_meth != "balanced"):
 
             ## for all times with increment dt from 0 until t_end
             for t in range(0, self.timesteps):
@@ -316,7 +359,7 @@ class droplets_R():
 
         os.chdir(path)
 
-        if (growth != "binary"):
+        if (growth != "binary" and growth != "balanced"):
             new_fn=os.path.join(path+NRfilename)   ##os.path.join(path+"N_R.csv")
 
             pd.DataFrame(self.AB_conc_array_gillespie).to_csv(ABfilename)
