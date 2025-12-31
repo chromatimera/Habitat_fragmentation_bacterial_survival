@@ -12,10 +12,9 @@ https://doi.org/10.1098/rsif.2024.0611
 The project studies how **spatial fragmentation of microbial habitats** (e.g. droplets or isolated micro-environments) can *increase population survival* under antibiotic stress through stochastic effects and local population heterogeneity.
 
 ## Conceptual overview
+We model habitat fragmentation by partitioning a microbial population of fixed total size and volume into an increasing number of isolated subvolumes. Although the *average* density decreases, stochastic partitioning leads to high-density pockets that can survive antibiotic treatment.
 
 ![Schematic of habitat fragmentation](figures/figure1.png)
-
-We model habitat fragmentation by partitioning a microbial population of fixed total size and volume into an increasing number of isolated subvolumes. Although the *average* density decreases, stochastic partitioning leads to high-density pockets that can survive antibiotic treatment.
 ---
 
 ## 📌 Key Concepts
