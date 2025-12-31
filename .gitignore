@@ -159,3 +159,4 @@ output/*
 variables.py
 variables.py
 *.svg
+!figures/**
